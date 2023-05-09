@@ -49,8 +49,8 @@ export const demoPagesMenu = {
 	},
 	listPages: {
 		id: 'listPages',
-		text: 'Roles',
-		path: 'list-pages',
+		text: 'Roles y Permisos',
+		path: 'Roles',
 		icon: 'PersonAdd',
 		subMenu: null
 	},
