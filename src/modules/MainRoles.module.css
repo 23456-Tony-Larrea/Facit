@@ -1,0 +1,76 @@
+.container {
+  font-style: italic;
+}
+.col {
+  text-align: start;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.TituloRolePermiso {
+  font-weight: bold;
+  border-bottom: 2px solid;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+}
+.divconCheckBox {
+  display: flex;
+  width: 100%;
+  font-size: 16px;
+  margin: 3px;
+  justify-content: space-between;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(130, 130, 130, 0.33049716468618695) 100%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  border-radius: 15px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 25px;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 25px;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+input {
+  display: none;
+}
+input:checked + .slider {
+  background-color: #4d69fa;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4d69fa;
+}
+
+input:checked + .slider:before {
+  transform: translateX(23px);
+}
+.buttonRole {
+  margin: 3px;
+  font-weight: 700;
+}
