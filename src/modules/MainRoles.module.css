@@ -5,12 +5,14 @@
   text-align: start;
   margin-top: 15px;
   margin-bottom: 15px;
+  text-shadow: 1px 1px 1px #979797;
 }
 .TituloRolePermiso {
   font-weight: bold;
   border-bottom: 2px solid;
   margin-bottom: 15px;
   padding-bottom: 5px;
+  text-shadow: 1px 1px 1px #4d69fa;
 }
 .divconCheckBox {
   display: flex;
@@ -71,6 +73,6 @@ input:checked + .slider:before {
   transform: translateX(23px);
 }
 .buttonRole {
-  margin: 3px;
+  margin-top: 15px;
   font-weight: 700;
 }

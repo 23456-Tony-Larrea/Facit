@@ -3,6 +3,7 @@ import Button from "../../../components/bootstrap/Button";
 import ListGroup from "../../../components/bootstrap/ListGroup";
 import ListGroupItem from "../../../components/bootstrap/ListGroup";
 import s from "../../../../src/modules/MainRoles.module.css";
+import swal from "sweetalert";
 
 const MainRole = () => {
   const [roles, setRoles] = useState(["Administrador", "Editor", "Usuario"]);
