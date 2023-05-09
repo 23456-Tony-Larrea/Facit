@@ -208,7 +208,7 @@ const EditWizardPage = () => {
 	});
 
 	return (
-		<PageWrapper title={demoPagesMenu.editPages.subMenu.editWizard.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Button color='info' isLink icon='ArrowBack' onClick={() => navigate(-1)}>

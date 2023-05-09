@@ -97,7 +97,7 @@ const SizingPage = () => {
 ),`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.utilities.subMenu.sizing.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

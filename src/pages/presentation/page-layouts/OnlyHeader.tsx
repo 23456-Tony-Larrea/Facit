@@ -7,7 +7,7 @@ import { pageLayoutTypesPagesMenu } from '../../../menu';
 
 const OnlyHeader = () => {
 	return (
-		<PageWrapper title={pageLayoutTypesPagesMenu.pageLayout.subMenu.onlyHeader.text}>
+		<PageWrapper >
 			<Page>
 				<div className='row d-flex align-items-center h-100'>
 					<div

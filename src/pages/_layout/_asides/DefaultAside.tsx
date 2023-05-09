@@ -8,7 +8,6 @@ import {
 	componentPagesMenu,
 	dashboardPagesMenu,
 	demoPagesMenu,
-	gettingStartedPagesMenu,
 	pageLayoutTypesPagesMenu,
 } from '../../../menu';
 import ThemeContext from '../../../contexts/themeContext';
@@ -49,7 +48,7 @@ const DefaultAside = () => {
 
 				{doc && (
 					<>
-						<Navigation menu={gettingStartedPagesMenu} id='aside-docMenu' />
+			
 						<NavigationLine />
 						<Navigation menu={componentPagesMenu} id='aside-componentsMenu' />
 						<NavigationLine />
@@ -81,6 +80,8 @@ const DefaultAside = () => {
 					</Card>
 				)}
 			</AsideBody>
+
+			{/* //////////////////////////////////////////menu  */}
 			<AsideFoot>
 				<nav aria-label='aside-bottom-menu'>
 					<div className='navigation'>

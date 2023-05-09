@@ -50,11 +50,7 @@ const User = () => {
 				<DropdownItem>
 					<Button
 						icon='AccountBox'
-						onClick={() =>
-							navigate(
-								`../${demoPagesMenu.appointment.subMenu.employeeID.path}/${userData?.id}`,
-							)
-						}>
+						>
 						Profile
 					</Button>
 				</DropdownItem>
@@ -74,13 +70,7 @@ const User = () => {
 						<div
 							role='presentation'
 							className='navigation-item cursor-pointer'
-							onClick={() =>
-								navigate(
-									`../${demoPagesMenu.appointment.subMenu.employeeID.path}/${userData?.id}`,
-									// @ts-ignore
-									handleItem(),
-								)
-							}>
+							>
 							<span className='navigation-link navigation-link-pill'>
 								<span className='navigation-link-info'>
 									<Icon icon='AccountBox' className='navigation-icon' />
@@ -120,12 +110,7 @@ const User = () => {
 						<div
 							role='presentation'
 							className='navigation-item cursor-pointer'
-							onClick={() => {
-								if (setUser) {
-									setUser('');
-								}
-								navigate(`../${demoPagesMenu.login.path}`);
-							}}>
+							>
 							<span className='navigation-link navigation-link-pill'>
 								<span className='navigation-link-info'>
 									<Icon icon='Logout' className='navigation-icon' />

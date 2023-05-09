@@ -7,7 +7,6 @@ import Card, {
 	CardTitle,
 } from '../../../components/bootstrap/Card';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import { gettingStartedPagesMenu } from '../../../menu';
 import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
 import Breadcrumb from '../../../components/bootstrap/Breadcrumb';
 import Page from '../../../layout/Page/Page';
@@ -1669,21 +1668,12 @@ $nested-kbd-font-weight:            null !default; // Deprecated in v5.2.0, remo
 $pre-color:                         null !default;`;
 
 	return (
-		<PageWrapper title={gettingStartedPagesMenu.gettingStarted.subMenu.bootstrapVariables.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: gettingStartedPagesMenu.gettingStarted.text,
-								to: gettingStartedPagesMenu.gettingStarted.path,
-							},
-							{
-								title: gettingStartedPagesMenu.gettingStarted.subMenu
-									.bootstrapVariables.text,
-								to: gettingStartedPagesMenu.gettingStarted.subMenu
-									.bootstrapVariables.path,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>
@@ -1695,9 +1685,8 @@ $pre-color:                         null !default;`;
 						tag='a'
 						color='success'
 						isLight
-						icon={gettingStartedPagesMenu.gettingStarted.subMenu.projectStructure.icon}
-						to={`../${gettingStartedPagesMenu.gettingStarted.subMenu.projectStructure.path}`}>
-						{gettingStartedPagesMenu.gettingStarted.subMenu.projectStructure.text}
+						>
+					
 					</Button>
 				</SubHeaderRight>
 			</SubHeader>
@@ -1810,7 +1799,7 @@ $pre-color:                         null !default;`;
 											color='success'
 											isLight
 											icon='NavigateNext'
-											to={`../${gettingStartedPagesMenu.gettingStarted.subMenu.projectStructure.path}`}>
+											>
 											Next
 										</Button>
 									</div>

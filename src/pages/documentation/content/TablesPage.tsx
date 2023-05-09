@@ -522,7 +522,7 @@ $table-variants: (
 );`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.content.subMenu.tables.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

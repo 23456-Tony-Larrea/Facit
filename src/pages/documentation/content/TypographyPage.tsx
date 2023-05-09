@@ -149,7 +149,7 @@ $display-line-height: $headings-line-height;`;
 </dl>`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.content.subMenu.typography.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

@@ -92,14 +92,7 @@ const AnswerCustomer: FC<IAnswerCustomerProps> = (props: IAnswerCustomerProps) =
 					</div>
 					<div className='flex-grow-1 ms-3 d-flex justify-content-between align-items-center'>
 						<div>
-							<Link
-								to={`../${demoPagesMenu.appointment.subMenu.employeeID.path}/${id}`}
-								className={classNames('fw-bold fs-6 mb-0', {
-									'link-dark': !darkModeStatus,
-									'link-light': darkModeStatus,
-								})}>
-								{name}
-							</Link>
+					
 							<div className='text-muted mt-n1'>
 								<small>{job}</small>
 							</div>

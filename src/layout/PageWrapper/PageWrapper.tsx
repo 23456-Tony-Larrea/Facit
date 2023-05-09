@@ -32,14 +32,7 @@ const PageWrapper = forwardRef<HTMLDivElement, IPageWrapperProps>(
 
 		const { user } = useContext(AuthContext);
 
-		const navigate = useNavigate();
-		useEffect(() => {
-			if (isProtected && user === '') {
-				navigate(`../${demoPagesMenu.login.path}`);
-			}
-			return () => {};
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, []);
+		
 
 		return (
 			<div ref={ref} className={classNames('page-wrapper', 'container-fluid', className)}>

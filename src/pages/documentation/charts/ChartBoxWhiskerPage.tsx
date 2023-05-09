@@ -10,7 +10,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartBoxWhiskerPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsBoxWhisker.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

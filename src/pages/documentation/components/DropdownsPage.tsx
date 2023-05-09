@@ -110,19 +110,12 @@ const DropdownsPage = () => {
 	];
 
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.dropdowns.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.dropdowns.text,
-								to: `/${componentPagesMenu.components.subMenu.dropdowns.path}`,
-							},
+						
 						]}
 					/>
 				</SubHeaderLeft>

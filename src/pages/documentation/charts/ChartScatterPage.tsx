@@ -11,7 +11,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartScatterPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsScatter.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

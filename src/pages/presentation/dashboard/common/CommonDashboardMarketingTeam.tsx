@@ -18,10 +18,7 @@ const CommonDashboardMarketingTeam = () => {
 	const { darkModeStatus } = useDarkMode();
 
 	const navigate = useNavigate();
-	const handleOnClickToEmployeeListPage = useCallback(
-		() => navigate(`../${demoPagesMenu.appointment.subMenu.employeeList.path}`),
-		[navigate],
-	);
+	
 
 	return (
 		<Card stretch>
@@ -40,7 +37,7 @@ const CommonDashboardMarketingTeam = () => {
 						aria-label='Read More'
 						hoverShadow='default'
 						color={darkModeStatus ? 'dark' : undefined}
-						onClick={handleOnClickToEmployeeListPage}
+						
 					/>
 				</CardActions>
 			</CardHeader>

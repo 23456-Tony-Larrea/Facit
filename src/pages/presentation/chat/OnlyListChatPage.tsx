@@ -75,7 +75,7 @@ const OnlyListChatPage = () => {
 	}, [canvasStatus]);
 
 	return (
-		<PageWrapper title={demoPagesMenu.chat.subMenu.onlyListChat.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<span>
@@ -93,7 +93,7 @@ const OnlyListChatPage = () => {
 						icon='Logout'
 						color='danger'
 						isLight
-						onClick={() => navigate(`../${demoPagesMenu.login.path}`)}>
+						>
 						Logout
 					</Button>
 				</SubHeaderRight>

@@ -190,7 +190,7 @@ $negative-spacers: if($enable-negative-margins, negativify-map($spacers), null);
 ),`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.utilities.subMenu.spacing.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

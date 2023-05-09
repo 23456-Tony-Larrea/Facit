@@ -116,7 +116,7 @@ const EmployeePage = () => {
 						isLink
 						icon='ArrowBack'
 						tag='a'
-						to={`../${demoPagesMenu.appointment.subMenu.employeeList.path}`}>
+						>
 						Back to List
 					</Button>
 					<SubheaderSeparator />

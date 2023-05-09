@@ -11,13 +11,7 @@ const ContentHeader = () => {
 	return (
 		<Header>
 			<HeaderLeft>
-				<Navigation
-					menu={componentPagesMenu.content.subMenu}
-					id={`${componentPagesMenu.content.id}top-menu`}
-					horizontal={
-						!!width && width >= Number(process.env.REACT_APP_MOBILE_BREAKPOINT_SIZE)
-					}
-				/>
+			
 			</HeaderLeft>
 			<CommonHeaderRight />
 		</Header>

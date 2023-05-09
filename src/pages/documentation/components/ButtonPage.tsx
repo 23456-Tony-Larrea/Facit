@@ -96,19 +96,12 @@ const ButtonPage = () => {
 	];
 
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.button.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.button.text,
-								to: `/${componentPagesMenu.components.subMenu.button.path}`,
-							},
+						
 						]}
 					/>
 				</SubHeaderLeft>

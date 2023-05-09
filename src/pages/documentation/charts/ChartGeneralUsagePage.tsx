@@ -91,10 +91,10 @@ options: PropTypes.shape({
 	yaxis: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 }).isRequired,`;
 
-	const MENU: TMenu = componentPagesMenu.charts.subMenu;
+	
 
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsUsage.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
@@ -185,26 +185,24 @@ options: PropTypes.shape({
 							</CardHeader>
 							<CardBody>
 								<div className='row g-3'>
-									{Object.keys(MENU).map((i) => {
-										if (['chartsUsage', 'chartsSparkline'].includes(MENU[i].id))
-											return null;
+									
 										return (
 											<div
 												className='col-xl-3 col-lg-4 col-md-6 col-12'
-												key={MENU[i].id}>
+												>
 												<Button
 													color='info'
 													isLight
-													icon={MENU[i].icon}
+													
 													size='lg'
 													tag='a'
 													className='w-100'
-													to={`../${MENU[i].path}`}>
-													{MENU[i].text}
+													>
+													
 												</Button>
 											</div>
 										);
-									})}
+									
 								</div>
 							</CardBody>
 						</Card>

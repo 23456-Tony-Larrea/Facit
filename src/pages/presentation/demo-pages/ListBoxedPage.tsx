@@ -98,7 +98,7 @@ const ListBoxedPage = () => {
 	const { selectTable, SelectAllCheck } = useSelectTable(onCurrentPageItems);
 
 	return (
-		<PageWrapper title={demoPagesMenu.listPages.subMenu.listBoxed.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Avatar srcSet={UserImageWebp} src={UserImage} size={32} />

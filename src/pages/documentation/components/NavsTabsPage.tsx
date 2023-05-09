@@ -88,19 +88,12 @@ const NavsTabsPage = () => {
 </Nav>`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.navsTabs.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.navsTabs.text,
-								to: `/${componentPagesMenu.components.subMenu.navsTabs.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

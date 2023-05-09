@@ -74,7 +74,7 @@ const TransActionsPage = () => {
 	});
 
 	return (
-		<PageWrapper title={demoPagesMenu.sales.subMenu.transactions.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<strong>Last Transfer</strong>

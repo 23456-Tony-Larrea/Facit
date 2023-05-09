@@ -231,7 +231,7 @@ const EditBoxedPage = () => {
 	});
 
 	return (
-		<PageWrapper title={demoPagesMenu.editPages.subMenu.editBoxed.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

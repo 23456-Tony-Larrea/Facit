@@ -28,7 +28,7 @@ const MaterialPage = () => {
 		name.toLowerCase().includes(formik.values.filterIcon.toLowerCase()),
 	);
 	return (
-		<PageWrapper title={componentPagesMenu.icons.subMenu.material.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

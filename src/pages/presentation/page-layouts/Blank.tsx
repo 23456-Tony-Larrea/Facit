@@ -7,7 +7,7 @@ import { pageLayoutTypesPagesMenu } from '../../../menu';
 
 const Blank = () => {
 	return (
-		<PageWrapper title={pageLayoutTypesPagesMenu.blank.text}>
+		<PageWrapper >
 			<Page>
 				<div className='row d-flex align-items-center h-100'>
 					<div

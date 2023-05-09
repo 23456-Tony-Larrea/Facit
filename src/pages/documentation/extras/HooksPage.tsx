@@ -32,7 +32,7 @@ HookLink.defaultProps = {
 
 const HooksPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.hooks.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb list={[{ title: 'Hooks', to: '/hooks' }]} />

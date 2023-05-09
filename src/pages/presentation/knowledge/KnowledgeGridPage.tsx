@@ -29,14 +29,11 @@ const Item: FC<IItemProps> = ({ id, image, title, description, tags, color }) =>
 	const { darkModeStatus } = useDarkMode();
 
 	const navigate = useNavigate();
-	const handleOnClick = useCallback(
-		() => navigate(`../${demoPagesMenu.knowledge.subMenu.itemID.path}/${id}`),
-		[navigate, id],
-	);
+	
 	return (
 		<Card
 			className='cursor-pointer shadow-3d-primary shadow-3d-hover'
-			onClick={handleOnClick}
+			
 			data-tour={title}>
 			<CardBody>
 				<div
@@ -131,7 +128,7 @@ const KnowledgeGridPage = () => {
 	});
 
 	return (
-		<PageWrapper title={demoPagesMenu.knowledge.subMenu.grid.text}>
+		<PageWrapper>
 			<Page>
 				<div className='row'>
 					<div className='col-12 text-center my-5'>

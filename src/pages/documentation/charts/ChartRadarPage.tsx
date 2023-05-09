@@ -11,7 +11,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartRadarPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsRadar.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

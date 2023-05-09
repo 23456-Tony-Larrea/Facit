@@ -16,8 +16,6 @@ import { TMenu } from '../../../type/menu-type';
 const ContentListPage = () => {
 	const { darkModeStatus } = useDarkMode();
 
-	const contents: TMenu = componentPagesMenu.content.subMenu;
-
 	const navigate = useNavigate();
 
 	const formik = useFormik({
@@ -28,7 +26,7 @@ const ContentListPage = () => {
 	});
 
 	return (
-		<PageWrapper title={`${componentPagesMenu.content.text} List`}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<label
@@ -51,20 +49,14 @@ const ContentListPage = () => {
 			</SubHeader>
 			<Page>
 				<div className='row'>
-					{Object.keys(contents)
-						.filter((key) =>
-							contents[key].text
-								.toLowerCase()
-								.includes(formik.values.searchInput.toLowerCase()),
-						)
-						.map((i) => (
-							<div key={contents[i].id} className='col-md-3'>
+					
+				
 								<Card
 									className={classNames('cursor-pointer transition-base', {
 										'bg-lo25-info-hover': darkModeStatus,
 										'bg-l25-info-hover': !darkModeStatus,
 									})}
-									onClick={() => navigate(`../${contents[i].path}`)}>
+									>
 									<CardBody>
 										<div className='d-flex align-items-center'>
 											<div className='flex-shrink-0'>
@@ -79,25 +71,21 @@ const ContentListPage = () => {
 																'bg-l25-info': !darkModeStatus,
 															},
 														)}>
-														<span className='text-info fs-1 fw-bold'>
-															<Icon icon={contents[i].icon} />
-														</span>
+														
 													</div>
 												</div>
 											</div>
 											<div className='flex-grow-1 ms-3 d-flex justify-content-between align-items-center'>
 												<div>
-													<div className='fw-bold fs-5 mb-0'>
-														{contents[i].text}
-													</div>
+													
 												</div>
 											</div>
 										</div>
 									</CardBody>
 								</Card>
 							</div>
-						))}
-				</div>
+						
+			
 			</Page>
 		</PageWrapper>
 	);

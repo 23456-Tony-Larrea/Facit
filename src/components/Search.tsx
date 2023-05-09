@@ -38,12 +38,7 @@ const Search = () => {
 			icon: string;
 		};
 	} = {
-		...componentPagesMenu.components.subMenu,
-		...componentPagesMenu.content.subMenu,
-		...componentPagesMenu.forms.subMenu,
-		...componentPagesMenu.utilities.subMenu,
-		...componentPagesMenu.icons.subMenu,
-		...componentPagesMenu.charts.subMenu,
+	
 	};
 	const filterResult = Object.keys(searchPages)
 		.filter(

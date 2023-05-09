@@ -38,7 +38,7 @@ const VisibilityPage = () => {
 )`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.utilities.subMenu.visibility.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

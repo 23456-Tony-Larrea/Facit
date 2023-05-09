@@ -102,19 +102,12 @@ const CarouselPage = () => {
 	const ROUNDED: (TCarouselRounded | undefined)[] = [undefined, 0, 1, 2, 3];
 
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.carousel.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.carousel.text,
-								to: `/${componentPagesMenu.components.subMenu.carousel.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

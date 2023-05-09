@@ -10,7 +10,7 @@ import { pageLayoutTypesPagesMenu } from '../../../menu';
 
 const HeaderAndSubheader = () => {
 	return (
-		<PageWrapper title={pageLayoutTypesPagesMenu.pageLayout.subMenu.headerAndSubheader.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

@@ -17,7 +17,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartBarPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsBar.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

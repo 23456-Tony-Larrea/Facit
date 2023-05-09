@@ -88,19 +88,12 @@ const [state, setState] = useState(null);`;
 
 	const [activeElementId, setActiveElementId] = useState(null);
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.scrollspy.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.scrollspy.text,
-								to: `/${componentPagesMenu.components.subMenu.scrollspy.path}`,
-							},
+							
 						]}
 					/>
 					<SubheaderSeparator />

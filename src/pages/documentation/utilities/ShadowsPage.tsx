@@ -43,7 +43,7 @@ $box-shadow-lg:               0 1.6rem 3rem rgba($black, 0.175);`;
 ),`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.utilities.subMenu.shadows.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

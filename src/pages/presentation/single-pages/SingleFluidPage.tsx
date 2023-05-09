@@ -122,7 +122,7 @@ const SingleFluidPage = () => {
 	);
 
 	return (
-		<PageWrapper title={demoPagesMenu.singlePages.subMenu.fluidSingle.text}>
+		<PageWrapper>
 			<Page container='fluid'>
 				<div className='row'>
 					<div className='col-xxl-4 col-xl-6'>
@@ -348,11 +348,7 @@ const SingleFluidPage = () => {
 											<p className='lead'>New products ready for sale.</p>
 											<Button
 												color={darkModeStatus ? 'light' : 'dark'}
-												onClick={() =>
-													navigate(
-														`../${demoPagesMenu.sales.subMenu.productsGrid.path}`,
-													)
-												}>
+												>
 												Click
 											</Button>
 										</div>
@@ -366,11 +362,7 @@ const SingleFluidPage = () => {
 											<h5>You can design your own screens</h5>
 											<Button
 												color={darkModeStatus ? 'light' : 'dark'}
-												onClick={() =>
-													navigate(
-														`../${demoPagesMenu.sales.subMenu.dashboard.path}`,
-													)
-												}>
+									>
 												Click
 											</Button>
 										</div>

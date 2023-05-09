@@ -22,7 +22,7 @@ const FiguresPage = () => {
 </figure>`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.content.subMenu.figures.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

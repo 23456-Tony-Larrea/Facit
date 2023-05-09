@@ -199,7 +199,7 @@ $font-sizes: (
 ),`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.utilities.subMenu.text.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

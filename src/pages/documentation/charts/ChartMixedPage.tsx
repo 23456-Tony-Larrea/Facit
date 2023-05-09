@@ -13,7 +13,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartMixedPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsMixed.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

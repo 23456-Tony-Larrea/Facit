@@ -44,7 +44,7 @@ const NotificationPage = () => {
 	);
 
 	return (
-		<PageWrapper title={componentPagesMenu.notification.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb list={[{ title: 'Notification', to: '/notifications' }]} />

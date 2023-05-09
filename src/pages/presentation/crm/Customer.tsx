@@ -49,7 +49,7 @@ const Customer = () => {
 	};
 
 	return (
-		<PageWrapper title={demoPagesMenu.crm.subMenu.customer.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Button
@@ -57,7 +57,7 @@ const Customer = () => {
 						isLink
 						icon='ArrowBack'
 						tag='a'
-						to={`../${demoPagesMenu.crm.subMenu.customersList.path}`}>
+						>
 						Back to List
 					</Button>
 					<SubheaderSeparator />

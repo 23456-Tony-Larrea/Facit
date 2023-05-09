@@ -12,7 +12,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartTreeMapPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsTreeMap.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

@@ -19,7 +19,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartLinePage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsLine.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

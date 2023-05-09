@@ -47,7 +47,7 @@ const WizardPage = () => {
 	];
 
 	return (
-		<PageWrapper title={componentPagesMenu.forms.subMenu.wizard.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

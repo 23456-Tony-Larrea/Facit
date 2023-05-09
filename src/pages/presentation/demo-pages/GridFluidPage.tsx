@@ -125,7 +125,7 @@ const GridFluidPage = () => {
 	}, [editItem]);
 
 	return (
-		<PageWrapper title={demoPagesMenu.gridPages.subMenu.gridFluid.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<img src={Company2} alt='Company' height={24} />

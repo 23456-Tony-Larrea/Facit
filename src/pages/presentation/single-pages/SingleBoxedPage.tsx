@@ -77,7 +77,7 @@ const SingleBoxedPage = () => {
 	});
 
 	return (
-		<PageWrapper title={demoPagesMenu.singlePages.subMenu.boxedSingle.text}>
+		<PageWrapper>
 			<SubHeader>
 				<SubHeaderLeft>
 					<strong>Last Transfer</strong>

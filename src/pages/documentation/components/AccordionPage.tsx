@@ -53,19 +53,12 @@ const AccordionPage = () => {
 		'dark',
 	];
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.accordion.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.accordion.text,
-								to: `/${componentPagesMenu.components.subMenu.accordion.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

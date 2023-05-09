@@ -45,19 +45,12 @@ const { addToast } = useToasts();`;
 	const { addToast } = useToasts();
 
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.toasts.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.toasts.text,
-								to: `/${componentPagesMenu.components.subMenu.toasts.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

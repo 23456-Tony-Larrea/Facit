@@ -33,7 +33,7 @@ const ImagesPage = () => {
 </picture>`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.content.subMenu.images.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

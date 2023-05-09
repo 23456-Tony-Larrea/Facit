@@ -186,7 +186,7 @@ const ProjectManagementsProject = () => {
 	};
 
 	return (
-		<PageWrapper title={demoPagesMenu.projectManagement.subMenu.item.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Button color='info' isLink icon='ArrowBack' onClick={() => navigate(-1)}>

@@ -72,7 +72,7 @@ const WithListChatPage = () => {
 	};
 
 	return (
-		<PageWrapper title={demoPagesMenu.chat.subMenu.withListChat.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<span>
@@ -212,9 +212,7 @@ const WithListChatPage = () => {
 											color='danger'
 											isLight
 											className='w-100 p-3'
-											onClick={() =>
-												navigate(`../${demoPagesMenu.login.path}`)
-											}>
+											>
 											Logout
 										</Button>
 									</CardFooterLeft>

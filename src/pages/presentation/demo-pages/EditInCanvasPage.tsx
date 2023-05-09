@@ -18,7 +18,7 @@ const EditInCanvasPage = () => {
 	const [date, setDate] = useState<Date>(new Date());
 
 	return (
-		<PageWrapper title={demoPagesMenu.editPages.subMenu.editInCanvas.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Icon icon='Info' className='me-2' size='2x' />

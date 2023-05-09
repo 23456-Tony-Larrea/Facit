@@ -15,15 +15,12 @@ const PricingTablePage = () => {
 	const { darkModeStatus } = useDarkMode();
 	const [activeElementId, setActiveElementId] = useState<string | null>(null);
 	return (
-		<PageWrapper title={demoPagesMenu.pricingTable.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: demoPagesMenu.pricingTable.text,
-								to: `/${demoPagesMenu.pricingTable.path}`,
-							},
+							
 						]}
 					/>
 					<SubheaderSeparator />

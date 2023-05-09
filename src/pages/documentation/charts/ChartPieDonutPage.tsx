@@ -16,7 +16,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartPieDonutPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsPieDonut.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

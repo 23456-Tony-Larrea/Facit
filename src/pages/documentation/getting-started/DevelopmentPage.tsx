@@ -9,7 +9,7 @@ import Card, {
 	ICardProps,
 } from '../../../components/bootstrap/Card';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import { gettingStartedPagesMenu } from '../../../menu';
+
 import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
 import Breadcrumb from '../../../components/bootstrap/Breadcrumb';
 import Page from '../../../layout/Page/Page';
@@ -83,19 +83,12 @@ const DevelopmentPage = () => {
 	};
 
 	return (
-		<PageWrapper title={gettingStartedPagesMenu.gettingStarted.subMenu.dev.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: gettingStartedPagesMenu.gettingStarted.text,
-								to: gettingStartedPagesMenu.gettingStarted.path,
-							},
-							{
-								title: gettingStartedPagesMenu.gettingStarted.subMenu.dev.text,
-								to: gettingStartedPagesMenu.gettingStarted.subMenu.dev.path,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>
@@ -107,9 +100,9 @@ const DevelopmentPage = () => {
 						tag='a'
 						color='success'
 						isLight
-						icon={gettingStartedPagesMenu.gettingStarted.subMenu.folderStructure.icon}
-						to={`../${gettingStartedPagesMenu.gettingStarted.subMenu.folderStructure.path}`}>
-						{gettingStartedPagesMenu.gettingStarted.subMenu.folderStructure.text}
+						
+					>
+						
 					</Button>
 				</SubHeaderRight>
 			</SubHeader>
@@ -270,7 +263,7 @@ const DevelopmentPage = () => {
 											color='success'
 											isLight
 											icon='NavigateNext'
-											to={`../${gettingStartedPagesMenu.gettingStarted.subMenu.folderStructure.path}`}>
+											>
 											Next
 										</Button>
 									</div>

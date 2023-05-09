@@ -1,7 +1,6 @@
 import React from 'react';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
-import { gettingStartedPagesMenu } from '../../../menu';
 import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
 import Card, {
 	CardBody,
@@ -24,21 +23,12 @@ const InstallationPage = () => {
 	};
 
 	return (
-		<PageWrapper title={gettingStartedPagesMenu.gettingStarted.subMenu.installation.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: gettingStartedPagesMenu.gettingStarted.text,
-								to: gettingStartedPagesMenu.gettingStarted.path,
-							},
-							{
-								title: gettingStartedPagesMenu.gettingStarted.subMenu.installation
-									.text,
-								to: gettingStartedPagesMenu.gettingStarted.subMenu.installation
-									.path,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>
@@ -50,9 +40,8 @@ const InstallationPage = () => {
 						tag='a'
 						color='success'
 						isLight
-						icon={gettingStartedPagesMenu.gettingStarted.subMenu.dev.icon}
-						to={`../${gettingStartedPagesMenu.gettingStarted.subMenu.dev.path}`}>
-						{gettingStartedPagesMenu.gettingStarted.subMenu.dev.text}
+						>
+						
 					</Button>
 				</SubHeaderRight>
 			</SubHeader>
@@ -164,7 +153,7 @@ const InstallationPage = () => {
 											color='success'
 											isLight
 											icon='NavigateNext'
-											to={`../${gettingStartedPagesMenu.gettingStarted.subMenu.dev.path}`}>
+											>
 											Next
 										</Button>
 									</div>

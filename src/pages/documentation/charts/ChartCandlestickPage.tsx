@@ -12,7 +12,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartCandlestickPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsCandleStick.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

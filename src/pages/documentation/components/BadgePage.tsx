@@ -31,19 +31,12 @@ const BadgePage = () => {
 	...
 </Badge>`;
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.badge.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.badge.text,
-								to: `/${componentPagesMenu.components.subMenu.badge.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

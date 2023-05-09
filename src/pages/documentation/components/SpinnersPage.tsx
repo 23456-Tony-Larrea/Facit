@@ -32,19 +32,12 @@ const SpinnersPage = () => {
 	className={ String }
 	{...props} />`;
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.spinners.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.spinners.text,
-								to: `/${componentPagesMenu.components.subMenu.spinners.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

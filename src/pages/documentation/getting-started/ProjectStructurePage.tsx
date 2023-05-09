@@ -8,7 +8,6 @@ import Card, {
 	CardTitle,
 } from '../../../components/bootstrap/Card';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import { gettingStartedPagesMenu } from '../../../menu';
 import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
 import Breadcrumb from '../../../components/bootstrap/Breadcrumb';
 import Page from '../../../layout/Page/Page';
@@ -310,21 +309,12 @@ reportWebVitals();
 	};
 
 	return (
-		<PageWrapper title={gettingStartedPagesMenu.gettingStarted.subMenu.projectStructure.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: gettingStartedPagesMenu.gettingStarted.text,
-								to: gettingStartedPagesMenu.gettingStarted.path,
-							},
-							{
-								title: gettingStartedPagesMenu.gettingStarted.subMenu
-									.projectStructure.text,
-								to: gettingStartedPagesMenu.gettingStarted.subMenu.projectStructure
-									.path,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>
@@ -336,9 +326,8 @@ reportWebVitals();
 						tag='a'
 						color='success'
 						isLight
-						icon={gettingStartedPagesMenu.routes.subMenu.router.icon}
-						to={`../${gettingStartedPagesMenu.routes.subMenu.router.path}`}>
-						{gettingStartedPagesMenu.routes.subMenu.router.text}
+						>
+					
 					</Button>
 				</SubHeaderRight>
 			</SubHeader>
@@ -506,7 +495,7 @@ reportWebVitals();
 											color='success'
 											isLight
 											icon='NavigateNext'
-											to={`../${gettingStartedPagesMenu.routes.subMenu.router.path}`}>
+											>
 											Next
 										</Button>
 									</div>

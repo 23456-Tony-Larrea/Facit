@@ -12,7 +12,7 @@ import { pageLayoutTypesPagesMenu } from '../../../menu';
 const MinimizeAsidePage = () => {
 	useMinimizeAside();
 	return (
-		<PageWrapper title={pageLayoutTypesPagesMenu.asideTypes.subMenu.minimizeAside.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

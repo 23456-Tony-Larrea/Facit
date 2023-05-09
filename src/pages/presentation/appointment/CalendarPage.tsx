@@ -301,7 +301,7 @@ const CalendarPage = () => {
 	}, [eventItem]);
 	// END:: Calendar
 	return (
-		<PageWrapper title={demoPagesMenu.appointment.subMenu.dashboard.text}>
+		<PageWrapper>
 			<SubHeader>
 				<SubHeaderLeft>
 					<Icon icon='Info' className='me-2' size='2x' />

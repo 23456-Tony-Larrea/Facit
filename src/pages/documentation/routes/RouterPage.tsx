@@ -9,8 +9,6 @@ import Card, {
 	CardTitle,
 } from '../../../components/bootstrap/Card';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import { componentPagesMenu, gettingStartedPagesMenu } from '../../../menu';
-import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
 import Breadcrumb from '../../../components/bootstrap/Breadcrumb';
 import Page from '../../../layout/Page/Page';
 import Icon from '../../../components/icon/Icon';
@@ -411,41 +409,9 @@ export default DefaultFooter;
 	};
 
 	return (
-		<PageWrapper title={gettingStartedPagesMenu.routes.subMenu.router.text}>
-			<SubHeader>
-				<SubHeaderLeft>
-					<Breadcrumb
-						list={[
-							{
-								title: gettingStartedPagesMenu.routes.text,
-								to: gettingStartedPagesMenu.routes.path,
-							},
-							{
-								title: gettingStartedPagesMenu.routes.subMenu.router.text,
-								to: gettingStartedPagesMenu.routes.subMenu.router.path,
-							},
-						]}
-					/>
-				</SubHeaderLeft>
-				<SubHeaderRight>
-					<Button
-						tag='a'
-						color='info'
-						isLight
-						icon={componentPagesMenu.components.icon}
-						to={`../${componentPagesMenu.components.path}`}>
-						{componentPagesMenu.components.text}
-					</Button>
-					<Button
-						tag='a'
-						color='info'
-						isLight
-						icon={componentPagesMenu.forms.icon}
-						to={`../${componentPagesMenu.forms.path}`}>
-						{componentPagesMenu.forms.text}
-					</Button>
-				</SubHeaderRight>
-			</SubHeader>
+		<PageWrapper >
+		
+		
 			<Page>
 				<div className='row h-100 align-content-start'>
 					<div className='col-md-3'>
@@ -918,9 +884,8 @@ export default DefaultFooter;
 											tag='a'
 											color='info'
 											isLight
-											icon={componentPagesMenu.components.icon}
-											to={`../${componentPagesMenu.components.path}`}>
-											{componentPagesMenu.components.text}
+											>
+											
 										</Button>
 									</div>
 									<div className='col-auto'>
@@ -928,9 +893,9 @@ export default DefaultFooter;
 											tag='a'
 											color='info'
 											isLight
-											icon={componentPagesMenu.forms.icon}
-											to={`../${componentPagesMenu.forms.path}`}>
-											{componentPagesMenu.forms.text}
+										
+			>
+											
 										</Button>
 									</div>
 								</div>

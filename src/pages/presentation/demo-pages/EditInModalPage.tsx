@@ -67,7 +67,7 @@ const EditInModalPage = () => {
 		},
 	});
 	return (
-		<PageWrapper title={demoPagesMenu.editPages.subMenu.editInModal.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Icon icon='Info' className='me-2' size='2x' />

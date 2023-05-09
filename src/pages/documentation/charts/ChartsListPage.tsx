@@ -16,8 +16,6 @@ import { TMenu } from '../../../type/menu-type';
 const ChartsListPage = () => {
 	const { darkModeStatus } = useDarkMode();
 
-	const charts: TMenu = componentPagesMenu.charts.subMenu;
-
 	const navigate = useNavigate();
 
 	const formik = useFormik({
@@ -28,7 +26,7 @@ const ChartsListPage = () => {
 	});
 
 	return (
-		<PageWrapper title={`${componentPagesMenu.charts.text} List`}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<label
@@ -51,20 +49,13 @@ const ChartsListPage = () => {
 			</SubHeader>
 			<Page>
 				<div className='row'>
-					{Object.keys(charts)
-						.filter((key) =>
-							charts[key].text
-								.toLowerCase()
-								.includes(formik.values.searchInput.toLowerCase()),
-						)
-						.map((i) => (
-							<div key={charts[i].id} className='col-md-3'>
+					
 								<Card
 									className={classNames('cursor-pointer transition-base', {
 										'bg-lo25-info-hover': darkModeStatus,
 										'bg-l25-info-hover': !darkModeStatus,
 									})}
-									onClick={() => navigate(`../${charts[i].path}`)}>
+									>
 									<CardBody>
 										<div className='d-flex align-items-center'>
 											<div className='flex-shrink-0'>
@@ -79,25 +70,20 @@ const ChartsListPage = () => {
 																'bg-l25-info': !darkModeStatus,
 															},
 														)}>
-														<span className='text-info fs-1 fw-bold'>
-															<Icon icon={charts[i].icon} />
-														</span>
+														
 													</div>
 												</div>
 											</div>
 											<div className='flex-grow-1 ms-3 d-flex justify-content-between align-items-center'>
 												<div>
-													<div className='fw-bold fs-5 mb-0'>
-														{charts[i].text}
-													</div>
+													
 												</div>
 											</div>
 										</div>
 									</CardBody>
 								</Card>
 							</div>
-						))}
-				</div>
+				
 			</Page>
 		</PageWrapper>
 	);

@@ -10,7 +10,7 @@ import { pageLayoutTypesPagesMenu } from '../../../menu';
 
 const OnlySubheader = () => {
 	return (
-		<PageWrapper title={pageLayoutTypesPagesMenu.pageLayout.subMenu.onlySubheader.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

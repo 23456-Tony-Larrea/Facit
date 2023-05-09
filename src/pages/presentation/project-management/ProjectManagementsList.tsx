@@ -45,14 +45,12 @@ const Item: FC<IItemProps> = ({
 }) => {
 	const { darkModeStatus } = useDarkMode();
 	const navigate = useNavigate();
-	const handleOnClickToProjectPage = useCallback(
-		() => navigate(`../${demoPagesMenu.projectManagement.subMenu.itemID.path}/1`),
-		[navigate],
-	);
+	
+	
 	return (
 		// eslint-disable-next-line react/jsx-props-no-spreading
 		<div className='col-md-4' {...props}>
-			<Card stretch onClick={handleOnClickToProjectPage} className='cursor-pointer'>
+			<Card>
 				<CardHeader>
 					<CardLabel icon='Ballot'>
 						<CardTitle>{name}</CardTitle>
@@ -135,13 +133,10 @@ const ProjectManagementsList = () => {
 
 	const { darkModeStatus } = useDarkMode();
 	const navigate = useNavigate();
-	const handleOnClickToEmployeeListPage = useCallback(
-		() => navigate(`../${demoPagesMenu.appointment.subMenu.employeeList.path}`),
-		[navigate],
-	);
+	
 
 	return (
-		<PageWrapper title={demoPagesMenu.projectManagement.subMenu.list.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<strong className='fs-5'>Hi John</strong>
@@ -186,7 +181,7 @@ const ProjectManagementsList = () => {
 										aria-label='Read More'
 										hoverShadow='default'
 										color={darkModeStatus ? 'dark' : undefined}
-										onClick={handleOnClickToEmployeeListPage}
+										
 									/>
 								</CardActions>
 							</CardHeader>
@@ -250,7 +245,7 @@ const ProjectManagementsList = () => {
 										aria-label='Read More'
 										hoverShadow='default'
 										color={darkModeStatus ? 'dark' : undefined}
-										onClick={handleOnClickToEmployeeListPage}
+									
 									/>
 								</CardActions>
 							</CardHeader>

@@ -82,7 +82,7 @@ const EditModernPage = () => {
 	const [passwordChangeCTA, setPasswordChangeCTA] = useState<boolean>(false);
 
 	return (
-		<PageWrapper title={demoPagesMenu.editPages.subMenu.editModern.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

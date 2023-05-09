@@ -49,7 +49,7 @@ const DashboardPage = () => {
 	const [activeTab, setActiveTab] = useState<TTabs>(TABS.YEARLY);
 
 	return (
-		<PageWrapper title={demoPagesMenu.sales.subMenu.dashboard.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<span className='h4 mb-0 fw-bold'>Overview</span>

@@ -232,7 +232,7 @@ $utilities: (
 /* rtl:end:remove */`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.utilities.subMenu.api.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

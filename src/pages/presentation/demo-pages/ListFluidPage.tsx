@@ -17,7 +17,7 @@ const ListFluidPage = () => {
 	const [date, setDate] = useState<Date>(new Date());
 
 	return (
-		<PageWrapper title={demoPagesMenu.listPages.subMenu.listFluid.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Icon icon='Info' className='me-2' size='2x' />

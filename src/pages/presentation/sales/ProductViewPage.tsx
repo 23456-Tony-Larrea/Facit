@@ -174,7 +174,7 @@ const ProductViewPage = () => {
 	}, [editItem]);
 
 	return (
-		<PageWrapper title={demoPagesMenu.sales.subMenu.product.text}>
+		<PageWrapper>
 			<SubHeader>
 				<SubHeaderLeft>
 					<Button color='info' isLink icon='ArrowBack' onClick={() => navigate(-1)}>

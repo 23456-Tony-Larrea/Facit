@@ -10,7 +10,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartPolarPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsPolar.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

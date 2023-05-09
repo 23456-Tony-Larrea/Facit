@@ -56,19 +56,12 @@ const ButtonGroupPage = () => {
 </ButtonGroup>`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.buttonGroup.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.buttonGroup.text,
-								to: `/${componentPagesMenu.components.subMenu.buttonGroup.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

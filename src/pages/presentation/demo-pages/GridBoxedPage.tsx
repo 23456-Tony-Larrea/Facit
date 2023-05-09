@@ -126,7 +126,7 @@ const GridBoxedPage = () => {
 	}, [editItem]);
 
 	return (
-		<PageWrapper title={demoPagesMenu.gridPages.subMenu.gridBoxed.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<img src={Company1} alt='Company' height={24} />

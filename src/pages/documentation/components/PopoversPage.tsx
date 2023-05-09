@@ -95,19 +95,12 @@ const PopoversPage = () => {
 	];
 
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.popovers.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.popovers.text,
-								to: `/${componentPagesMenu.components.subMenu.popovers.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

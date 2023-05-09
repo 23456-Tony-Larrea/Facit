@@ -68,7 +68,7 @@ const CustomersList = () => {
 	const [editModalStatus, setEditModalStatus] = useState<boolean>(false);
 
 	return (
-		<PageWrapper title={demoPagesMenu.crm.subMenu.customersList.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<label
@@ -278,7 +278,7 @@ const CustomersList = () => {
 																<Button
 																	icon='Visibility'
 																	tag='a'
-																	to={`../${demoPagesMenu.crm.subMenu.customerID.path}/${i.id}`}>
+																	>
 																	View
 																</Button>
 															</DropdownItem>

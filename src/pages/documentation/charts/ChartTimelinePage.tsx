@@ -13,7 +13,7 @@ import { componentPagesMenu } from '../../../menu';
 
 const ChartTimelinePage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsTimeline.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

@@ -50,7 +50,7 @@ const EmployeeList = () => {
 		.filter((key2) => (formik.values.available ? USERS[key2].isOnline : key2))
 		.map((i) => USERS[i]);
 	return (
-		<PageWrapper title={demoPagesMenu.appointment.subMenu.employeeList.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<label
@@ -151,7 +151,7 @@ const EmployeeList = () => {
 						color='info'
 						isLight
 						tag='a'
-						to={`../${demoPagesMenu.editPages.subMenu.editWizard.path}`}>
+						>
 						New Employee
 					</Button>
 				</SubHeaderRight>
@@ -217,7 +217,7 @@ const EmployeeList = () => {
 																isLight
 																hoverShadow='sm'
 																tag='a'
-																to={`../${demoPagesMenu.appointment.subMenu.employeeID.path}/${user.id}`}
+															
 																data-tour={user.name}
 															/>
 														</div>

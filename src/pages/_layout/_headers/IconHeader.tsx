@@ -10,13 +10,8 @@ const IconHeader = () => {
 	return (
 		<Header>
 			<HeaderLeft>
-				<Navigation
-					menu={componentPagesMenu.icons.subMenu}
-					id={`${componentPagesMenu.icons.id}top-menu`}
-					horizontal={
-						!!width && width >= Number(process.env.REACT_APP_MOBILE_BREAKPOINT_SIZE)
-					}
-				/>
+		
+				
 			</HeaderLeft>
 			<CommonHeaderRight />
 		</Header>

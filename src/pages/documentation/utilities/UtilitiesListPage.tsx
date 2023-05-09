@@ -16,7 +16,7 @@ import { TMenu } from '../../../type/menu-type';
 const FormsListPage = () => {
 	const { darkModeStatus } = useDarkMode();
 
-	const utilities: TMenu = componentPagesMenu.utilities.subMenu;
+	
 
 	const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const FormsListPage = () => {
 	});
 
 	return (
-		<PageWrapper title={`${componentPagesMenu.utilities.text} List`}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<label
@@ -49,56 +49,7 @@ const FormsListPage = () => {
 					<CommonStoryBtn to='/docs/' />
 				</SubHeaderRight>
 			</SubHeader>
-			<Page>
-				<div className='row'>
-					{Object.keys(utilities)
-						.filter((key) =>
-							utilities[key].text
-								.toLowerCase()
-								.includes(formik.values.searchInput.toLowerCase()),
-						)
-						.map((i) => (
-							<div key={utilities[i].id} className='col-md-3'>
-								<Card
-									className={classNames('cursor-pointer transition-base', {
-										'bg-lo25-info-hover': darkModeStatus,
-										'bg-l25-info-hover': !darkModeStatus,
-									})}
-									onClick={() => navigate(`../${utilities[i].path}`)}>
-									<CardBody>
-										<div className='d-flex align-items-center'>
-											<div className='flex-shrink-0'>
-												<div
-													className='ratio ratio-1x1'
-													style={{ width: 72 }}>
-													<div
-														className={classNames(
-															'rounded-2 d-flex align-items-center justify-content-center',
-															{
-																'bg-lo25-info': darkModeStatus,
-																'bg-l25-info': !darkModeStatus,
-															},
-														)}>
-														<span className='text-info fs-1 fw-bold'>
-															<Icon icon={utilities[i].icon} />
-														</span>
-													</div>
-												</div>
-											</div>
-											<div className='flex-grow-1 ms-3 d-flex justify-content-between align-items-center'>
-												<div>
-													<div className='fw-bold fs-5 mb-0'>
-														{utilities[i].text}
-													</div>
-												</div>
-											</div>
-										</div>
-									</CardBody>
-								</Card>
-							</div>
-						))}
-				</div>
-			</Page>
+			
 		</PageWrapper>
 	);
 };

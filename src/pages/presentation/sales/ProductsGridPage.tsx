@@ -122,17 +122,10 @@ const ProductsGridPage = () => {
 	}, [editItem]);
 
 	return (
-		<PageWrapper title={demoPagesMenu.sales.subMenu.productsGrid.text}>
+		<PageWrapper>
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
-						list={[
-							{ title: demoPagesMenu.sales.text, to: demoPagesMenu.sales.path },
-							{
-								title: demoPagesMenu.sales.subMenu.productsGrid.text,
-								to: demoPagesMenu.sales.subMenu.productsGrid.path,
-							},
-						]}
 					/>
 					<SubheaderSeparator />
 					<span className='text-muted'>{data.length} items</span>

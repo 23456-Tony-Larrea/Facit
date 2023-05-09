@@ -245,7 +245,7 @@ $border-radius-pill:	50rem;`;
 ),`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.utilities.subMenu.borders.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

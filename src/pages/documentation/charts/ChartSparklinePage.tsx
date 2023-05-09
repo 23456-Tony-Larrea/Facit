@@ -417,7 +417,7 @@ const ChartSparklinePage = () => {
 		},
 	});
 	return (
-		<PageWrapper title={componentPagesMenu.charts.subMenu.chartsSparkline.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

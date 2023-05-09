@@ -10,7 +10,7 @@ import { pageLayoutTypesPagesMenu } from '../../../menu';
 
 const DefaultAsidePage = () => {
 	return (
-		<PageWrapper title={pageLayoutTypesPagesMenu.asideTypes.subMenu.defaultAside.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

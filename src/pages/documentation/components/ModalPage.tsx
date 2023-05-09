@@ -177,19 +177,12 @@ const ModalPage = () => {
 </Modal>`;
 
 	return (
-		<PageWrapper title={componentPagesMenu.components.subMenu.modal.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
 						list={[
-							{
-								title: componentPagesMenu.components.text,
-								to: `/${componentPagesMenu.components.path}`,
-							},
-							{
-								title: componentPagesMenu.components.subMenu.modal.text,
-								to: `/${componentPagesMenu.components.subMenu.modal.path}`,
-							},
+							
 						]}
 					/>
 				</SubHeaderLeft>

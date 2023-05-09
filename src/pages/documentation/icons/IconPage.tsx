@@ -55,7 +55,7 @@ const SIZES: TIconsSize[] = [
 
 const IconPage = () => {
 	return (
-		<PageWrapper title={componentPagesMenu.icons.subMenu.icon.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb

@@ -159,7 +159,7 @@ const FormControlsPage = () => {
 	];
 
 	return (
-		<PageWrapper title={componentPagesMenu.forms.subMenu.formControl.text}>
+		<PageWrapper >
 			<SubHeader>
 				<SubHeaderLeft>
 					<Breadcrumb
