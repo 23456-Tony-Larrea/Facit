@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { componentPagesMenu,dashboardPagesMenu,demoPagesMenu ,pageLayoutTypesPagesMenu,menuRole} from '../menu';
+import { componentPagesMenu,dashboardPagesMenu,demoPagesMenu ,pageLayoutTypesPagesMenu,menuRole,loginMenu} from '../menu';
 import Login from '../pages/presentation/auth/Login';
 
 const LANDING = {
@@ -25,7 +25,16 @@ const presentation = [
 	/**
 	 * Landing
 	 */
-	
+	{
+		path: dashboardPagesMenu.dashboard.path,
+		element: <LANDING.DASHBOARD />,
+		exact: true,
+	},
+	{
+		path: loginMenu.login.path,
+		element: <Login />,
+		exact: true,
+	},
 	//My Paths
 	{
 		path: menuRole.role.path,

@@ -82,7 +82,7 @@ const DefaultAside = () => {
 			</AsideBody>
 
 			{/* //////////////////////////////////////////menu  */}
-{/* 			<AsideFoot>
+			<AsideFoot>
 				<nav aria-label='aside-bottom-menu'>
 					<div className='navigation'>
 						<div
@@ -119,7 +119,7 @@ const DefaultAside = () => {
 					</div>
 				</nav>
 				<User />
-			</AsideFoot> */}
+			</AsideFoot>
 		</Aside>
 	);
 };

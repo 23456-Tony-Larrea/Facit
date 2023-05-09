@@ -54,8 +54,33 @@ export const demoPagesMenu = {
 		icon: 'PersonAdd',
 		subMenu: null
 	},
-		
 };
+export const loginMenu={
+	auth: {
+		id: 'auth',
+		text: 'Auth Pages',
+		icon: 'Extension',
+	},
+	login: {
+		id: 'login',
+		text: 'Login',
+		path: 'auth-pages/login',
+		icon: 'Login',
+	},
+	signUp: {
+		id: 'signUp',
+		text: 'Sign Up',
+		path: 'auth-pages/sign-up',
+		icon: 'PersonAdd',
+	},
+
+	page404: {
+		id: 'Page404',
+		text: 'Error 404',
+		path: 'auth-pages/404',
+		icon: 'ReportGmailerrorred',
+	},
+}
 export const pageLayoutTypesPagesMenu = {
 };
 
