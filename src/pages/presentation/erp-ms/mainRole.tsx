@@ -3,14 +3,22 @@ import Button from "../../../components/bootstrap/Button";
 import ListGroup from "../../../components/bootstrap/ListGroup";
 import ListGroupItem from "../../../components/bootstrap/ListGroup";
 import s from "../../../../src/modules/MainRoles.module.css";
-import swal from "sweetalert";
+import swal from "sweetalert2";
 
 const MainRole = () => {
   const [roles, setRoles] = useState(["Administrador", "Editor", "Usuario"]);
   const [permissions, setPermissions] = useState([true, false, true]);
 
-  const handleAddRole = () => {
-    const newRole = prompt("Ingrese el nombre del nuevo rol");
+  const handleAddRole = async () => {
+    // const newRole = prompt("Ingrese el nombre del nuevo rol");
+
+    const { value: newRole } = await swal.fire({
+      title: "Ingrese Nuevo Rol",
+      icon: "info",
+      input: "text",
+      inputValue: "",
+    });
+
     if (newRole) {
       setRoles([...roles, newRole]);
       setPermissions([...permissions, false]);
