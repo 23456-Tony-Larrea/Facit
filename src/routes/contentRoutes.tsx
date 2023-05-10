@@ -3,7 +3,9 @@ import { componentPagesMenu,dashboardPagesMenu,demoPagesMenu ,pageLayoutTypesPag
 import Login from '../pages/presentation/auth/Login';
 
 const LANDING = {
-	DASHBOARD: lazy(() => import('../pages/presentation/dashboard/DashboardPage')),
+  DASHBOARD: lazy(
+    () => import("../pages/presentation/dashboard/DashboardPage")
+  ),
 };
 const AUTH = {
 	PAGE_404: lazy(() => import('../pages/presentation/auth/Page404')),
@@ -18,7 +20,8 @@ const PAGE_LAYOUTS = {
 	MINIMIZE_ASIDE: lazy(() => import('../pages/presentation/aside-types/MinimizeAsidePage')),
 };
 const PAGE_ROLE={
-	ROLE:lazy(() => import('../pages/presentation/erp-ms/mainRole'))
+	ROLE:lazy(() => import('../pages/presentation/erp-ms/mainRole')),
+	USER:lazy(() => import('../pages/presentation/erp-ms/mainUser'))
 }
 
 const presentation = [
@@ -39,6 +42,11 @@ const presentation = [
 	{
 		path: menuRole.role.path,
 		element: <PAGE_ROLE.ROLE />,
+		exact: true,
+	},
+	{
+		path:demoPagesMenu.listPages.subMenu.usuarios.path,
+		element: <PAGE_ROLE.USER />,
 		exact: true,
 	}	
 ];
