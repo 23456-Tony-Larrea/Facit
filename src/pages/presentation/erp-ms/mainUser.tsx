@@ -80,7 +80,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	}, []);
 
 	const handleAddUser = (values: IUser, { resetForm }: FormikHelpers<IUser>) => {
-		axios.post('/api/user', values)
+		axios.post(`${API_URL}user`, values)
 			.then(response => {
 				setUsers([...users, response.data]);
 				resetForm();
@@ -116,13 +116,21 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items } = useSortableData(users.filter(user => activeFilter === null || user.status === (activeFilter ? 'active' : 'inactive')));
-    type ModalProps = {
-        isOpen: boolean;
-        setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-      };
-
-      
-
+    const formik = useFormik<IUser>({
+        initialValues: {
+            id: 0,
+            name: '',
+            first_name: '',
+            last_name: '',
+            email: '',
+            photo: '',
+            identification_card: '',
+            identificationNumber: '',
+            status: '',
+        },
+        onSubmit: handleAddUser,
+    });
+    
 	return (
 		<>
 			<Card stretch={isFluid}>
