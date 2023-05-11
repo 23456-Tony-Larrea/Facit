@@ -1,24 +1,46 @@
 .container {
   font-style: italic;
+  background-color: #e3e3e3;
 }
-.col {
+.colRole {
   text-align: start;
   margin-top: 15px;
   margin-bottom: 15px;
   text-shadow: 1px 1px 1px #979797;
+  width: 30%;
+  padding: 15px;
+  border-radius: 15px;
+  /* border: 2px solid; */
+  min-height: 70vh;
+}
+.colPermisos {
+  text-align: start;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 1px #979797;
+  width: 65%;
+  padding: 15px;
+  border-radius: 15px;
+  /* border: 2px solid; */
+  margin-left: 10px;
+  min-height: 70vh;
 }
 .TituloRolePermiso {
+  padding-left: 5px;
   font-weight: bold;
-  border-bottom: 2px solid;
+  /* border-bottom: 2px solid; */
   margin-bottom: 15px;
   padding-bottom: 5px;
-  text-shadow: 1px 1px 1px #4d69fa;
+  /* text-shadow: 1px 1px 1px #4d69fa; */
+  border-radius: 15px;
+  box-shadow: 2px 2px 2px #4d69fa;
 }
 .divconCheckBox {
   display: flex;
   width: 100%;
   font-size: 16px;
-  margin: 3px;
+  margin-top: 8px;
+  padding: 5px;
   justify-content: space-between;
   background: rgb(0, 0, 0);
   background: linear-gradient(
@@ -27,6 +49,7 @@
     rgba(130, 130, 130, 0.33049716468618695) 100%,
     rgba(0, 0, 0, 1) 100%
   );
+  box-shadow: 2px 2px 2px #4d69fa;
   border-radius: 15px;
 }
 .switch {
@@ -76,4 +99,10 @@ input:checked + .slider:before {
   margin-top: 15px;
   margin-left: 15px;
   font-weight: 700;
+  box-shadow: 2px 2px 2px #868686;
+}
+.icon {
+  color: #4d69fa;
+  font-size: 30px;
+  margin-right: 5px;
 }
