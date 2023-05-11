@@ -1,120 +1,120 @@
 .container {
-  font-style: italic;
-  background-color: #e9e9e9;
-  border-radius: 15px;
+	font-style: italic;
+	background-color: #e9e9e9;
+	border-radius: 15px;
 }
 .row {
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  flex-direction: row;
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	flex-direction: row;
 }
 .colRole {
-  text-align: start;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-shadow: 1px 1px 1px #979797;
-  width: 30%;
-  padding: 15px;
-  min-height: 70vh;
-  border-radius: 15px;
-  box-shadow: 2px 2px 2px #c5c5c5;
-  background-color: #fbfbfb;
-  margin-top: 15px;
+	text-align: start;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	text-shadow: 1px 1px 1px #979797;
+	width: 30%;
+	padding: 15px;
+	min-height: 70vh;
+	border-radius: 15px;
+	box-shadow: 2px 2px 2px #c5c5c5;
+	background-color: #fbfbfb;
+	margin-top: 15px;
 }
 .colPermisos {
-  text-align: start;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-shadow: 1px 1px 1px #979797;
-  width: 65%;
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 2px 2px 2px #c5c5c5;
-  background-color: #fbfbfb;
-  margin-top: 15px;
-  margin-left: 10px;
-  min-height: 70vh;
+	text-align: start;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	text-shadow: 1px 1px 1px #979797;
+	width: 65%;
+	padding: 15px;
+	border-radius: 15px;
+	box-shadow: 2px 2px 2px #c5c5c5;
+	background-color: #fbfbfb;
+	margin-top: 15px;
+	margin-left: 10px;
+	min-height: 70vh;
 }
 .TituloRolePermiso {
-  padding-left: 5px;
-  font-weight: bold;
-  /* border-bottom: 2px solid; */
-  margin-bottom: 15px;
-  padding-bottom: 5px;
-  /* text-shadow: 1px 1px 1px #4d69fa; */
-  border-radius: 15px;
-  box-shadow: 2px 2px 2px #4d69fa;
+	padding-left: 5px;
+	font-weight: bold;
+	/* border-bottom: 2px solid; */
+	margin-bottom: 15px;
+	padding-bottom: 5px;
+	/* text-shadow: 1px 1px 1px #4d69fa; */
+	border-radius: 15px;
+	box-shadow: 2px 2px 2px #4d69fa;
 }
 .divconCheckBox {
-  display: flex;
-  width: 100%;
-  font-size: 16px;
-  margin-top: 8px;
-  padding: 5px;
-  justify-content: space-between;
-  /* background: rgb(0, 0, 0);
+	display: flex;
+	width: 100%;
+	font-size: 16px;
+	margin-top: 8px;
+	padding: 5px;
+	justify-content: space-between;
+	/* background: rgb(0, 0, 0);
   background: linear-gradient(
     90deg,
     rgba(0, 0, 0, 0) 0%,
     rgba(130, 130, 130, 0.33049716468618695) 100%,
     rgba(0, 0, 0, 1) 100%
   ); */
-  background-color: #efefef;
-  box-shadow: 2px 2px 2px #4d69fa;
-  border-radius: 15px;
+	background-color: #efefef;
+	box-shadow: 2px 2px 2px #4d69fa;
+	border-radius: 15px;
 }
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 48px;
-  height: 25px;
+	position: relative;
+	display: inline-block;
+	width: 48px;
+	height: 25px;
 }
 
 .slider {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  border-radius: 25px;
-  transition: 0.4s;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	border-radius: 25px;
+	transition: 0.4s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.4s;
+	position: absolute;
+	content: '';
+	height: 20px;
+	width: 20px;
+	left: 3px;
+	bottom: 3px;
+	background-color: white;
+	border-radius: 50%;
+	transition: 0.4s;
 }
 input {
-  display: none;
+	display: none;
 }
 input:checked + .slider {
-  background-color: #4d69fa;
+	background-color: #4d69fa;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #4d69fa;
+	box-shadow: 0 0 1px #4d69fa;
 }
 
 input:checked + .slider:before {
-  transform: translateX(23px);
+	transform: translateX(23px);
 }
 .buttonRole {
-  margin-top: 15px;
-  margin-left: 15px;
-  font-weight: 700;
-  box-shadow: 2px 2px 2px #868686;
+	margin-top: 15px;
+	margin-left: 15px;
+	font-weight: 700;
+	box-shadow: 2px 2px 2px #868686;
 }
 .icon {
-  color: #4d69fa;
-  font-size: 30px;
-  margin-right: 5px;
+	color: #4d69fa;
+	font-size: 30px;
+	margin-right: 5px;
 }

@@ -49,10 +49,23 @@ export const demoPagesMenu = {
 	},
 	listPages: {
 		id: 'listPages',
-		text: 'Roles y Permisos',
+		text: 'Configuracion',
 		path: 'Roles',
-		icon: 'PersonAdd',
-		subMenu: null
+		icon: 'BackupTable',
+		subMenu: {
+			RolesPermiso: {
+				id: 'RolesPermiso',
+				text: 'Roles y Permisos',
+				path: 'Roles',
+				icon: 'Person',
+			},
+			usuarios:{
+				id: 'usuarios',
+				text: 'Usuarios',
+				path: 'Users',
+				icon: 'PersonAdd',
+			}
+		}
 	},
 };
 export const loginMenu={
