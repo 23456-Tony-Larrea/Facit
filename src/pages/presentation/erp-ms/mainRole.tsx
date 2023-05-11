@@ -58,6 +58,9 @@ localStorage.removeItem("token");
 }
 }
 );
+
+
+	
 	const { themeStatus, darkModeStatus } = useDarkMode();
   const [roles, setRoles] = useState<IRole[]>([]);
 
@@ -85,22 +88,39 @@ localStorage.removeItem("token");
 			notify: true,
 		},
 	});
+	const getRoles = async () => {
+		await axios
+		  .get(`${API_URL}roles`)
+		  .then(response => {
+			setRoles(response.data.data);
+			console.log(response.data.data);
+		  })
+		  .catch(error => {
+			console.log(error);
+		  });
+	  };
 	useEffect(() => {
-		axios.get(`${API_URL}roles`)
-		.then(response => {
-		setRoles(response.data.data);
-		console.log(response.data.data);
+		getRoles();
+		}, []);		
+	const addRoles = async () => {
+		const data = {
+			name: formik.values.roleName,
 		
-		})
-		.catch(error => {
-		console.log(error);
-		});
-		}, []);
+		};
+		try {
+			const response = await axios.post(`${API_URL}roles`, data);
+			console.log(response);
+			setIsOpenModal(false)
+			getRoles();
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-
+	
 
 	return (
 		<>
@@ -310,7 +330,9 @@ localStorage.removeItem("token");
 			color='secondary'
 			isLight
 			onClick={() => {
-			setIsOpenModal(false);
+				addRoles();
+				setIsOpenModal(false);
+
 			}}>
 			Guardar
 			</Button>
