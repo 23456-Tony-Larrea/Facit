@@ -34,12 +34,10 @@ const MainRole = () => {
 
   return (
     <div className={`container ${s.container}`}>
-      <div className="row">
+      <div className={`row ${s.row}`}>
         <div className={`col-md-6 ${s.colRole}`}>
           <h2 className={s.TituloRolePermiso}>
-            <Icon icon="Assignment" className={s.icon}>
-              {"rrr"}
-            </Icon>
+            <Icon icon="Assignment" className={s.icon} />
             Roles
           </h2>
           <ListGroup>
