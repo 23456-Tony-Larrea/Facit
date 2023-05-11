@@ -13,18 +13,18 @@ interface IRole {
 	name: string;
 }
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
-	const token = localStorage.getItem('user_token');
-	axios.interceptors.request.use(
-		(config) => {
-			config.headers.authorization = `Bearer ${token}`;
-			return config;
-		},
-		(error) => {
-			if (error.response.status === 401) {
-				localStorage.removeItem('token');
-			}
-		},
-	);
+	const token = localStorage.getItem("user_token");
+axios.interceptors.request.use(
+(config) => {
+config.headers.authorization = `Bearer ${token}`;
+return config;
+},
+(error) => {
+if (error.response.status === 401) {
+localStorage.removeItem("token");
+}
+}
+);
 	const { themeStatus, darkModeStatus } = useDarkMode();
 	const [roles, setRoles] = useState<IRole[]>([]);
 
@@ -53,20 +53,21 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		},
 	});
 	useEffect(() => {
-		axios
-			.get(`${API_URL}roles`)
-			.then((response) => {
-				setRoles(response.data.data);
-				console.log(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
+		axios.get(`${API_URL}roles`)
+		.then(response => {
+		setRoles(response.data.data);
+		console.log(response.data.data);
+		
+		})
+		.catch(error => {
+		console.log(error);
+		});
+		}, []);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
 
 	return (
 		<div className={`container ${s.container}`}>
@@ -113,8 +114,48 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						))}
 					</ListGroup>
 				</div>
+			</OffCanvas>
+						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} titleId='tour-title'>
+			<ModalHeader setIsOpen={setIsOpenModal}>
+			<ModalTitle id='tour-title' className='d-flex align-items-end'>
+			<span className='ps-2'>
+			<Icon icon='Verified' color='info' />
+			</span>
+			</ModalTitle>
+			</ModalHeader>
+			<ModalBody>
+			<div className='row'>
+
+			<div className='col-md-9 d-flex align-items-center'>
+			<div>
+			<h2>Agregar Roles</h2>
+			<Input
+            type='text'
+            id='roleName'
+            name='roleName'
+            onChange={formik.handleChange}
+        	value={formik.values.roleName}
+          />
 			</div>
-		</div>
+			</div>
+			</div>
+			</ModalBody>
+			<ModalFooter>
+			<Button icon='Close' color='danger' isLink onClick={() => setIsOpenModal(false)}>
+			Cancelar
+			</Button>
+			<Button
+			icon='Save'
+			color='success'
+			isLight
+			onClick={() => {
+			setIsOpenModal(false);
+			}}>
+			Guardar
+			</Button>
+			</ModalFooter>
+			</Modal>
+		</>
 	);
 };
 
