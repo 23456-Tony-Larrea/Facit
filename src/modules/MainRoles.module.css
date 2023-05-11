@@ -44,10 +44,17 @@
 	padding-bottom: 5px;
 	/* text-shadow: 1px 1px 1px #4d69fa; */
 	border-radius: 15px;
-	box-shadow: 2px 2px 2px #4d69fa;
+	/* box-shadow: 2px 2px 2px #4d69fa; */
+}
+.divconCheckBox span {
+	width: 100%;
+	display: flex;
+	justify-content: start;
+	align-items: center;
 }
 .divconCheckBox {
 	display: flex;
+	text-align: start;
 	width: 100%;
 	font-size: 16px;
 	margin-top: 8px;
@@ -60,8 +67,8 @@
     rgba(130, 130, 130, 0.33049716468618695) 100%,
     rgba(0, 0, 0, 1) 100%
   ); */
-	background-color: #efefef;
-	box-shadow: 2px 2px 2px #4d69fa;
+	/* background-color: #efefef; */
+	/* box-shadow: 2px 2px 2px #4d69fa; */
 	border-radius: 15px;
 }
 .switch {
@@ -77,7 +84,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #ccc;
+	/* background-color: #ccc; */
 	border-radius: 25px;
 	transition: 0.4s;
 }

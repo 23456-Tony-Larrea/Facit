@@ -63,7 +63,7 @@ const MainRole = () => {
 							<ListGroupItem key={index}>
 								<div className={s.divconCheckBox}>
 									<Icon icon='Add' className={s.icon} />
-									{` Permiso ${index + 1}`}{' '}
+									<span>{` Permiso ${index + 1}`} </span>
 									<label className={s.switch}>
 										<input
 											type='checkbox'
