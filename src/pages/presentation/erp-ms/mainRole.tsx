@@ -41,6 +41,10 @@ import { API_URL } from '../../../constants';
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
+interface IRole{
+  id: number;
+  name: string;
+}
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const token = localStorage.getItem("user_token");
 axios.interceptors.request.use(
@@ -55,6 +59,7 @@ localStorage.removeItem("token");
 }
 );
 	const { themeStatus, darkModeStatus } = useDarkMode();
+  const [roles, setRoles] = useState<IRole[]>([]);
 
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -83,7 +88,7 @@ localStorage.removeItem("token");
 	useEffect(() => {
 		axios.get(`${API_URL}roles`)
 		.then(response => {
-		/* setUsers(response.data.data); */
+		setRoles(response.data.data);
 		console.log(response.data.data);
 		
 		})
@@ -129,7 +134,7 @@ localStorage.removeItem("token");
 							</tr>
 						</thead>
 						<tbody>
-							{dataPagination(items, currentPage, perPage).map((item) => (
+							{dataPagination(roles, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
 									{/* <td>
 										<Button
@@ -150,12 +155,12 @@ localStorage.removeItem("token");
 										<div className='d-flex'>
 											
 											<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
-												{`${item.name} ${item.assigned.surname}`}
+												{item.name}
 											</div>
 										</div>
 									</td>
 		
-									<td>
+									{/* <td>
 										<Dropdown>
 											<DropdownToggle hasIcon={false}>
 												<Button
@@ -180,7 +185,7 @@ localStorage.removeItem("token");
 												))}
 											</DropdownMenu>
 										</Dropdown>
-									</td>
+									</td> */}
 									<td>
 										<Button
 											isOutline={!darkModeStatus}
