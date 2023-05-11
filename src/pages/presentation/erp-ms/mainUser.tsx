@@ -8,6 +8,7 @@ import Card, {
 	CardLabel,
 	CardTitle,
 } from '../../../components/bootstrap/Card';
+import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 
 import Dropdown, {
 	DropdownItem,
@@ -23,10 +24,11 @@ import Modal, {
 import Button from '../../../components/bootstrap/Button';
 import Icon from '../../../components/icon/Icon';
 import Avatar from '../../../components/Avatar';
+import Input from '../../../components/bootstrap/forms/Input';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../../components/PaginationButtons';
 import useSortableData from '../../../hooks/useSortableData';
 import useDarkMode from '../../../hooks/useDarkMode';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { API_URL } from '../../../constants';
 
 
@@ -40,14 +42,18 @@ interface IUser {
 	last_name: string;
 	email: string;
 	photo: string;
+	type_identification_card: string;
 	identification_card: string;
-	identificationNumber: string;
 	status: string;
 }
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
 
+type Role = {
+	id: number;
+	name: string;
+  }
 const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
     const token = localStorage.getItem("user_token");
     axios.interceptors.request.use(
@@ -66,34 +72,38 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [users, setUsers] = useState<IUser[]>([]);
 	const [activeFilter, setActiveFilter] = useState<boolean | null>(null);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+	const [roles, setRoles] = useState<Role[]>([]);
+	const [isEditMode, setIsEditMode] = useState(false);
+
 
 	const getUsers = () => {
 		axios.get(`${API_URL}user`)
 			.then(response => {
 				setUsers(response.data.data);
+				console.log(response.data.data);
 			})
 			.catch(error => {
 				console.log(error);
 			});
 	};
-	/* const addUsers = async () => {
-		axios.post(`${API_URL}user`)
- */
+	const getRoles = () => {
+		axios.get(`${API_URL}roles`)
+			.then(response => {
+				setRoles(response.data.data);
+				console.log(response.data.data);
+
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	};
+	
+	
 	useEffect(() => {
 		getUsers();
+		getRoles();
 	}, []);
 
-	const handleEditUser = (values: IUser, { resetForm }: FormikHelpers<IUser>) => {
-		axios.put(`/api/user/${values.id}`, values)
-			.then(response => {
-				const updatedUsers = users.map(user => user.id === response.data.id ? response.data : user);
-				setUsers(updatedUsers);
-				resetForm();
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	};
 
 	const handleDeleteUser = (id: number) => {
 		axios.delete(`/api/user/${id}`)
@@ -109,23 +119,79 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items } = useSortableData(users.filter(user => activeFilter === null || user.status === (activeFilter ? 'active' : 'inactive')));
+	
+	const handleIdentificationType = (type_identification_card: string) => {
+		formik.setFieldValue('type_identification_card', type_identification_card);
+		formik.setFieldValue('type_identification_card', type_identification_card);
+	};
 	const formik = useFormik({
+		onSubmit<Values>(
+			values: Values,
+			formikHelpers: FormikHelpers<Values>,
+			): void | Promise<any> {
+			return undefined;
+			},
 		initialValues: {
-			id: 0,
+			id: undefined,
 			name: '',
 			first_name: '',
 			last_name: '',
 			email: '',
 			photo: '',
+			type_identification_card: '',
 			identification_card: '',
-			identificationNumber: '',
 			status: '',
+			password:'12345678',
+			phone: '',
+			address:'',
+			role_id:undefined,
 		},
-		onSubmit: handleEditUser,
 	});
+	const addUsers = async () => {
+		try {
+			if (isEditMode && formik.values.id) {
+			  const response = await axios.put(`${API_URL}roles/${formik.values.id}`, {
+				id: formik.values.id,
+				name: formik.values.name,
+				first_name: formik.values.first_name,
+				last_name: formik.values.last_name,
+				email: formik.values.email,
+				photo: formik.values.photo,
+				type_identification_card: formik.values.type_identification_card,
+				identification_card: formik.values.identification_card,
+				status: formik.values.status,
+				password: formik.values.password,
+				phone: formik.values.phone,
+				address: formik.values.address,
+				role_id: formik.values.role_id,
+			  });
+			  console.log(response);
+			  setUsers([...users, response.data]);
+			  setIsOpenModal(false);
+			}else {
+		  		const response = await axios.post(`${API_URL}user`, {
+				name: formik.values.name,
+			first_name: formik.values.first_name,
+			last_name: formik.values.last_name,
+			email: formik.values.email,
+			photo: formik.values.photo,
+			type_identification_card: formik.values.type_identification_card,
+			identification_card: formik.values.identification_card,
+			status: formik.values.status,
+			password: formik.values.password,
+			phone: formik.values.phone,
+			address: formik.values.address,
+			role_id: formik.values.role_id,
+		  });
+		  console.log(response);
+		  setUsers([...users, response.data]);
+		  setIsOpenModal(false);
+	}
+}catch (error) {
+		  console.error(error);
+		}
+	  };
 
-
-    
 	return (
 		<>
 			<Card stretch={isFluid}>
@@ -194,7 +260,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									<td>{item.identification_card}</td>
                                     <td>{item.phone}</td>
                                     <td>{item.address}</td>
-                                    <td>{item.role_id.name}</td>
+                                    <td>{item.role_id.name}</td> 
 									<td>
   {item.status === true ? (
     <Button isLink color="success" icon="Circle" className="text-nowrap">
@@ -215,7 +281,24 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												'border-light': !darkModeStatus,
 											})}
 											icon='Edit'
-											onClick={() => {}}>
+											onClick={() => {
+												setIsOpenModal(true);
+												formik.setValues(item);
+												formik.setFieldValue('userId', item.id);
+											
+												formik.setFieldValue('name', item.name);
+												formik.setFieldValue('first_name', item.first_name);
+												formik.setFieldValue('last_name', item.last_name);
+												formik.setFieldValue('email', item.email);
+												formik.setFieldValue('photo', item.photo);
+												formik.setFieldValue('type_identification_card', item.type_identification_card);
+												formik.setFieldValue('identification_card', item.identification_card);
+												formik.setFieldValue('status', item.status);
+												formik.setFieldValue('phone', item.phone);
+												formik.setFieldValue('address', item.address);
+												formik.setFieldValue('role_id', item.role_id);
+												setIsEditMode(false);
+											}}>
 											Editar
 										</Button>
 										<Button
@@ -253,17 +336,135 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
-				<div className='row'>
-					
-					<div className='col-md-9 d-flex align-items-center'>
-						<div>
-							<h2>Hi 👋🏻, I'm Susy.</h2>
-							<p className='lead'>
-								Would you like me to introduce "Facit" to you in a few steps?
-							</p>
-						</div>
-					</div>
-				</div>
+			<div className="col-12">
+                        <FormGroup
+                          id="name"
+                          isFloating
+                          label="Nombre del usuario"						  		
+                        >
+                          <Input type="text" 
+						  	onChange={formik.handleChange}
+						   value={formik.values.name}
+						  />
+                        </FormGroup>
+            </div>
+			<div className="col-12">
+                        <FormGroup
+                          id="first_name"
+                          isFloating
+                          label="Nombres"
+                        >
+                          <Input type="text" 
+						  	onChange={formik.handleChange}
+							value={formik.values.first_name}
+						  />
+                        </FormGroup>
+            </div>
+			<div className="col-12">
+                        <FormGroup
+                          id="last_name"
+                          isFloating
+                          label="Apellidos"
+                        >
+                          <Input type="text" 
+						  	onChange={formik.handleChange}
+							value={formik.values.last_name}
+						  />
+                        </FormGroup>
+            </div>
+			<div className="col-12">
+						<FormGroup
+							id='email'
+							isFloating
+							label='Correo electrónico'>
+							<Input type='email' 
+								value={formik.values.email}
+								onChange={formik.handleChange}
+							/>
+						</FormGroup>
+			</div>
+			<div className="col-12">
+						<FormGroup
+							id='password'
+							isFloating
+							label='Contraseña'>
+							<Input type='password' 
+								value={formik.values.password}
+								onChange={formik.handleChange}
+								disabled={true}
+							/>
+						</FormGroup>
+			</div>
+			<div className="col-12">
+			 <Dropdown>
+  <DropdownToggle>
+    <Button>Selecciona un tipo de identificación</Button>
+  </DropdownToggle>
+  <DropdownMenu>
+    <DropdownItem onClick={() => handleIdentificationType('Cedula')}>Cedula</DropdownItem>
+    <DropdownItem onClick={() => handleIdentificationType('Pasaporte')}>Pasaporte</DropdownItem>
+    <DropdownItem onClick={() => handleIdentificationType('RUC')}>RUC</DropdownItem>
+  </DropdownMenu>
+</Dropdown>
+			</div> 
+			<div className="col-12">
+						<FormGroup
+							id='identification_card'
+							isFloating
+							label='identificación'>
+							<Input type='text' 
+									
+									value={formik.values.identification_card}
+									onChange={formik.handleChange}
+							/>
+						</FormGroup>
+			</div>
+			<div className="col-12">
+						<FormGroup
+							id='phone'
+							isFloating
+							label='Telefono'>
+							<Input type='text' 
+								value={formik.values.phone}
+								onChange={formik.handleChange}
+							/>
+						</FormGroup>
+			</div>
+			<div className="col-12">
+						<FormGroup
+							id='address'
+							isFloating
+							label='Dirección'>
+							<Input type='text' 
+								value={formik.values.address}
+								onChange={formik.handleChange}
+							/>
+						</FormGroup>
+			</div>
+		 	<div className="col-12">
+			 <Dropdown>
+  <DropdownToggle>
+    <Button>
+      {formik.values.role_id ? 
+        roles.find(role => role.id === formik.values.role_id)?.name || "Selecciona un Rol"
+        : "Selecciona un Rol"
+      }
+    </Button>
+  </DropdownToggle>
+  <DropdownMenu>
+    {roles && roles.map((role) => (
+      <DropdownItem 
+        key={role.id} 
+        onClick={() => {
+          formik.setFieldValue("role_id", role.id);
+        }}
+      >
+        {role.name}
+      </DropdownItem>
+    ))}
+  </DropdownMenu>
+</Dropdown>
+			</div> 
 			</ModalBody>
 			<ModalFooter>
 				<Button icon='Close' color='danger' isLink onClick={() => setIsOpenModal(false)}>
@@ -272,11 +473,14 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				<Button
 					icon='DoneOutline'
 					color='success'
+
 					isLight
 					onClick={() => {
 						setIsOpenModal(false);
+						addUsers();
+
 					}}>
-					
+					Guardar
 				</Button>
 			</ModalFooter>
 		</Modal>
