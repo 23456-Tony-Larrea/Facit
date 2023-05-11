@@ -55,7 +55,7 @@ const MainRole = () => {
 				</div>
 				<div className={`col-md-6 ${s.colPermisos}`}>
 					<h2 className={s.TituloRolePermiso}>
-						<Icon icon='Rule' className={s.icon} />
+						<Icon icon='Beenhere' className={s.icon} />
 						Permisos
 					</h2>
 					<ListGroup>
