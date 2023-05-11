@@ -275,7 +275,7 @@ localStorage.removeItem("token");
 			<ModalHeader setIsOpen={setIsOpenModal}>
 			<ModalTitle id='tour-title' className='d-flex align-items-end'>
 			<span className='ps-2'>
-			<Icon icon='Verified' color='info' />
+			{/* <Icon icon='Verified' color='info' /> */}
 			</span>
 			</ModalTitle>
 			</ModalHeader>
@@ -302,7 +302,7 @@ localStorage.removeItem("token");
 			</Button>
 			<Button
 			icon='Save'
-			color='success'
+			color='secondary'
 			isLight
 			onClick={() => {
 			setIsOpenModal(false);
