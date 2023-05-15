@@ -33,7 +33,7 @@ import { API_URL } from '../../../constants';
 import { useToasts } from 'react-toast-notifications';
 import Toasts from '../../../components/bootstrap/Toasts';
 import { type } from 'os';
-
+import PlaceholderImage from '../../../components/extras/PlaceholderImage';
 
 
 
@@ -79,6 +79,9 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [roles, setRoles] = useState<Role[]>([]);
 	const [isEditMode, setIsEditMode] = useState(false);
 	const { addToast } = useToasts();
+	const [IsOpenModalPhoto,setIsOpenModalPhoto] = useState<boolean>(false);
+	const [selectedId, setSelectedId] = useState(null);
+
 
 	const getUsers = () => {
 		axios.get(`${API_URL}user`)
@@ -124,6 +127,8 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items } = useSortableData(users.filter(user => activeFilter === null || user.status === (activeFilter ? 'active' : 'inactive')));
 	const [selectedOption, setSelectedOption] = useState('')
+	const [selectedImage, setSelectedImage] = useState(null);
+
 	
 
 	const handleIdentificationType = (type_identification_card: string) => {
@@ -313,7 +318,18 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		formik.resetForm();
 		setSelectedOption('');
 	};
-
+/* 	const handleUploadPhoto = () => {
+		const formData = new FormData();
+  formData.append('photo', selectedImage);
+  axios.post(`${API_URL}user/upload`, formData)
+  .then(response => {
+	console.log(response);
+	formik.setFieldValue('photo', response.data.url);
+	  })
+	  .catch(error => {
+		console.log(error);
+	  });
+	}; */
 	return (
 		<>
 			<Card stretch={isFluid}>
@@ -371,16 +387,27 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									</td>
 									<td>{item.email}</td>
 									<td>
-										<div className='d-flex'>
+										<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
 											<div className='flex-shrink-0'>
-												<Avatar
-													src={item.photo}
-													size={36}
-												/>
+												{/* capture id for open modalPhoto upload photo */}
+												<Button
+													color='primary'
+													icon='camera'
+													onClick={() => {
+														setSelectedId(item.id);
+														setIsOpenModalPhoto(true);
+													  }}
+													>
+													Subir foto
+												</Button>	
 											</div>
 										</div>
 									</td>
-                                    <td>{item.type_identification_card}</td>
+                                    <td>
+									<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
+										{item.type_identification_card}
+									</div>
+										</td>
 									<td>{item.identification_card}</td>
                                     <td>{item.phone}</td>
                                     <td>{item.address}</td>
@@ -668,6 +695,40 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				</Button>
 			</ModalFooter>
 		</Modal>
+
+
+{/* 		<Modal isOpen={IsOpenModalPhoto} setIsOpen={setIsOpenModalPhoto} titleId='tour-title'>
+  <ModalHeader setIsOpen={setIsOpenModalPhoto}>
+    <ModalTitle id='tour-title' className='d-flex align-items-end'>
+      <span className='ps-2'>
+        <Icon icon='Verified' color='info' />
+      </span>
+    </ModalTitle>
+  </ModalHeader>
+  <ModalBody>
+    <input
+      type="file"
+      accept="image/*"
+      onChange={event => handleUploadPhoto(event)}
+    />
+  </ModalBody>
+  <ModalFooter>
+    <Button icon='Close' color='danger' isLink onClick={() => setIsOpenModalPhoto(false)}>
+      Cancelar
+    </Button>
+    <Button
+      icon='DoneOutline'
+      color='success'
+      isLight
+      onClick={() => {
+        handleUploadPhoto();
+        setIsOpenModalPhoto(false);
+      }}
+    >
+      Guardar
+    </Button>
+  </ModalFooter>
+</Modal> */}
 		</>
 	);
 };
