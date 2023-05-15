@@ -23,6 +23,9 @@ const PAGE_ROLE={
 	ROLE:lazy(() => import('../pages/presentation/erp-ms/mainRole')),
 	USER:lazy(() => import('../pages/presentation/erp-ms/mainUser'))
 }
+const AGENCY_PAGES = {
+	AGENCY_LIST: lazy(() => import('../pages/presentation/erp-ms/mainAgency')),
+}
 
 const presentation = [
 	/**
@@ -48,7 +51,8 @@ const presentation = [
 		path:demoPagesMenu.listPages.subMenu.usuarios.path,
 		element: <PAGE_ROLE.USER />,
 		exact: true,
-	}	
+	},
+	
 ];
 const contents = [...presentation];
 
