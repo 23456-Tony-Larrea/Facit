@@ -30,6 +30,10 @@ import useSortableData from '../../../hooks/useSortableData';
 import useDarkMode from '../../../hooks/useDarkMode';
 import axios, { AxiosResponse } from 'axios';
 import { API_URL } from '../../../constants';
+import { useToasts } from 'react-toast-notifications';
+import Toasts from '../../../components/bootstrap/Toasts';
+import { type } from 'os';
+
 
 
 
@@ -74,7 +78,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 	const [roles, setRoles] = useState<Role[]>([]);
 	const [isEditMode, setIsEditMode] = useState(false);
-
+	const { addToast } = useToasts();
 
 	const getUsers = () => {
 		axios.get(`${API_URL}user`)
@@ -106,7 +110,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 
 
 	const handleDeleteUser = (id: number) => {
-		axios.delete(`/api/user/${id}`)
+		axios.delete(`${API_URL}user/${id}`)
 			.then(response => {
 				const updatedUsers = users.filter(user => user.id !== id);
 				setUsers(updatedUsers);
@@ -119,18 +123,16 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items } = useSortableData(users.filter(user => activeFilter === null || user.status === (activeFilter ? 'active' : 'inactive')));
+	const [selectedOption, setSelectedOption] = useState('')
 	
+
 	const handleIdentificationType = (type_identification_card: string) => {
 		formik.setFieldValue('type_identification_card', type_identification_card);
 		formik.setFieldValue('type_identification_card', type_identification_card);
+		setSelectedOption(type_identification_card);
 	};
 	const formik = useFormik({
-		onSubmit<Values>(
-			values: Values,
-			formikHelpers: FormikHelpers<Values>,
-			): void | Promise<any> {
-			return undefined;
-			},
+		onSubmit: () => {},
 		initialValues: {
 			id: undefined,
 			name: '',
@@ -141,33 +143,93 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			type_identification_card: '',
 			identification_card: '',
 			status: '',
-			password:'12345678',
 			phone: '',
 			address:'',
 			role_id:undefined,
 		},
+		validate: values => {
+			const errors: any = {};
+			if (!values.name) {
+				errors.name = 'Requerido';
+			}
+			if (!values.first_name) {
+				errors.first_name = 'Requerido';
+			}
+			if (!values.last_name) {
+				errors.last_name = 'Requerido';
+			}
+			if (!values.email) {
+				errors.email = 'Requerido';
+			}else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)){
+				errors.email = 'Correo electrónico inválido';
+			}
+			if (!values.type_identification_card) {
+				errors.type_identification_card = 'Requerido';
+			} else if (values.type_identification_card === '0') {
+				errors.type_identification_card = 'Selecciona una opción';
+			}
+			if (!values.identification_card) {
+				errors.identification_card = 'Requerido';
+			}else if (values.type_identification_card === 'Cedula' && !/^[0-9]{10}$/i.test(values.identification_card)){
+				errors.identification_card = 'Cédula inválida';
+			}
+			else if (values.type_identification_card === 'RUC' && !/^[0-9]{13}$/i.test(values.identification_card)){
+				errors.identification_card = 'RUC inválido';
+			}
+			else if (values.type_identification_card === 'Pasaporte' && !/^[a-zA-Z0-9]{3,20}$/i.test(values.identification_card)){
+				errors.identification_card = 'Pasaporte inválido';
+			} else if (!/^[0-9]+$/i.test(values.identification_card)) {
+				errors.identification_card = 'Solo se permiten números';
+			}
+			if (!values.phone) {
+				errors.phone = 'Requerido';
+			}else if (!/^[0-9]{10}$/i.test(values.phone)){
+				errors.phone = 'el numero solo debe contener 10 digitos';
+			}
+			if (!values.address) {
+				errors.address = 'Requerido';
+			}
+			if (!values.role_id) {
+				errors.role_id = 'Requerido';
+			} else if (values.role_id === '0') {
+				errors.role_id = 'Selecciona una opción';
+			}
+			return errors;
+		},
 	});
 	const addUsers = async () => {
 		try {
-			if (isEditMode && formik.values.id) {
-			  const response = await axios.put(`${API_URL}roles/${formik.values.id}`, {
-				id: formik.values.id,
-				name: formik.values.name,
-				first_name: formik.values.first_name,
-				last_name: formik.values.last_name,
-				email: formik.values.email,
-				photo: formik.values.photo,
-				type_identification_card: formik.values.type_identification_card,
-				identification_card: formik.values.identification_card,
-				status: formik.values.status,
-				password: formik.values.password,
-				phone: formik.values.phone,
-				address: formik.values.address,
-				role_id: formik.values.role_id,
-			  });
-			  console.log(response);
-			  setUsers([...users, response.data]);
-			  setIsOpenModal(false);
+			if (formik.values.id){
+				console.log("this is my id",formik.values.id);
+				const response = await axios.put(`${API_URL}user/${formik.values.id}`, {
+					name: formik.values.name,
+					first_name: formik.values.first_name,
+					last_name: formik.values.last_name,
+					email: formik.values.email,
+					photo: formik.values.photo,
+					type_identification_card: formik.values.type_identification_card,
+					identification_card: formik.values.identification_card,
+					status: formik.values.status,
+					phone: formik.values.phone,
+					address: formik.values.address,
+					role_id: formik.values.role_id,
+				});
+				console.log(response);
+				setUsers([...users, response.data]);
+				setIsOpenModal(false);
+				//implementar el toast
+				addToast(
+					<Toasts
+						title='Usuario actualizado'
+						icon='success'
+						iconColor='success'
+						time='Justo ahora'>
+						Usuario actualizado con exito
+					</Toasts>,
+					{
+						autoDismiss: true,
+					},
+				)
 			}else {
 		  		const response = await axios.post(`${API_URL}user`, {
 				name: formik.values.name,
@@ -178,7 +240,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			type_identification_card: formik.values.type_identification_card,
 			identification_card: formik.values.identification_card,
 			status: formik.values.status,
-			password: formik.values.password,
+			password:'12345678',
 			phone: formik.values.phone,
 			address: formik.values.address,
 			role_id: formik.values.role_id,
@@ -186,11 +248,71 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		  console.log(response);
 		  setUsers([...users, response.data]);
 		  setIsOpenModal(false);
+		//implementar el toast
+		addToast(
+			<Toasts
+				title='Usuario creado'
+				icon='success'
+				iconColor='success'
+				time='Justo ahora'
+				
+				>
+				Usuario creado con exito
+			</Toasts>,
+			{
+				autoDismiss: true,
+			},
+		)
 	}
 }catch (error) {
 		  console.error(error);
 		}
 	  };
+	const activateUser = (id: undefined) => {
+		axios.put(`${API_URL}user/Status/${id}`)
+			.then(response => {
+				const updatedUsers = users.map(user => {
+					if (user.id === id) {
+						user.status = 'true';
+					}
+
+					return user;
+				});
+				setUsers(updatedUsers);
+				addToast(
+					<Toasts
+						title='Usuario activado'
+						icon='success'
+						iconColor='success'
+						time='Justo ahora'>
+						Usuario activado con exito
+					</Toasts>,
+					{
+						autoDismiss: true,
+					},
+				)
+			})
+			.catch(error => {
+				console.log(error);
+			//implementar el toast
+			addToast(
+				<Toasts
+					title='Error'
+					icon='Error'
+					iconColor='danger'
+					time='Justo ahora'>
+					No se pudo activar el usuario
+				</Toasts>,
+				{
+					autoDismiss: true,
+				},
+			)
+			});
+	};
+	const clearForm = () => {
+		formik.resetForm();
+		setSelectedOption('');
+	};
 
 	return (
 		<>
@@ -203,7 +325,9 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						<Button
 							color='success'
 							icon='personAdd'
-                            onClick={() => setIsOpenModal(true)}>
+                            onClick={() => {setIsOpenModal(true)
+								clearForm()}}
+							>
 							Agregar usuarios
 						</Button>
 					</CardActions>
@@ -285,7 +409,6 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												setIsOpenModal(true);
 												formik.setValues(item);
 												formik.setFieldValue('userId', item.id);
-											
 												formik.setFieldValue('name', item.name);
 												formik.setFieldValue('first_name', item.first_name);
 												formik.setFieldValue('last_name', item.last_name);
@@ -297,7 +420,10 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												formik.setFieldValue('phone', item.phone);
 												formik.setFieldValue('address', item.address);
 												formik.setFieldValue('role_id', item.role_id);
+												console.log("role_id",item.role_id.name)
 												setIsEditMode(false);
+												getUsers();
+												
 											}}>
 											Editar
 										</Button>
@@ -309,7 +435,10 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												'border-light': !darkModeStatus,
 											})}
 											icon='Cancel'
-											onClick={() => handleDeleteUser(item.id)}>
+											onClick={() => {handleDeleteUser(item.id)
+												getUsers();
+												clearForm();
+											}}>
 											Eliminar
 										</Button>
 									</td>
@@ -343,8 +472,13 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
                           label="Nombre del usuario"						  		
                         >
                           <Input type="text" 
-						  	onChange={formik.handleChange}
-						   value={formik.values.name}
+						  onChange={formik.handleChange}
+						  onBlur={formik.handleBlur}
+						  value={formik.values.name}
+						  isValid={formik.isValid}
+						  isTouched={formik.touched.name}
+						  invalidFeedback={formik.errors.name}
+						  validFeedback='Perfecto!'
 						  />
                         </FormGroup>
             </div>
@@ -357,6 +491,11 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
                           <Input type="text" 
 						  	onChange={formik.handleChange}
 							value={formik.values.first_name}
+							onBlur={formik.handleBlur}
+						  isValid={formik.isValid}
+						  isTouched={formik.touched.first_name}
+						  invalidFeedback={formik.errors.first_name}
+						  validFeedback='Perfecto!'
 						  />
                         </FormGroup>
             </div>
@@ -369,6 +508,11 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
                           <Input type="text" 
 						  	onChange={formik.handleChange}
 							value={formik.values.last_name}
+						  onBlur={formik.handleBlur}
+						  isValid={formik.isValid}
+						  isTouched={formik.touched.last_name}
+						  invalidFeedback={formik.errors.last_name}
+						  validFeedback='Perfecto!'
 						  />
                         </FormGroup>
             </div>
@@ -380,32 +524,32 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							<Input type='email' 
 								value={formik.values.email}
 								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								isValid={formik.isValid}
+								isTouched={formik.touched.email}
+								invalidFeedback={formik.errors.email}
+								validFeedback='Perfecto!'
 							/>
 						</FormGroup>
 			</div>
 			<div className="col-12">
-						<FormGroup
-							id='password'
-							isFloating
-							label='Contraseña'>
-							<Input type='password' 
-								value={formik.values.password}
-								onChange={formik.handleChange}
-								disabled={true}
-							/>
-						</FormGroup>
-			</div>
-			<div className="col-12">
-			 <Dropdown>
-  <DropdownToggle>
-    <Button>Selecciona un tipo de identificación</Button>
-  </DropdownToggle>
-  <DropdownMenu>
-    <DropdownItem onClick={() => handleIdentificationType('Cedula')}>Cedula</DropdownItem>
-    <DropdownItem onClick={() => handleIdentificationType('Pasaporte')}>Pasaporte</DropdownItem>
-    <DropdownItem onClick={() => handleIdentificationType('RUC')}>RUC</DropdownItem>
-  </DropdownMenu>
-</Dropdown>
+			<Dropdown>
+      <DropdownToggle>
+        <Button>
+          {selectedOption ? selectedOption : 'Selecciona un tipo de identificación'}
+        </Button>
+      </DropdownToggle>
+      <DropdownMenu>
+        <DropdownItem onClick={() => handleIdentificationType('Cedula')}>Cedula</DropdownItem>
+        <DropdownItem onClick={() => handleIdentificationType('Pasaporte')}>Pasaporte</DropdownItem>
+        <DropdownItem onClick={() => handleIdentificationType('RUC')}>RUC</DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+	{
+		formik.errors.type_identification_card && formik.touched.type_identification_card
+		? <div className="text-danger">{formik.errors.type_identification_card}</div>
+		: null
+	}
 			</div> 
 			<div className="col-12">
 						<FormGroup
@@ -416,6 +560,12 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									
 									value={formik.values.identification_card}
 									onChange={formik.handleChange}
+									onBlur={formik.handleBlur}
+									isValid={formik.isValid}
+									isTouched={formik.touched.identification_card}
+									invalidFeedback={formik.errors.identification_card}
+									validFeedback='Perfecto!'
+
 							/>
 						</FormGroup>
 			</div>
@@ -427,6 +577,12 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							<Input type='text' 
 								value={formik.values.phone}
 								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								isValid={formik.isValid}
+								isTouched={formik.touched.phone}
+								invalidFeedback={formik.errors.phone}
+								validFeedback='Perfecto!'
+							
 							/>
 						</FormGroup>
 			</div>
@@ -438,6 +594,11 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							<Input type='text' 
 								value={formik.values.address}
 								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								isValid={formik.isValid}
+								isTouched={formik.touched.address}
+								invalidFeedback={formik.errors.address}
+								validFeedback='Perfecto!'
 							/>
 						</FormGroup>
 			</div>
@@ -464,10 +625,33 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
     ))}
   </DropdownMenu>
 </Dropdown>
-			</div> 
+{
+		formik.errors.role_id && formik.touched.role_id
+		? <div className="text-danger">{formik.errors.role_id}</div>
+		: null
+	}
+
+			</div>
+			<div className="col-12">
+			{!formik.values.status === true ? (
+			<Button
+				color='success'
+				className='mt-3'
+				onClick={() => {
+					activateUser(formik.values.id);
+				}}>
+				Activar
+			</Button>
+		) : (
+			null
+		)}
+			</div>
 			</ModalBody>
 			<ModalFooter>
-				<Button icon='Close' color='danger' isLink onClick={() => setIsOpenModal(false)}>
+				<Button icon='Close' color='danger' isLink onClick={() => {setIsOpenModal(false)
+				formik.resetForm()
+				getUsers();
+			}}>
 					Cancelar
 				</Button>
 				<Button
@@ -478,7 +662,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					onClick={() => {
 						setIsOpenModal(false);
 						addUsers();
-
+						getUsers();
 					}}>
 					Guardar
 				</Button>
