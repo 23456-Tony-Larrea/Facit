@@ -1,4 +1,4 @@
-import React, { FC, useState,useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
@@ -31,35 +31,48 @@ import data from '../../../common/data/dummyEventsData';
 import USERS from '../../../common/data/userDummyData';
 import EVENT_STATUS from '../../../common/data/enumEventStatus';
 import Avatar from '../../../components/Avatar';
-import PaginationButtons, { dataPagination, PER_COUNT } from '../../../components/PaginationButtons';
+import PaginationButtons, {
+	dataPagination,
+	PER_COUNT,
+} from '../../../components/PaginationButtons';
 import useSortableData from '../../../hooks/useSortableData';
 import useDarkMode from '../../../hooks/useDarkMode';
-import Modal, {ModalBody,ModalFooter,ModalHeader,ModalTitle,} from '../../../components/bootstrap/Modal';
+import Modal, {
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	ModalTitle,
+} from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
-interface IRole{
-  id: number;
-  name: string;
+interface IRole {
+	id: number;
+	name: string;
+}
+interface IPermisos {
+	id: number;
+	name: string;
 }
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
-	const token = localStorage.getItem("user_token");
-axios.interceptors.request.use(
-(config) => {
-config.headers.authorization = `Bearer ${token}`;
-return config;
-},
-(error) => {
-if (error.response.status === 401) {
-localStorage.removeItem("token");
-}
-}
-);
+	const token = localStorage.getItem('user_token');
+	axios.interceptors.request.use(
+		(config) => {
+			config.headers.authorization = `Bearer ${token}`;
+			return config;
+		},
+		(error) => {
+			if (error.response.status === 401) {
+				localStorage.removeItem('token');
+			}
+		},
+	);
 	const { themeStatus, darkModeStatus } = useDarkMode();
-  const [roles, setRoles] = useState<IRole[]>([]);
+	const [roles, setRoles] = useState<IRole[]>([]);
+	const [permisos, setPermisos] = useState<IPermisos[]>([]);
 
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -85,48 +98,57 @@ localStorage.removeItem("token");
 			notify: true,
 		},
 	});
+
 	useEffect(() => {
-		axios.get(`${API_URL}roles`)
-		.then(response => {
-		setRoles(response.data.data);
-		console.log(response.data.data);
-		
-		})
-		.catch(error => {
-		console.log(error);
-		});
-		}, []);
+		axios
+			.get('http://localhost:4000/roles')
+			.then((response) => {
+				setRoles(response.data);
+				console.log(response.data);
+			})
+			// .get(`${API_URL}roles`)
+			// .then((response) => {
+			// 	setRoles(response.data.data);
+			// 	console.log(response.data.data);
+			// })
+			.catch((error) => {
+				console.log(error);
+			});
+		axios
+			.get('http://localhost:4000/permissions')
+			.then((response) => {
+				setPermisos(response.data.data);
+				console.log(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, []);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
-
 	return (
 		<>
-			<Card  style={{ width: '100%' }}>
+			<Card style={{ width: '100%' }}>
 				<CardHeader borderSize={1}>
 					<CardLabel icon='SafetyDivider' iconColor='info'>
 						<CardTitle>Roles y Permisos</CardTitle>
 					</CardLabel>
 					<CardActions>
-						
 						<Button
-						color='success'
-					icon='personAdd'
-					onClick={() => setIsOpenModal(true)}>
-					Agregar
-					</Button>
-						
+							color='success'
+							icon='personAdd'
+							onClick={() => setIsOpenModal(true)}>
+							Agregar
+						</Button>
 					</CardActions>
 				</CardHeader>
 				<CardBody className='table-responsive' isScrollable={isFluid}>
 					<table className='table table-striped'>
 						<thead>
 							<tr>
-								
-								
-								
 								<th>Roles</th>
 								<th>Status</th>
 								<th>Permisos</th>
@@ -149,17 +171,15 @@ localStorage.removeItem("token");
 											aria-label='Detailed information'
 										/>
 									</td> */}
-									
-									
+
 									<td>
 										<div className='d-flex'>
-											
 											<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
 												{item.name}
 											</div>
 										</div>
 									</td>
-		
+
 									{/* <td>
 										<Dropdown>
 											<DropdownToggle hasIcon={false}>
@@ -196,7 +216,7 @@ localStorage.removeItem("token");
 											})}
 											icon='RemoveRedEye'
 											onClick={handleUpcomingEdit}>
-											Ver Permisos 
+											Ver Permisos
 										</Button>
 									</td>
 								</tr>
@@ -214,9 +234,6 @@ localStorage.removeItem("token");
 				/>
 			</Card>
 
-			
-			
-
 			<OffCanvas
 				setOpen={setUpcomingEventsEditOffcanvas}
 				isOpen={upcomingEventsEditOffcanvas}
@@ -228,27 +245,21 @@ localStorage.removeItem("token");
 				</OffCanvasHeader>
 				<OffCanvasBody>
 					<div className='row g-4'>
-						
 						<div className='col-12'>
 							<Card isCompact borderSize={2} shadow='none' className='mb-0'>
 								<CardHeader>
-									<CardLabel >
-										<CardTitle>Grupo 1</CardTitle>
-									</CardLabel>
-								</CardHeader>
-								<CardBody>
-									<FormGroup >
+									<CardLabel>
 										<Checks
 											id='notify'
 											type='switch'
 											label={
 												<>
-												
-													Permiso 1
+													<CardTitle>Grupo 1</CardTitle>
 													<Popovers
 														trigger='hover'
 														desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
 														<Icon
+															icon='none'
 															size='lg'
 															className='ms-1 cursor-help'
 														/>
@@ -257,9 +268,34 @@ localStorage.removeItem("token");
 											}
 											onChange={formik.handleChange}
 											checked={formik.values.notify}
-											
 										/>
-									</FormGroup>
+									</CardLabel>
+								</CardHeader>
+								<CardBody>
+									{permisos.map((permiso) => (
+										<FormGroup key={permiso.id}>
+											<Checks
+												id='notify'
+												type='switch'
+												label={
+													<>
+														{permiso.name}
+														<Popovers
+															trigger='hover'
+															desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
+															<Icon
+																icon='none'
+																size='lg'
+																className='ms-1 cursor-help'
+															/>
+														</Popovers>
+													</>
+												}
+												onChange={formik.handleChange}
+												checked={formik.values.notify}
+											/>
+										</FormGroup>
+									))}
 								</CardBody>
 							</Card>
 						</div>
@@ -276,45 +312,48 @@ localStorage.removeItem("token");
 					</div>
 				</div>
 			</OffCanvas>
-						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} titleId='tour-title'>
-			<ModalHeader setIsOpen={setIsOpenModal}>
-			<ModalTitle id='tour-title' className='d-flex align-items-end'>
-			<span className='ps-2'>
-			<Icon icon='Verified' color='info' />
-			</span>
-			</ModalTitle>
-			</ModalHeader>
-			<ModalBody>
-			<div className='row'>
-
-			<div className='col-md-9 d-flex align-items-center'>
-			<div>
-			<h2>Agregar Roles</h2>
-			<Input
-            type='text'
-            id='roleName'
-            name='roleName'
-            onChange={formik.handleChange}
-        	value={formik.values.roleName}
-          />
-			</div>
-			</div>
-			</div>
-			</ModalBody>
-			<ModalFooter>
-			<Button icon='Close' color='danger' isLink onClick={() => setIsOpenModal(false)}>
-			Cancelar
-			</Button>
-			<Button
-			icon='Save'
-			color='success'
-			isLight
-			onClick={() => {
-			setIsOpenModal(false);
-			}}>
-			Guardar
-			</Button>
-			</ModalFooter>
+			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} titleId='tour-title'>
+				<ModalHeader setIsOpen={setIsOpenModal}>
+					<ModalTitle id='tour-title' className='d-flex align-items-end'>
+						<span className='ps-2'>
+							<Icon icon='Verified' color='info' />
+						</span>
+					</ModalTitle>
+				</ModalHeader>
+				<ModalBody>
+					<div className='row'>
+						<div className='col-md-9 d-flex align-items-center'>
+							<div>
+								<h2>Agregar Roles</h2>
+								<Input
+									type='text'
+									id='roleName'
+									name='roleName'
+									onChange={formik.handleChange}
+									value={formik.values.roleName}
+								/>
+							</div>
+						</div>
+					</div>
+				</ModalBody>
+				<ModalFooter>
+					<Button
+						icon='Close'
+						color='danger'
+						isLink
+						onClick={() => setIsOpenModal(false)}>
+						Cancelar
+					</Button>
+					<Button
+						icon='Save'
+						color='success'
+						isLight
+						onClick={() => {
+							setIsOpenModal(false);
+						}}>
+						Guardar
+					</Button>
+				</ModalFooter>
 			</Modal>
 		</>
 	);
