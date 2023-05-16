@@ -76,9 +76,9 @@ export const demoPagesMenu1 = {
 	},
 	listPages: {
 		id: 'listPages',
-		text: 'Empresas',
-		path: 'Empresas',
-		icon: 'Apartment',
+		text: 'Organización',
+		path: 'Organización',
+		icon: 'Preview',
 		subMenu: {
 			empresas: {
 				id: 'Empresas',

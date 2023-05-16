@@ -45,6 +45,7 @@ import Modal, {
 } from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
+import { Try } from '../../../components/icon/material-icons';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
@@ -55,7 +56,14 @@ interface IRole {
 }
 interface IPermisos {
 	id: number;
-	name: string;
+	id_permission: {
+		name: string;
+		description: string;
+	};
+	id_group: {
+		id: number;
+		name: string;
+	};
 }
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const token = localStorage.getItem('user_token');
@@ -98,31 +106,20 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			notify: true,
 		},
 	});
+	const llamadoRoles = async () => {
+		const resp = await axios.get(`${API_URL}roles`);
+		setRoles(resp.data.data);
+		// console.log(resp);
+	};
+	const llamadoPermision = async () => {
+		const resp = await axios.get(`${API_URL}roles_permissions`);
+		setPermisos(resp.data.data);
+		console.log(resp.data.data);
+	};
 
 	useEffect(() => {
-		axios
-			.get('http://localhost:4000/roles')
-			.then((response) => {
-				setRoles(response.data);
-				console.log(response.data);
-			})
-			// .get(`${API_URL}roles`)
-			// .then((response) => {
-			// 	setRoles(response.data.data);
-			// 	console.log(response.data.data);
-			// })
-			.catch((error) => {
-				console.log(error);
-			});
-		axios
-			.get('http://localhost:4000/permissions')
-			.then((response) => {
-				setPermisos(response.data.data);
-				console.log(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		llamadoRoles();
+		llamadoPermision();
 	}, []);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
@@ -241,7 +238,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				isBodyScroll
 				placement='end'>
 				<OffCanvasHeader setOpen={setUpcomingEventsEditOffcanvas}>
-					<OffCanvasTitle id='upcomingEdit'>Permisos</OffCanvasTitle>
+					<OffCanvasTitle id='upcomingEdit'>Administrador</OffCanvasTitle>
+					<Popovers
+						trigger='hover'
+						desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
+						<Icon icon='none' size='lg' className='ms-1 cursor-help' />
+					</Popovers>
 				</OffCanvasHeader>
 				<OffCanvasBody>
 					<div className='row g-4'>
@@ -254,16 +256,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											type='switch'
 											label={
 												<>
-													<CardTitle>Grupo 1</CardTitle>
-													<Popovers
-														trigger='hover'
-														desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
-														<Icon
-															icon='none'
-															size='lg'
-															className='ms-1 cursor-help'
-														/>
-													</Popovers>
+													<CardTitle>Permisos</CardTitle>
 												</>
 											}
 											onChange={formik.handleChange}
@@ -279,13 +272,13 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												type='switch'
 												label={
 													<>
-														{permiso.name}
+														{permiso.id_permission.description}
 														<Popovers
 															trigger='hover'
 															desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
 															<Icon
 																icon='none'
-																size='lg'
+																size='md'
 																className='ms-1 cursor-help'
 															/>
 														</Popovers>
@@ -301,7 +294,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						</div>
 					</div>
 				</OffCanvasBody>
-				<div className='row m-0'>
+				{/* <div className='row m-0'>
 					<div className='col-12 p-3'>
 						<Button
 							color='info'
@@ -310,7 +303,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							Agregar
 						</Button>
 					</div>
-				</div>
+				</div> */}
 			</OffCanvas>
 			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} titleId='tour-title'>
 				<ModalHeader setIsOpen={setIsOpenModal}>

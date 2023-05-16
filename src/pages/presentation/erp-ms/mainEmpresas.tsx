@@ -49,7 +49,7 @@ import { API_URL } from '../../../constants';
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
-interface IRole {
+interface IEmpresa {
 	id: number;
 	name: string;
 }
@@ -71,7 +71,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		},
 	);
 	const { themeStatus, darkModeStatus } = useDarkMode();
-	const [roles, setRoles] = useState<IRole[]>([]);
+	const [empresa, setEmpresa] = useState<IEmpresa[]>([]);
 	const [permisos, setPermisos] = useState<IPermisos[]>([]);
 
 	// BEGIN :: Upcoming Events
@@ -100,29 +100,31 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	});
 
 	useEffect(() => {
+		const token =
+			'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5taXJhbmRhc29mdC1lYy5jb20vYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODQyNjQyMzcsImV4cCI6MTY4NDI4MjIzNywibmJmIjoxNjg0MjY0MjM3LCJqdGkiOiJLUTY0aWtuMWtlbGxGeFpVIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJpZCI6MSwibmFtZSI6IkFkbWluaXN0cmFkb3IiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBob25lIjoiMTIzNDU2Nzg5Iiwic3RhdHVzIjoiMSJ9.56NOZNfJaY2ISl4NXwIMBZv8GLS0SDNgcnN0KyBF_tY';
+		const config = {
+			headers: {
+				authorization: `Bearer ${token}`,
+			},
+		};
 		axios
-			.get('http://localhost:4000/roles')
+			.get(`${API_URL}roles`, config)
 			.then((response) => {
-				setRoles(response.data);
-				console.log(response.data);
-			})
-			// .get(`${API_URL}roles`)
-			// .then((response) => {
-			// 	setRoles(response.data.data);
-			// 	console.log(response.data.data);
-			// })
-			.catch((error) => {
-				console.log(error);
-			});
-		axios
-			.get('http://localhost:4000/permissions')
-			.then((response) => {
-				setPermisos(response.data.data);
+				setEmpresa(response.data.data);
 				console.log(response.data.data);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
+		// axios
+		// 	.get(`${API_URL}roles_permissions`)
+		// 	.then((response) => {
+		// 		setPermisos(response.data.data);
+		// 		console.log(response.data.data);
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error);
+		// 	});
 	}, []);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
@@ -151,12 +153,13 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							<tr>
 								<th>Nombre Empresa</th>
 								<th>RUC</th>
-								<th>Usuarios</th>
+								<th>Direccion</th>
+								<th>Web</th>
 								<td />
 							</tr>
 						</thead>
 						<tbody>
-							{dataPagination(roles, currentPage, perPage).map((item) => (
+							{dataPagination(empresa, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
 									{/* <td>
 										<Button
@@ -324,7 +327,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<div className='row'>
 						<div className='col-md-9 d-flex align-items-center'>
 							<div>
-								<h2>Agregar Roles</h2>
+								<h2>Agregar Empresa</h2>
 								<Input
 									type='text'
 									id='roleName'
