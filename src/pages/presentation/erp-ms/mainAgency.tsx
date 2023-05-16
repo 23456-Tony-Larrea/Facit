@@ -97,55 +97,42 @@ localStorage.removeItem("token");
 			return undefined;
 		},
 		initialValues: {
-			roleId: undefined,
-			roleName: '',
+			agencyId: undefined,
+			agencyName: '',
 			notify: true,
 		},
 	});
-	// const getAgency = async () => {
-	// 	await axios
-	// 	  .get(`${API_URL}roles`)
-	// 	  .then(response => {
-	// 		setAgency(response.data.data);
-	// 		console.log(response.data.data);
-	// 	  })
-	// 	  .catch(error => {
-	// 		console.log(error);
-	// 	  });
-	//   };
-	// const getPermisos = async () => {
-	// 	await axios
-	// 	.get(`${API_URL}permissions`)
-	// 	.then(response => {
-	// 		/* setPermisos(response.data.data); */
-	// 		console.log(response.data.data);
-	// 	})
-	// 	.catch(error => {
-	// 		console.log(error);
-	// 	});
-	// };
+	const getAgency = async () => {
+		try {
+			const response = await axios.get(`${API_URL}agency`);
+			setAgency(response.data.data);
+		  } catch (error) {
+			console.log(error);
+		  }
+		};
 
-	// useEffect(() => {
-	// 	getRoles();
-	// 	getPermisos();
-	// 	}, []);		
-	// 	const addRoles = async () => {
-	// 		try {
-	// 		  if (isEditMode) {
-	// 			if (!formik.values.roleId) {
-	// 			  console.log("roleId is not defined"); // Mostrar mensaje de error si roleId no está definido
-	// 			  return;
-	// 			}
-	// 			await axios.put(`${API_URL}roles/${formik.values.roleId}`, { name: formik.values.roleName });
-	// 		  } else {
-	// 			await axios.post(`${API_URL}roles`, { name: formik.values.roleName });
-	// 		  }
-	// 		  getRoles();
-	// 		  setIsOpenModal(false);
-	// 		} catch (error) {
-	// 		  console.log(error);
-	// 		}
-	// 	  };
+
+	useEffect(() => {
+		getAgency();
+		}, []);		
+
+		const addagency = async () => {
+			try {
+			  if (isEditMode) {
+				if (!formik.values.agencyId) {
+				  console.log("agencyId is not defined"); // Mostrar mensaje de error si roleId no está definido
+				  return;
+				}
+				await axios.put(`${API_URL}agency/${formik.values.agencyId}`, { name: formik.values.agencyName});
+			  } else {
+				await axios.post(`${API_URL}agency`, { name: formik.values.agencyName });
+			  }
+			  getAgency();
+			  setIsOpenModal(false);
+			} catch (error) {
+			  console.log(error);
+			}
+		  };
 
 
 	
@@ -173,9 +160,9 @@ localStorage.removeItem("token");
 	return (
 		<>
 			<Card style={{ width: '100%', overflowX: 'auto' }}>
-				<CardHeader borderSize={5}>
+				<CardHeader borderSize={4}>
 					<CardLabel icon='storefront' iconColor='info'>
-						 <CardTitle tag='h4' className='font-weight-bold'>
+						 <CardTitle tag='h3' className='font-weight-bold'>
           Agencias
         </CardTitle>
 				
@@ -199,30 +186,30 @@ localStorage.removeItem("token");
 						
 					</CardActions>
 				</CardHeader>
-				<CardBody style={{ width: '100%', overflowX: 'auto' }}>
+				<CardBody style={{ width: '109%', overflowX: 'auto' }}>
 				<table className='table table-modern '>
   <thead>
     <tr>
-      <th className='col-sm-2' onClick={() => requestSort('provincia')}>
-        <h4>Provincia</h4>
+      <th className='col-sm-2'>
+        <h5>Provincia</h5>
       </th>
-      <th className='col-sm-2' onClick={() => requestSort('canton')}>
-        <h4>Cantón</h4>
+      <th className='col-sm-2' >
+        <h5>Cantón</h5>
       </th>
-      <th className='col-sm-2' onClick={() => requestSort('empresa')}>
-        <h4>Empresa</h4>
+      <th className='col-sm-2' >
+        <h5>Empresa</h5>
       </th>
-      <th className='col-sm-2' onClick={() => requestSort('nombre')}>
-        <h4>Nombre</h4>
+      <th className='col-sm-2'>
+        <h5>Nombre</h5>
       </th>
-      <th className='col-sm-2' onClick={() => requestSort('cEstablecimiento')}>
-        <h4>C. Establecimiento</h4>
+      <th className='col-sm-2' >
+        <h5>C. Establecimiento</h5>
       </th>
-      <th className='col-sm-2' onClick={() => requestSort('cEmision')}>
-        <h4>C. Emisión</h4>
+      <th className='col-sm-2'>
+        <h5>C. Emisión</h5>
       </th>
-      <th className='col-sm-2' onClick={() => requestSort('estado')}>
-        <h4>Estado</h4>
+      <th className='col-sm-2'>
+        <h5>Estado</h5>
       </th>
       <th></th>
     </tr>
@@ -230,13 +217,17 @@ localStorage.removeItem("token");
   <tbody>
     {items.map((item) => (
       <tr key={item.id}>
-        <td>{item.provincia}</td>
-        <td>{item.canton}</td>
-        <td>{item.empresa}</td>
-        <td>{item.nombre}</td>
-        <td>{item.cEstablecimiento}</td>
-        <td>{item.cEmision}</td>
-        <td>{item.estado}</td>
+        <td>{item.tradename}</td>
+        <td>{item.establishment_code}</td>
+        <td>{item.emission_code}</td>
+        <td>{item.landline}</td>
+        <td>{item.whatssap}</td>
+		<td>{item.address}</td>
+		<td>{item.description}</td>
+		<td>{item.logo_path}</td>
+		<td>{item.iva_holiday}</td>
+		<td>{item.state}</td>
+		<td>{item.matriz}</td>
         <td></td>
       </tr>
     ))}
@@ -263,15 +254,16 @@ localStorage.removeItem("token");
 			</ModalHeader>
 			<ModalBody>
 			<div className='row'>
-
 			<div className='col-md-9 d-flex align-items-center'>
 			<div>
+			<Card>
 			<CardHeader>
-									<CardLabel icon='ReceiptLong'>
-										<CardTitle>Elegir</CardTitle>
-									</CardLabel>
-								</CardHeader>
-								<Select
+				<CardLabel icon='ReceiptLong'>
+				<CardTitle>Asignar</CardTitle>
+				</CardLabel>
+				</CardHeader>
+				<CardBody>
+				<Select
 									id='province'
 									size='lg'
 									ariaLabel='Category'
@@ -317,8 +309,15 @@ localStorage.removeItem("token");
 									})}
 									
 								/>
-
-			<FormGroup id='name' label='Nombre Comercial' className='col-md-10'>
+								 </CardBody>
+								 </Card>
+								 </div>
+    							</div>
+								 <div className="row">
+     							 <div className="col-md-10">
+        						<Card>
+         					 <CardBody>
+						<FormGroup id='name' label='Nombre Comercial' className='col-md-10'>
 							<Input onChange={formik.handleChange}
 							//  value={formik.values.name}
 							 />
@@ -355,7 +354,8 @@ localStorage.removeItem("token");
 							//  value={formik.values.name}
 							 />
 						</FormGroup>
-						
+						</CardBody>
+        </Card>
 								
 							
 			</div>
