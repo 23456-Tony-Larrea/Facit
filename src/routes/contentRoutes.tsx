@@ -52,7 +52,12 @@ const presentation = [
 		element: <PAGE_ROLE.USER />,
 		exact: true,
 	},
-	
+
+	{
+	path: demoPagesMenu.listPages.subMenu.Agencia.path,
+	element: <AGENCY_PAGES.AGENCY_LIST />,
+	exact: true,
+},
 ];
 const contents = [...presentation];
 
