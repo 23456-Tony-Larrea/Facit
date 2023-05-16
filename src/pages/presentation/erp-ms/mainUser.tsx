@@ -127,9 +127,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items } = useSortableData(users.filter(user => activeFilter === null || user.status === (activeFilter ? 'active' : 'inactive')));
 	const [selectedOption, setSelectedOption] = useState('')
-	const [selectedImage, setSelectedImage] = useState(null);
 
-	
 
 	const handleIdentificationType = (type_identification_card: string) => {
 		formik.setFieldValue('type_identification_card', type_identification_card);
@@ -144,13 +142,13 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			first_name: '',
 			last_name: '',
 			email: '',
-			photo: '',
 			type_identification_card: '',
 			identification_card: '',
-			status: '',
+			status: undefined,
 			phone: '',
 			address:'',
 			role_id:undefined,
+			profile_photo_path:'',
 		},
 		validate: values => {
 			const errors: any = {};
@@ -211,7 +209,6 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					first_name: formik.values.first_name,
 					last_name: formik.values.last_name,
 					email: formik.values.email,
-					photo: formik.values.photo,
 					type_identification_card: formik.values.type_identification_card,
 					identification_card: formik.values.identification_card,
 					status: formik.values.status,
@@ -241,7 +238,6 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			first_name: formik.values.first_name,
 			last_name: formik.values.last_name,
 			email: formik.values.email,
-			photo: formik.values.photo,
 			type_identification_card: formik.values.type_identification_card,
 			identification_card: formik.values.identification_card,
 			status: formik.values.status,
@@ -317,19 +313,37 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const clearForm = () => {
 		formik.resetForm();
 		setSelectedOption('');
+	};	
+	const onFileChange = (event: any) => {
+	const profile_photo_path=formik.setFieldValue('profile_photo_path', event.target.files[0]);
+		console.log("llego al onchange",profile_photo_path);
 	};
-/* 	const handleUploadPhoto = () => {
+
+	const onUploadFile = async () => {
+		const id = selectedId;
+		
 		const formData = new FormData();
-  formData.append('photo', selectedImage);
-  axios.post(`${API_URL}user/upload`, formData)
-  .then(response => {
-	console.log(response);
-	formik.setFieldValue('photo', response.data.url);
-	  })
-	  .catch(error => {
-		console.log(error);
-	  });
-	}; */
+		formData.append('profile_photo_path', formik.values.profile_photo_path);
+		await axios.post(`${API_URL}user/Photo/${id}`, formData,{
+		headers:{
+			'Content-Type': 'multipart/form-data'
+		  }
+		});
+		setIsOpenModal(false);
+		addToast(
+			<Toasts
+				title='Foto de perfil actualizada'
+				icon='success'
+				iconColor='success'
+				time='Justo ahora'>
+				Foto de perfil actualizada con exito
+			</Toasts>,
+			{
+				autoDismiss: true,
+			},
+		)
+		
+	}
 	return (
 		<>
 			<Card stretch={isFluid}>
@@ -398,7 +412,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 														setIsOpenModalPhoto(true);
 													  }}
 													>
-													Subir foto
+													
 												</Button>	
 											</div>
 										</div>
@@ -411,7 +425,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									<td>{item.identification_card}</td>
                                     <td>{item.phone}</td>
                                     <td>{item.address}</td>
-                                    <td>{item.role_id.name}</td> 
+                                    <td>{item.role_id ? item.role_id.name : "Sin ningún rol"}</td>
 									<td>
   {item.status === true ? (
     <Button isLink color="success" icon="Circle" className="text-nowrap">
@@ -426,7 +440,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									<td>
 										<Button
 											isOutline={!darkModeStatus}
-											color='dark'
+											color='warning'
 											isLight={darkModeStatus}
 											className={classNames('text-nowrap', {
 												'border-light': !darkModeStatus,
@@ -447,16 +461,15 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												formik.setFieldValue('phone', item.phone);
 												formik.setFieldValue('address', item.address);
 												formik.setFieldValue('role_id', item.role_id);
-												console.log("role_id",item.role_id.name)
 												setIsEditMode(false);
 												getUsers();
 												
 											}}>
-											Editar
+						
 										</Button>
 										<Button
 											isOutline={!darkModeStatus}
-											color='dark'
+											color='danger'
 											isLight={darkModeStatus}
 											className={classNames('text-nowrap', {
 												'border-light': !darkModeStatus,
@@ -466,7 +479,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												getUsers();
 												clearForm();
 											}}>
-											Eliminar
+											
 										</Button>
 									</td>
 								</tr>
@@ -633,10 +646,12 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			 <Dropdown>
   <DropdownToggle>
     <Button>
-      {formik.values.role_id ? 
-        roles.find(role => role.id === formik.values.role_id)?.name || "Selecciona un Rol"
-        : "Selecciona un Rol"
-      }
+	<Button>
+    {formik.values.role_id ? 
+      roles.find(role => role.id === formik.values.role_id)?.name || "Selecciona un Rol"
+      : "Selecciona un Rol"
+    }
+  </Button>
     </Button>
   </DropdownToggle>
   <DropdownMenu>
@@ -660,19 +675,18 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 
 			</div>
 			<div className="col-12">
-			{!formik.values.status === true ? (
-			<Button
-				color='success'
-				className='mt-3'
-				onClick={() => {
-					activateUser(formik.values.id);
-				}}>
-				Activar
-			</Button>
-		) : (
-			null
-		)}
-			</div>
+{formik.values.status ===false && (
+    <Button
+      color='success'
+      className='mt-3'
+      onClick={() => {
+        activateUser(formik.values.id);
+      }}
+    >
+      Activar
+    </Button>
+	  )}
+</div>
 			</ModalBody>
 			<ModalFooter>
 				<Button icon='Close' color='danger' isLink onClick={() => {setIsOpenModal(false)
@@ -684,7 +698,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				<Button
 					icon='DoneOutline'
 					color='success'
-
+					isDisable={Object.keys(formik.errors).length > 0}
 					isLight
 					onClick={() => {
 						setIsOpenModal(false);
@@ -697,7 +711,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		</Modal>
 
 
-{/* 		<Modal isOpen={IsOpenModalPhoto} setIsOpen={setIsOpenModalPhoto} titleId='tour-title'>
+<Modal isOpen={IsOpenModalPhoto} setIsOpen={setIsOpenModalPhoto} titleId='tour-title'>
   <ModalHeader setIsOpen={setIsOpenModalPhoto}>
     <ModalTitle id='tour-title' className='d-flex align-items-end'>
       <span className='ps-2'>
@@ -709,7 +723,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
     <input
       type="file"
       accept="image/*"
-      onChange={event => handleUploadPhoto(event)}
+	  onChange={onFileChange}		
     />
   </ModalBody>
   <ModalFooter>
@@ -721,14 +735,13 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
       color='success'
       isLight
       onClick={() => {
-        handleUploadPhoto();
-        setIsOpenModalPhoto(false);
+		onUploadFile();
       }}
     >
       Guardar
     </Button>
   </ModalFooter>
-</Modal> */}
+</Modal> 
 		</>
 	);
 };

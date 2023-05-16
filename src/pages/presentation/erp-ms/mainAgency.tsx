@@ -243,8 +243,6 @@ localStorage.removeItem("token");
 					setPerPage={setPerPage}
 				/>
 			</Card>
-
-			
 		
 						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
 			<ModalHeader setIsOpen={setIsOpenModal}>
