@@ -69,33 +69,7 @@ export const demoPagesMenu = {
 		}
 	},
 };
-export const demoPagesMenu1 = {
-	pages: {
-		id: 'pages',
-		text: 'Empresas',
-		icon: 'Extension',
-	},
-	listPages: {
-		id: 'listPages',
-		text: 'Organización',
-		path: 'Organización',
-		icon: 'Preview',
-		subMenu: {
-			empresas: {
-				id: 'Empresas',
-				text: 'Empresas',
-				path: 'Empresas',
-				icon: 'Apartment',
-			},
-			agencias: {
-				id: 'agencias',
-				text: 'Agencias',
-				path: 'Agencias',
-				icon: 'PersonAdd',
-			}
-		}
-	},
-};
+
 export const loginMenu = {
 	auth: {
 		id: 'auth',

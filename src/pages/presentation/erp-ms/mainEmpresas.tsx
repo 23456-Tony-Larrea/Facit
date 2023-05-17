@@ -144,77 +144,54 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<table className='table table-striped'>
 						<thead>
 							<tr>
-								<th>Nombre Empresa</th>
-								<th>RUC</th>
-								<th>Direccion</th>
-								<th>Web</th>
+								<th>
+									<Icon
+										icon='ArrowRight'
+										size='lg'
+										className='ms-1 cursor-help'
+									/>
+									Nombre
+								</th>
+								<th>
+									<Icon
+										icon='ArrowRight'
+										size='lg'
+										className='ms-1 cursor-help'
+									/>
+									RUC
+								</th>
+								<th>
+									<Icon
+										icon='ArrowRight'
+										size='lg'
+										className='ms-1 cursor-help'
+									/>
+									Email
+								</th>
+								<th>
+									<Icon
+										icon='ArrowRight'
+										size='lg'
+										className='ms-1 cursor-help'
+									/>
+									Direccion
+								</th>
 								<td />
 							</tr>
 						</thead>
 						<tbody>
 							{dataPagination(empresa, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
-									{/* <td>
-										<Button
-											isOutline={!darkModeStatus}
-											color='dark'
-											isLight={darkModeStatus}
-											className={classNames({
-												'border-light': !darkModeStatus,
-											})}
-											icon='Info'
-											onClick={handleUpcomingDetails}
-											aria-label='Detailed information'
-										/>
-									</td> */}
-
 									<td>
-										<div className='d-flex'>
-											<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
-												{item.name}
-											</div>
-										</div>
+										{/* <div className='d-flex'>
+											<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'> */}
+										{item.business_name}
+										{/* </div>
+										</div> */}
 									</td>
-
-									{/* <td>
-										<Dropdown>
-											<DropdownToggle hasIcon={false}>
-												<Button
-													isLink
-													color={item.status.color}
-													icon='Circle'
-													className='text-nowrap'>
-													{item.status.name}
-												</Button>
-											</DropdownToggle>
-											<DropdownMenu>
-												{Object.keys(EVENT_STATUS).map((key) => (
-													<DropdownItem key={key}>
-														<div>
-															<Icon
-																icon='Circle'
-																color={EVENT_STATUS[key].color}
-															/>
-															{EVENT_STATUS[key].name}
-														</div>
-													</DropdownItem>
-												))}
-											</DropdownMenu>
-										</Dropdown>
-									</td> */}
-									<td>
-										<Button
-											isOutline={!darkModeStatus}
-											color='dark'
-											isLight={darkModeStatus}
-											className={classNames('text-nowrap', {
-												'border-light': !darkModeStatus,
-											})}
-											icon='RemoveRedEye'
-											onClick={handleUpcomingEdit}>
-											Ver Permisos
-										</Button>
-									</td>
+									<td>{item.ruc}</td>
+									<td>{item.email_company}</td>
+									<td>{item.address}</td>
 								</tr>
 							))}
 						</tbody>
