@@ -354,10 +354,3 @@ localStorage.removeItem("token");
 };
 
 export default CommonUpcomingEvents;
-
-
-
-
-
-
-//alisson
