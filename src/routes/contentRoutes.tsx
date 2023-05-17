@@ -1,11 +1,17 @@
 import React, { lazy } from 'react';
-import { componentPagesMenu,dashboardPagesMenu,demoPagesMenu ,pageLayoutTypesPagesMenu,menuRole,loginMenu,demoPagesMenu1} from '../menu';
+import {
+	componentPagesMenu,
+	dashboardPagesMenu,
+	demoPagesMenu,
+	pageLayoutTypesPagesMenu,
+	menuRole,
+	loginMenu,
+	demoPagesMenu1,
+} from '../menu';
 import Login from '../pages/presentation/auth/Login';
 
 const LANDING = {
-  DASHBOARD: lazy(
-    () => import("../pages/presentation/dashboard/DashboardPage")
-  ),
+	DASHBOARD: lazy(() => import('../pages/presentation/dashboard/DashboardPage')),
 };
 const AUTH = {
 	PAGE_404: lazy(() => import('../pages/presentation/auth/Page404')),
@@ -19,16 +25,14 @@ const PAGE_LAYOUTS = {
 	ASIDE: lazy(() => import('../pages/presentation/aside-types/DefaultAsidePage')),
 	MINIMIZE_ASIDE: lazy(() => import('../pages/presentation/aside-types/MinimizeAsidePage')),
 };
-const PAGE_ROLE={
-	ROLE:lazy(() => import('../pages/presentation/erp-ms/mainRole')),
-	USER:lazy(() => import('../pages/presentation/erp-ms/mainUser'))
-}
-const AGENCY_PAGES = {
-	AGENCY_LIST: lazy(() => import('../pages/presentation/erp-ms/mainAgency')),
-}
-const PAGE_EMPRESA = {
-    EMPRESA: lazy(() => import('../pages/presentation/erp-ms/mainEmpresas')),
+const PAGE_ROLE = {
+	ROLE: lazy(() => import('../pages/presentation/erp-ms/mainRole')),
+	USER: lazy(() => import('../pages/presentation/erp-ms/mainUser')),
 };
+const PAGE_EMPRESA = {
+	EMPRESA: lazy(() => import('../pages/presentation/erp-ms/mainEmpresas')),
+};
+
 const presentation = [
 	/**
 	 * Landing
@@ -50,21 +54,15 @@ const presentation = [
 		exact: true,
 	},
 	{
-		path:demoPagesMenu.listPages.subMenu.usuarios.path,
+		path: demoPagesMenu.listPages.subMenu.usuarios.path,
 		element: <PAGE_ROLE.USER />,
 		exact: true,
 	},
-
 	{
-	path: demoPagesMenu1.listPages.subMenu.Agencias.path,
-	element: <AGENCY_PAGES.AGENCY_LIST />,
-	exact: true,
-},
-{
-	path: demoPagesMenu1.listPages.subMenu.empresas.path,
-	element: <PAGE_EMPRESA.EMPRESA />,
-	exact: true,
-},
+		path: demoPagesMenu1.listPages.subMenu.empresas.path,
+		element: <PAGE_EMPRESA.EMPRESA />,
+		exact: true,
+	},
 ];
 const contents = [...presentation];
 

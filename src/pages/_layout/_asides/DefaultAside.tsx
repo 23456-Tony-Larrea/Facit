@@ -8,6 +8,7 @@ import {
 	componentPagesMenu,
 	dashboardPagesMenu,
 	demoPagesMenu,
+	demoPagesMenu1,
 	pageLayoutTypesPagesMenu,
 } from '../../../menu';
 import ThemeContext from '../../../contexts/themeContext';
@@ -43,6 +44,8 @@ const DefaultAside = () => {
 						<NavigationLine />
 						<Navigation menu={demoPagesMenu} id='aside-demo-pages' />
 						<NavigationLine />
+						<Navigation menu={demoPagesMenu1} id='aside-demo-pages' />
+						<NavigationLine />
 						<Navigation menu={pageLayoutTypesPagesMenu} id='aside-menu' />
 						<Navigation menu={demoPagesMenu1} id='aside-demo-pages' />
 
@@ -51,7 +54,6 @@ const DefaultAside = () => {
 
 				{doc && (
 					<>
-			
 						<NavigationLine />
 						<Navigation menu={componentPagesMenu} id='aside-componentsMenu' />
 						<NavigationLine />

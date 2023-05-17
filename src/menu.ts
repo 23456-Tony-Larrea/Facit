@@ -59,7 +59,7 @@ export const demoPagesMenu = {
 				path: 'Roles',
 				icon: 'Person',
 			},
-			usuarios:{
+			usuarios: {
 				id: 'usuarios',
 				text: 'Usuarios',
 				path: 'Users',
@@ -74,7 +74,34 @@ export const demoPagesMenu = {
 		}
 	},
 };
-export const loginMenu={
+export const demoPagesMenu1 = {
+	pages: {
+		id: 'pages',
+		text: 'Empresas',
+		icon: 'Extension',
+	},
+	listPages: {
+		id: 'listPages',
+		text: 'Organización',
+		path: 'Organización',
+		icon: 'Preview',
+		subMenu: {
+			empresas: {
+				id: 'Empresas',
+				text: 'Empresas',
+				path: 'Empresas',
+				icon: 'Apartment',
+			},
+			agencias: {
+				id: 'agencias',
+				text: 'Agencias',
+				path: 'Agencias',
+				icon: 'PersonAdd',
+			}
+		}
+	},
+};
+export const loginMenu = {
 	auth: {
 		id: 'auth',
 		text: 'Auth Pages',
@@ -104,47 +131,47 @@ export const pageLayoutTypesPagesMenu = {
 };
 
 export const componentPagesMenu = {
-	
-	};
+
+};
 export const productsExampleMenu = {
 	companyA: { id: 'companyA', text: 'Company A', path: 'grid-pages/products', subMenu: null },
 	companyB: { id: 'companyB', text: 'Company B', path: '/', subMenu: null },
 	companyC: { id: 'companyC', text: 'Company C', path: '/', subMenu: null },
 	companyD: { id: 'companyD', text: 'Company D', path: '/', subMenu: null },
 };
-export const menuRole={
-role:{
-id:"roles"
-,text:"Roles"
-,path:"roles"
-,icon:"AccountTree"
-,subMenu:null
-},
+export const menuRole = {
+	role: {
+		id: "roles"
+		, text: "Roles"
+		, path: "roles"
+		, icon: "AccountTree"
+		, subMenu: null
+	},
 }
 export const demoPagesMenu1 = {
-    pages: {
-        id: 'pages',
-        text: 'Empresas',
-        icon: 'Extension',
-    },
-    listPages: {
-        id: 'listPages',
-        text: 'Organización',
-        path: 'Organización',
-        icon: 'Preview',
-        subMenu: {
-            empresas: {
-                id: 'Empresas',
-                text: 'Empresas',
-                path: 'Empresas',
-                icon: 'Apartment',
-            },
-			Agencias:{
+	pages: {
+		id: 'pages',
+		text: 'Empresas',
+		icon: 'Extension',
+	},
+	listPages: {
+		id: 'listPages',
+		text: 'Organización',
+		path: 'Organización',
+		icon: 'Preview',
+		subMenu: {
+			empresas: {
+				id: 'Empresas',
+				text: 'Empresas',
+				path: 'Empresas',
+				icon: 'Apartment',
+			},
+			Agencias: {
 				id: 'agencias',
 				text: 'Agencias',
 				path: 'Agency',
 				icon: 'storefront',
 			}
-        }
-    },
+		}
+	},
 };
