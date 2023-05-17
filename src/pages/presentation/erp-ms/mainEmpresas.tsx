@@ -101,7 +101,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 
 	useEffect(() => {
 		axios
-			.get(`https://api.mirandasoft-ec.com/api/company`)
+			.get(`${API_URL}company`)
 			.then((response) => {
 				setEmpresa(response.data.data);
 				console.log(response.data.data);
@@ -144,7 +144,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<table className='table table-striped'>
 						<thead>
 							<tr>
-								<th>Nombre</th>
+								<th>Nombre Empresa</th>
 								<th>RUC</th>
 								<th>Direccion</th>
 								<th>Web</th>
@@ -171,7 +171,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									<td>
 										<div className='d-flex'>
 											<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
-												{item.business_name}
+												{item.name}
 											</div>
 										</div>
 									</td>

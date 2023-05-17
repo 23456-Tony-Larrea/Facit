@@ -19,6 +19,7 @@ import Icon from '../../../components/icon/Icon';
 import Button from '../../../components/bootstrap/Button';
 import useDarkMode from '../../../hooks/useDarkMode';
 import Aside, { AsideBody, AsideFoot, AsideHead } from '../../../layout/Aside/Aside';
+import { demoPagesMenu1 } from '../../../menu';
 
 const DefaultAside = () => {
 	const { asideStatus, setAsideStatus } = useContext(ThemeContext);
@@ -46,6 +47,8 @@ const DefaultAside = () => {
 						<Navigation menu={demoPagesMenu1} id='aside-demo-pages' />
 						<NavigationLine />
 						<Navigation menu={pageLayoutTypesPagesMenu} id='aside-menu' />
+						<Navigation menu={demoPagesMenu1} id='aside-demo-pages' />
+
 					</>
 				)}
 

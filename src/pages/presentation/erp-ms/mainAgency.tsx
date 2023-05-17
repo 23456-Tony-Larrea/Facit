@@ -43,9 +43,21 @@ interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
 interface IAgency{
-  roleId: number;
-  name: string;
-  
+	id: string;
+	address: string;
+	description: string;
+	id_company: string;
+	iva_holiday: string;
+	phone: string;
+	establishment_code: string;
+	emission_code: string;
+	matriz: string;
+	state: string;
+	tradename: string;
+	whatsapp: string;
+	id_canton: string;
+	id_province: string;
+	logo_path: string;
 }
 
 interface ICustomerEditModalProps {
@@ -74,7 +86,7 @@ localStorage.removeItem("token");
   const [agency, setAgency] = useState<IAgency[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   	const ADD_TITLE = 'Nueva Agencia';
-	const EDIT_TITLE = 'Editar Roles';
+	const EDIT_TITLE = 'Editar Agencia';
 	const [modalTitle, setModalTitle] = useState('');
 
 	// BEGIN :: Upcoming Events
@@ -97,15 +109,28 @@ localStorage.removeItem("token");
 			return undefined;
 		},
 		initialValues: {
-			agencyId: undefined,
-			agencyName: '',
-			notify: true,
+			id:undefined,
+			address: '',
+			description: '',
+			id_company: '',
+			iva_holiday:undefined,
+			phone: '',
+			establishment_code: '',
+			emission_code: '',
+			matriz:undefined,
+			state:undefined,
+			tradename: '',
+			whatsapp: '',
+			id_canton:undefined,
+			id_province:undefined,
+			logo_path: '',
 		},
 	});
 	const getAgency = async () => {
 		try {
 			const response = await axios.get(`${API_URL}agency`);
 			setAgency(response.data.data);
+			console.log(response.data.data);
 		  } catch (error) {
 			console.log(error);
 		  }
@@ -115,37 +140,6 @@ localStorage.removeItem("token");
 	useEffect(() => {
 		getAgency();
 		}, []);		
-
-		const addagency = async () => {
-			try {
-			  if (isEditMode) {
-				if (!formik.values.agencyId) {
-				  console.log("agencyId is not defined"); // Mostrar mensaje de error si roleId no está definido
-				  return;
-				}
-				await axios.put(`${API_URL}agency/${formik.values.agencyId}`, { name: formik.values.agencyName});
-			  } else {
-				await axios.post(`${API_URL}agency`, { name: formik.values.agencyName });
-			  }
-			  getAgency();
-			  setIsOpenModal(false);
-			} catch (error) {
-			  console.log(error);
-			}
-		  };
-
-
-	
-	//   const deleteRole = async (roleId: number | undefined) => {
-	// 	try {
-	// 	  if (roleId) {
-	// 		await axios.delete(`${API_URL}roles/${roleId}`);
-	// 		getRoles();
-	// 	  }
-	// 	} catch (error) {
-	// 	  console.log(error);
-	// 	}
-	//   };
 	
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
@@ -155,7 +149,7 @@ localStorage.removeItem("token");
 		formik.setFieldValue('roleName', '');
 	};
 	
-	
+
 
 	return (
 		<>
@@ -191,46 +185,110 @@ localStorage.removeItem("token");
   <thead>
     <tr>
       <th className='col-sm-2'>
-        <h5>Provincia</h5>
+        Dirección
       </th>
       <th className='col-sm-2' >
-        <h5>Cantón</h5>
+        Descripción
       </th>
       <th className='col-sm-2' >
-        <h5>Empresa</h5>
+        Empresa
       </th>
       <th className='col-sm-2'>
-        <h5>Nombre</h5>
+        Codigo de emisión
       </th>
       <th className='col-sm-2' >
-        <h5>C. Establecimiento</h5>
+        Codigo de establecimiento
       </th>
       <th className='col-sm-2'>
-        <h5>C. Emisión</h5>
+	  	IVA feriado
       </th>
       <th className='col-sm-2'>
-        <h5>Estado</h5>
+        Telefono fijo
       </th>
-      <th></th>
+      <th className='col-sm-2'>
+		Logo
+		</th>
+		<th className='col-sm-2'>
+		matriz
+		</th>
+		<th className='col-sm-2'>
+		Estado
+		</th>
+		<th className='col-sm-2'>
+			Nombre comercial
+		</th>
+		<th className='col-sm-2'>
+		Whatsapp
+		</th>
+		<th className='col-sm-2'>
+		Falta
+		</th>
+		<th className='col-sm-2'>
+		Acciones
+		</th>
     </tr>
   </thead>
   <tbody>
-    {items.map((item) => (
-      <tr key={item.id}>
-        <td>{item.tradename}</td>
-        <td>{item.establishment_code}</td>
-        <td>{item.emission_code}</td>
-        <td>{item.landline}</td>
-        <td>{item.whatssap}</td>
-		<td>{item.address}</td>
-		<td>{item.description}</td>
-		<td>{item.logo_path}</td>
-		<td>{item.iva_holiday}</td>
-		<td>{item.state}</td>
-		<td>{item.matriz}</td>
-        <td></td>
-      </tr>
-    ))}
+  {dataPagination(agency, currentPage, perPage).map((item) => (
+								<tr key={item.id}>
+									<td className='col-sm-2'>
+										{item.address}
+									</td>
+									<td className='col-sm-2'>
+										{item.description}
+									</td>
+									<td className='col-sm-2'>
+										{item.emission_code}
+									</td>
+									<td className='col-sm-2'>
+										{item.establishment_code}
+									</td>
+									<td className='col-sm-2'>
+										{item.iva_holiday}
+									</td>
+									<td className='col-sm-2'>
+										{item.landline}
+									</td>
+									<td className='col-sm-2'>
+									{item.logo_path}
+									</td>
+									<td className='col-sm-2'>
+									{item.matriz}
+									</td>
+									<td className='col-sm-2'>
+									{item.state}
+									</td>
+									<td className='col-sm-2'>
+									{item.tradename}
+									</td>
+									<td className='col-sm-2'>
+									{item.whatsapp}
+									</td>
+									<td className='col-sm-2'>
+									hola
+									</td>
+									<td className='col-sm-2'>
+									hola
+									</td>
+									
+									<td className='col-sm-2'>
+									<Button
+									color='success'
+									icon='edit'
+									>
+									</Button>
+									<Button
+									color='danger'
+									icon='delete'
+									>
+									</Button>
+									</td>
+					
+								</tr>
+							))}
+						
+
+									
   </tbody>
 					</table>
 				</CardBody>
@@ -268,31 +326,18 @@ localStorage.removeItem("token");
 									size='lg'
 									ariaLabel='Category'
 									placeholder='Provincia'
-									// list={Object.keys(CATEGORIES).map((c) => CATEGORIES[c])}
+									
 									className={classNames('rounded-1', {
 										'bg-white': !darkModeStatus,
 									})}
-									// onChange={(e: { target: { value: any } }) => {
-									// 	formik.handleChange(e);
-
-									// 	if (e.target.value)
-									// 		debounce(
-									// 			() =>
-									// 				onFormSubmit({
-									// 					...formik.values,
-									// 					category: e.target.value,
-									// 				}),
-									// 			1000,
-									// 		)();
-									// }}
-									// value={formik.values.category}
+						
 								/>
 								<Select
 									id='canton'
 									size='lg'
 									ariaLabel='Category'
 									placeholder='Cantón'
-									// list={Object.keys(CATEGORIES).map((c) => CATEGORIES[c])}
+									
 									className={classNames('rounded-1', {
 										'bg-white': !darkModeStatus,
 									})}
@@ -303,7 +348,7 @@ localStorage.removeItem("token");
 									size='lg'
 									ariaLabel='Category'
 									placeholder='Usuarios'
-									// list={Object.keys(CATEGORIES).map((c) => CATEGORIES[c])}
+								
 									className={classNames('rounded-1', {
 										'bg-white': !darkModeStatus,
 									})}
@@ -319,7 +364,7 @@ localStorage.removeItem("token");
          					 <CardBody>
 						<FormGroup id='name' label='Nombre Comercial' className='col-md-10'>
 							<Input onChange={formik.handleChange}
-							//  value={formik.values.name}
+
 							 />
 						</FormGroup>
 						<FormGroup id='name' label='Codigo Establecimiento' className='col-md-10'>
@@ -382,5 +427,3 @@ localStorage.removeItem("token");
 	);
 };
 export default CommonUpcomingEvents;
-
-//a
