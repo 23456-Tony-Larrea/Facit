@@ -46,6 +46,7 @@ import Modal, {
 import axios from 'axios';
 import { API_URL } from '../../../constants';
 import { Try } from '../../../components/icon/material-icons';
+import { string } from 'prop-types';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
@@ -54,6 +55,7 @@ interface IRole {
 	id: number;
 	name: string;
 }
+
 interface IPermisos {
 	id: number;
 	id_permission: {
@@ -80,6 +82,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	);
 	const { themeStatus, darkModeStatus } = useDarkMode();
 	const [roles, setRoles] = useState<IRole[]>([]);
+	const [perName, setPerName] = useState('');
 	const [permisos, setPermisos] = useState<IPermisos[]>([]);
 
 	// BEGIN :: Upcoming Events
@@ -120,11 +123,14 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	useEffect(() => {
 		llamadoRoles();
 		llamadoPermision();
-	}, []);
+	}, [perName]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+	const onChangeName = (e: string) => {
+		setPerName(e);
+	};
 
 	return (
 		<>
@@ -212,7 +218,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												'border-light': !darkModeStatus,
 											})}
 											icon='RemoveRedEye'
-											onClick={handleUpcomingEdit}>
+											onClick={() => {
+												onChangeName(item.name);
+												handleUpcomingEdit();
+											}}>
 											Ver Permisos
 										</Button>
 									</td>
@@ -238,7 +247,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				isBodyScroll
 				placement='end'>
 				<OffCanvasHeader setOpen={setUpcomingEventsEditOffcanvas}>
-					<OffCanvasTitle id='upcomingEdit'>Administrador</OffCanvasTitle>
+					<OffCanvasTitle id='upcomingEdit'>
+						{perName.length > 0 && perName}
+					</OffCanvasTitle>
 					<Popovers
 						trigger='hover'
 						desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>

@@ -100,15 +100,8 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	});
 
 	useEffect(() => {
-		const token =
-			'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5taXJhbmRhc29mdC1lYy5jb20vYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODQyNjQyMzcsImV4cCI6MTY4NDI4MjIzNywibmJmIjoxNjg0MjY0MjM3LCJqdGkiOiJLUTY0aWtuMWtlbGxGeFpVIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJpZCI6MSwibmFtZSI6IkFkbWluaXN0cmFkb3IiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBob25lIjoiMTIzNDU2Nzg5Iiwic3RhdHVzIjoiMSJ9.56NOZNfJaY2ISl4NXwIMBZv8GLS0SDNgcnN0KyBF_tY';
-		const config = {
-			headers: {
-				authorization: `Bearer ${token}`,
-			},
-		};
 		axios
-			.get(`${API_URL}roles`, config)
+			.get(`${API_URL}company`)
 			.then((response) => {
 				setEmpresa(response.data.data);
 				console.log(response.data.data);
