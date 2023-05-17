@@ -65,7 +65,12 @@ export const demoPagesMenu = {
 				path: 'Users',
 				icon: 'PersonAdd',
 			},
-
+			employees: {
+				id: 'employees',
+				text: 'Empleados',
+				path: 'Employees',
+				icon: 'PersonAdd',
+			},
 		}
 	},
 };
