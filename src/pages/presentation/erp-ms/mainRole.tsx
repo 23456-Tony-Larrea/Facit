@@ -45,8 +45,7 @@ import Modal, {
 } from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
-import { Try } from '../../../components/icon/material-icons';
-import { string } from 'prop-types';
+
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
@@ -185,13 +184,13 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						</Button>
 					</CardActions>
 				</CardHeader>
-				<CardBody className='table-responsive' isScrollable={isFluid}>
-					<table className='table table-striped'>
+				<CardBody className='table-responsive' style={{ width: '100%', overflowX: 'auto' }} isScrollable={isFluid}>
+					<table className='table table-modern'>
 						<thead>
 							<tr>
-								<th>Roles</th>
-								<th>Status</th>
-								<th>Permisos</th>
+							<th className='col-sm-3'><h4>Roles y Acciones</h4></th>
+								<th className='col-sm-10'><h4>Permisos</h4></th>
+								<th></th>
 								<td />
 							</tr>
 						</thead>
