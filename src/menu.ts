@@ -64,6 +64,12 @@ export const demoPagesMenu = {
 				text: 'Usuarios',
 				path: 'Users',
 				icon: 'PersonAdd',
+			},
+			Agencia:{
+				id: 'agencias',
+				text: 'Agencias',
+				path: 'Agency',
+				icon: 'storefront',
 			}
 		}
 	},
