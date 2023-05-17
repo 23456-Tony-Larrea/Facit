@@ -46,7 +46,6 @@ import Modal, {
 import axios from 'axios';
 import { API_URL } from '../../../constants';
 
-
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
@@ -137,34 +136,36 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	};
 	const addRoles = async () => {
 		try {
-		  if (isEditMode) {
-			if (!formik.values.roleId) {
-			  console.log("roleId is not defined"); // Mostrar mensaje de error si roleId no está definido
-			  return;
+			if (isEditMode) {
+				if (!formik.values.roleId) {
+					console.log('roleId is not defined'); // Mostrar mensaje de error si roleId no está definido
+					return;
+				}
+				await axios.put(`${API_URL}roles/${formik.values.roleId}`, {
+					name: formik.values.roleName,
+				});
+			} else {
+				await axios.post(`${API_URL}roles`, { name: formik.values.roleName });
 			}
-			await axios.put(`${API_URL}roles/${formik.values.roleId}`, { name: formik.values.roleName });
-		  } else {
-			await axios.post(`${API_URL}roles`, { name: formik.values.roleName });
-		  }
-		  llamadoRoles();
-		  setIsOpenModal(false);
+			llamadoRoles();
+			setIsOpenModal(false);
 		} catch (error) {
-		  console.log(error);
+			console.log(error);
 		}
-	  };
+	};
 	const onChangeName = (e: string) => {
 		setPerName(e);
 	};
 	const deleteRole = async (roleId: number | undefined) => {
 		try {
-		  if (roleId) {
-			await axios.delete(`${API_URL}roles/${roleId}`);
-			llamadoRoles();
-		  }
+			if (roleId) {
+				await axios.delete(`${API_URL}roles/${roleId}`);
+				llamadoRoles();
+			}
 		} catch (error) {
-		  console.log(error);
+			console.log(error);
 		}
-	  };
+	};
 	return (
 		<>
 			<Card style={{ width: '100%' }}>
@@ -176,7 +177,8 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						<Button
 							color='success'
 							icon='personAdd'
-							onClick={() => {setIsOpenModal(true)
+							onClick={() => {
+								setIsOpenModal(true);
 								setModalTitle(ADD_TITLE);
 								clearName();
 							}}>
@@ -184,53 +186,82 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						</Button>
 					</CardActions>
 				</CardHeader>
-				<CardBody className='table-responsive' style={{ width: '100%', overflowX: 'auto' }} isScrollable={isFluid}>
+				<CardBody
+					className='table-responsive'
+					style={{ width: '100%', overflowX: 'auto' }}
+					isScrollable={isFluid}>
 					<table className='table table-modern'>
 						<thead>
 							<tr>
-							<th className='col-sm-3'><h4>Roles y Acciones</h4></th>
-								<th className='col-sm-10'><h4>Permisos</h4></th>
+								<th className='col-sm-3'>
+									<h4>Roles y Acciones</h4>
+								</th>
+								<th className='col-sm-10'>
+									<h4>Permisos</h4>
+								</th>
 								<th></th>
 								<td />
 							</tr>
 						</thead>
 						<tbody>
-							 {dataPagination(roles, currentPage, perPage).map((item) => {
-    if (item.name === "SuperAdministrador") {
-      return null; // Si es el rol "superadministrador", no se renderiza la fila
-    }
-	
-    return (
-      <tr key={item.id}>
-        <td>
-          <div className='d-flex  align-items-center'>
-            <div className='text-nowrap'>{item.name}</div>
-            <div className='ms-auto'></div>
-			
-            <Button icon='Edit' color='primary' isLight data-tour='filter ' className='ms-2' aria-label='Edit'  onClick={() => {(item)
-						setIsOpenModal(true);
-						setModalTitle(EDIT_TITLE);
-						setIsEditMode(true);
-						formik.setFieldValue('roleId', item.id);
-						formik.setFieldValue('roleName', item.name);
-					}}>
-            </Button>
-            <Button isLight data-tour='filter ' icon='Delete' color='danger' className='ms-5' aria-label='Delete' onClick={() => { 
-						deleteRole(item.id);
+							{dataPagination(roles, currentPage, perPage).map((item) => {
+								if (item.name === 'SuperAdministrador') {
+									return null; // Si es el rol "superadministrador", no se renderiza la fila
+								}
 
-			 }}>
-            </Button>
-          </div>
-        </td>
-        <td>
-          <Button isOutline={!darkModeStatus} color='dark' isLight={darkModeStatus} className={classNames('text-nowrap', { 'border-light': !darkModeStatus })} icon='RemoveRedEye' onClick={handleUpcomingEdit}>
-            Ver Permisos
-          </Button>
-        </td>
-      </tr>
-    );
-  })}
-</tbody>
+								return (
+									<tr key={item.id}>
+										<td>
+											<div className='d-flex  align-items-center'>
+												<div className='text-nowrap'>{item.name}</div>
+												<div className='ms-auto'></div>
+
+												<Button
+													icon='Edit'
+													color='primary'
+													isLight
+													data-tour='filter '
+													className='ms-2'
+													aria-label='Edit'
+													onClick={() => {
+														item;
+														setIsOpenModal(true);
+														setModalTitle(EDIT_TITLE);
+														setIsEditMode(true);
+														formik.setFieldValue('roleId', item.id);
+														formik.setFieldValue('roleName', item.name);
+													}}></Button>
+												<Button
+													isLight
+													data-tour='filter '
+													icon='Delete'
+													color='danger'
+													className='ms-5'
+													aria-label='Delete'
+													onClick={() => {
+														deleteRole(item.id);
+													}}></Button>
+											</div>
+										</td>
+										<td>
+											<Button
+												isOutline={!darkModeStatus}
+												color='dark'
+												isLight={darkModeStatus}
+												className={classNames('text-nowrap', {
+													'border-light': !darkModeStatus,
+												})}
+												icon='RemoveRedEye'
+												onClick={() => {
+													setPerName(item.name), handleUpcomingEdit();
+												}}>
+												Ver Permisos
+											</Button>
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
 					</table>
 				</CardBody>
 				<PaginationButtons
@@ -242,7 +273,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					setPerPage={setPerPage}
 				/>
 			</Card>
-
 			<OffCanvas
 				setOpen={setUpcomingEventsEditOffcanvas}
 				isOpen={upcomingEventsEditOffcanvas}
@@ -322,51 +352,52 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				</div> */}
 			</OffCanvas>
 			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
-			<ModalHeader setIsOpen={setIsOpenModal}>
-			<ModalTitle id='tour-title' className='d-flex align-items-end'>
-			<span className='ps-2'>
-			<h3 className=''>{modalTitle}</h3>			
-			</span>
-			</ModalTitle>
-			</ModalHeader>
-			<ModalBody>
-			<div className='row'>
-
-			<div className='col-md-9 d-flex align-items-center'>
-			<div>
-			
-
-			<Input
-            type='text'
-            id='roleName'
-            name='roleName'
-			style={{width: '230%'}}
-            onChange={formik.handleChange}
-        	value={formik.values.roleName}
-          />
-			</div>
-			</div>
-			</div>
-			</ModalBody>
-			<ModalFooter>
-			<Button icon='Close' color='danger' isLink onClick={() => {
-				clearName();
-				setIsOpenModal(false)}}
-				>
-			Cancelar
-			</Button>
-			<Button
-			icon='Save'
-			color='success'
-			isLight
-			onClick={() => {
-				addRoles();
-				setIsOpenModal(false);
-				clearName()
-			}}>
-			Guardar
-			</Button>
-			</ModalFooter>
+				<ModalHeader setIsOpen={setIsOpenModal}>
+					<ModalTitle id='tour-title' className='d-flex align-items-end'>
+						<span className='ps-2'>
+							<h3 className=''>{modalTitle}</h3>
+						</span>
+					</ModalTitle>
+				</ModalHeader>
+				<ModalBody>
+					<div className='row'>
+						<div className='col-md-9 d-flex align-items-center'>
+							<div>
+								<Input
+									type='text'
+									id='roleName'
+									name='roleName'
+									style={{ width: '230%' }}
+									onChange={formik.handleChange}
+									value={formik.values.roleName}
+								/>
+							</div>
+						</div>
+					</div>
+				</ModalBody>
+				<ModalFooter>
+					<Button
+						icon='Close'
+						color='danger'
+						isLink
+						onClick={() => {
+							clearName();
+							setIsOpenModal(false);
+						}}>
+						Cancelar
+					</Button>
+					<Button
+						icon='Save'
+						color='success'
+						isLight
+						onClick={() => {
+							addRoles();
+							setIsOpenModal(false);
+							clearName();
+						}}>
+						Guardar
+					</Button>
+				</ModalFooter>
 			</Modal>
 		</>
 	);
