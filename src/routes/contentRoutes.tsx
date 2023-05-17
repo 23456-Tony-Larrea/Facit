@@ -56,7 +56,7 @@ const presentation = [
 	},
 
 	{
-	path: demoPagesMenu.listPages.subMenu.Agencia.path,
+	path: demoPagesMenu1.listPages.subMenu.Agencias.path,
 	element: <AGENCY_PAGES.AGENCY_LIST />,
 	exact: true,
 },
