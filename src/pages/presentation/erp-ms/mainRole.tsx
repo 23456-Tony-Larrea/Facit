@@ -82,6 +82,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	);
 	const { themeStatus, darkModeStatus } = useDarkMode();
 	const [roles, setRoles] = useState<IRole[]>([]);
+	const ADD_TITLE = 'Agregar Roles';
+	const EDIT_TITLE = 'Editar Roles';
+	const [modalTitle, setModalTitle] = useState('');
+	const [isEditMode, setIsEditMode] = useState(false);
 	const [perName, setPerName] = useState('');
 	const [permisos, setPermisos] = useState<IPermisos[]>([]);
 
@@ -105,6 +109,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			return undefined;
 		},
 		initialValues: {
+			roleId: undefined,
 			roleName: '',
 			notify: true,
 		},
@@ -128,10 +133,39 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+	const clearName = () => {
+		formik.setFieldValue('roleName', '');
+	};
+	const addRoles = async () => {
+		try {
+		  if (isEditMode) {
+			if (!formik.values.roleId) {
+			  console.log("roleId is not defined"); // Mostrar mensaje de error si roleId no está definido
+			  return;
+			}
+			await axios.put(`${API_URL}roles/${formik.values.roleId}`, { name: formik.values.roleName });
+		  } else {
+			await axios.post(`${API_URL}roles`, { name: formik.values.roleName });
+		  }
+		  llamadoRoles();
+		  setIsOpenModal(false);
+		} catch (error) {
+		  console.log(error);
+		}
+	  };
 	const onChangeName = (e: string) => {
 		setPerName(e);
 	};
-
+	const deleteRole = async (roleId: number | undefined) => {
+		try {
+		  if (roleId) {
+			await axios.delete(`${API_URL}roles/${roleId}`);
+			llamadoRoles();
+		  }
+		} catch (error) {
+		  console.log(error);
+		}
+	  };
 	return (
 		<>
 			<Card style={{ width: '100%' }}>
@@ -143,7 +177,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						<Button
 							color='success'
 							icon='personAdd'
-							onClick={() => setIsOpenModal(true)}>
+							onClick={() => {setIsOpenModal(true)
+								setModalTitle(ADD_TITLE);
+								clearName();
+							}}>
 							Agregar
 						</Button>
 					</CardActions>
@@ -159,75 +196,42 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							</tr>
 						</thead>
 						<tbody>
-							{dataPagination(roles, currentPage, perPage).map((item) => (
-								<tr key={item.id}>
-									{/* <td>
-										<Button
-											isOutline={!darkModeStatus}
-											color='dark'
-											isLight={darkModeStatus}
-											className={classNames({
-												'border-light': !darkModeStatus,
-											})}
-											icon='Info'
-											onClick={handleUpcomingDetails}
-											aria-label='Detailed information'
-										/>
-									</td> */}
+							 {dataPagination(roles, currentPage, perPage).map((item) => {
+    if (item.name === "SuperAdministrador") {
+      return null; // Si es el rol "superadministrador", no se renderiza la fila
+    }
+	
+    return (
+      <tr key={item.id}>
+        <td>
+          <div className='d-flex  align-items-center'>
+            <div className='text-nowrap'>{item.name}</div>
+            <div className='ms-auto'></div>
+			
+            <Button icon='Edit' color='primary' isLight data-tour='filter ' className='ms-2' aria-label='Edit'  onClick={() => {(item)
+						setIsOpenModal(true);
+						setModalTitle(EDIT_TITLE);
+						setIsEditMode(true);
+						formik.setFieldValue('roleId', item.id);
+						formik.setFieldValue('roleName', item.name);
+					}}>
+            </Button>
+            <Button isLight data-tour='filter ' icon='Delete' color='danger' className='ms-5' aria-label='Delete' onClick={() => { 
+						deleteRole(item.id);
 
-									<td>
-										<div className='d-flex'>
-											<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
-												{item.name}
-											</div>
-										</div>
-									</td>
-
-									{/* <td>
-										<Dropdown>
-											<DropdownToggle hasIcon={false}>
-												<Button
-													isLink
-													color={item.status.color}
-													icon='Circle'
-													className='text-nowrap'>
-													{item.status.name}
-												</Button>
-											</DropdownToggle>
-											<DropdownMenu>
-												{Object.keys(EVENT_STATUS).map((key) => (
-													<DropdownItem key={key}>
-														<div>
-															<Icon
-																icon='Circle'
-																color={EVENT_STATUS[key].color}
-															/>
-															{EVENT_STATUS[key].name}
-														</div>
-													</DropdownItem>
-												))}
-											</DropdownMenu>
-										</Dropdown>
-									</td> */}
-									<td>
-										<Button
-											isOutline={!darkModeStatus}
-											color='dark'
-											isLight={darkModeStatus}
-											className={classNames('text-nowrap', {
-												'border-light': !darkModeStatus,
-											})}
-											icon='RemoveRedEye'
-											onClick={() => {
-												onChangeName(item.name);
-												handleUpcomingEdit();
-											}}>
-											Ver Permisos
-										</Button>
-									</td>
-								</tr>
-							))}
-						</tbody>
+			 }}>
+            </Button>
+          </div>
+        </td>
+        <td>
+          <Button isOutline={!darkModeStatus} color='dark' isLight={darkModeStatus} className={classNames('text-nowrap', { 'border-light': !darkModeStatus })} icon='RemoveRedEye' onClick={handleUpcomingEdit}>
+            Ver Permisos
+          </Button>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
 					</table>
 				</CardBody>
 				<PaginationButtons
@@ -318,48 +322,52 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					</div>
 				</div> */}
 			</OffCanvas>
-			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} titleId='tour-title'>
-				<ModalHeader setIsOpen={setIsOpenModal}>
-					<ModalTitle id='tour-title' className='d-flex align-items-end'>
-						<span className='ps-2'>
-							<Icon icon='Verified' color='info' />
-						</span>
-					</ModalTitle>
-				</ModalHeader>
-				<ModalBody>
-					<div className='row'>
-						<div className='col-md-9 d-flex align-items-center'>
-							<div>
-								<h2>Agregar Roles</h2>
-								<Input
-									type='text'
-									id='roleName'
-									name='roleName'
-									onChange={formik.handleChange}
-									value={formik.values.roleName}
-								/>
-							</div>
-						</div>
-					</div>
-				</ModalBody>
-				<ModalFooter>
-					<Button
-						icon='Close'
-						color='danger'
-						isLink
-						onClick={() => setIsOpenModal(false)}>
-						Cancelar
-					</Button>
-					<Button
-						icon='Save'
-						color='success'
-						isLight
-						onClick={() => {
-							setIsOpenModal(false);
-						}}>
-						Guardar
-					</Button>
-				</ModalFooter>
+			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
+			<ModalHeader setIsOpen={setIsOpenModal}>
+			<ModalTitle id='tour-title' className='d-flex align-items-end'>
+			<span className='ps-2'>
+			<h3 className=''>{modalTitle}</h3>			
+			</span>
+			</ModalTitle>
+			</ModalHeader>
+			<ModalBody>
+			<div className='row'>
+
+			<div className='col-md-9 d-flex align-items-center'>
+			<div>
+			
+
+			<Input
+            type='text'
+            id='roleName'
+            name='roleName'
+			style={{width: '230%'}}
+            onChange={formik.handleChange}
+        	value={formik.values.roleName}
+          />
+			</div>
+			</div>
+			</div>
+			</ModalBody>
+			<ModalFooter>
+			<Button icon='Close' color='danger' isLink onClick={() => {
+				clearName();
+				setIsOpenModal(false)}}
+				>
+			Cancelar
+			</Button>
+			<Button
+			icon='Save'
+			color='success'
+			isLight
+			onClick={() => {
+				addRoles();
+				setIsOpenModal(false);
+				clearName()
+			}}>
+			Guardar
+			</Button>
+			</ModalFooter>
 			</Modal>
 		</>
 	);
