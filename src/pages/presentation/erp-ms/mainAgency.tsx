@@ -144,12 +144,26 @@ localStorage.removeItem("token");
 	
 	const addAgency = async (values: any) => {
 		try {
-			if (isEditMode) {
-				if (formik.values.id) {
-					console.log("id is not defined");
-					return;
-				}
-				await axios.put(`${API_URL}agency/${formik.values.id}`, formik.values);
+			if (formik.values.id) {
+				console.log("this is my id",formik.values.id);
+
+				await axios.put(`${API_URL}agency/${formik.values.id}`,{
+					address: formik.values.address,
+					description: formik.values.description,
+					landline: formik.values.landline,
+					id_company: formik.values.id_company,
+					iva_holiday: formik.values.iva_holiday,
+					establishment_code: formik.values.establishment_code,
+					emission_code: formik.values.emission_code,
+					matriz: formik.values.matriz,
+					state: formik.values.state,
+					tradename: formik.values.tradename,
+					whatsapp: formik.values.whatsapp,
+					id_canton: formik.values.id_canton,
+					id_province: formik.values.id_province,
+					logo_path: formik.values.logo_path,
+				});
+					
 			} else {
 				await axios.post(`${API_URL}agency`,{
 					address: formik.values.address,
@@ -242,7 +256,6 @@ localStorage.removeItem("token");
        <th className='col-sm-2'>
 		Logo
 		</th> 
-		
 		<th className='col-sm-2'>
 		matriz
 		</th>
@@ -307,16 +320,35 @@ localStorage.removeItem("token");
 									</td>
 									
 									<td className='col-sm-2'>
-									<Button
-									color='success'
-									icon='edit'
-									>
-									</Button>
-									<Button
-									color='danger'
-									icon='delete'
-									>
-									</Button>
+									<Button icon='Edit' color='primary' isLight data-tour='filter ' className='ms-2' aria-label='Edit'  onClick={() => {(item)
+						setIsOpenModal(true);
+						setModalTitle(EDIT_TITLE);
+						setIsEditMode(true);
+						formik.setValues(item);
+						formik.setFieldValue('id', item.id);
+						formik.setFieldValue('address', item.address);
+						formik.setFieldValue('description', item.description);
+						formik.setFieldValue('emission_code', item.emission_code);
+						formik.setFieldValue('establishment_code', item.establishment_code);
+						formik.setFieldValue('iva_holiday', item.iva_holiday);
+						formik.setFieldValue('landline', item.landline);
+						formik.setFieldValue('logo_path', item.logo_path);
+						formik.setFieldValue('matriz', item.matriz);
+						formik.setFieldValue('state', item.state);
+						formik.setFieldValue('tradename', item.tradename);
+						formik.setFieldValue('whatsapp', item.whatsapp);
+						formik.setFieldValue('id_canton', item.id_canton);
+						formik.setFieldValue('id_province', item.id_province);
+						formik.setFieldValue('id_company', item.id_company);
+					}}>
+						</Button>
+          
+      {/*    <Button isLight data-tour='filter ' icon='Delete' color='danger' className='ms-5' aria-label='Delete' onClick={() => { 
+						deleteRole(item.id);
+
+			 }}> 
+           </Button> */}
+          
 									</td>
 					
 								</tr>
