@@ -248,7 +248,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				placement='end'>
 				<OffCanvasHeader setOpen={setUpcomingEventsEditOffcanvas}>
 					<OffCanvasTitle id='upcomingEdit'>
-						{perName.length > 0 && perName}
+						{/* {perName.length > 0 && perName} */}
 					</OffCanvasTitle>
 					<Popovers
 						trigger='hover'
@@ -267,7 +267,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											type='switch'
 											label={
 												<>
-													<CardTitle>Permisos</CardTitle>
+													<CardTitle>
+														{perName.length > 0 && perName}
+													</CardTitle>
 												</>
 											}
 											onChange={formik.handleChange}

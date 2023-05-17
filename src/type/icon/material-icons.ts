@@ -632,7 +632,7 @@ export type TMaterialIcons =
 	| 'FlipCameraIos'
 	| 'FlipToBack'
 	| 'FlipToFront'
-	| 'Flourescent'
+	| ''
 	| 'FlutterDash'
 	| 'FmdBad'
 	| 'FmdGood'
