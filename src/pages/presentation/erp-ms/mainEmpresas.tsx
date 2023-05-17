@@ -45,27 +45,17 @@ import Modal, {
 } from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
-import { Try } from '../../../components/icon/material-icons';
-import { string } from 'prop-types';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
-interface IRole {
+interface IEmpresa {
 	id: number;
 	name: string;
 }
-
 interface IPermisos {
 	id: number;
-	id_permission: {
-		name: string;
-		description: string;
-	};
-	id_group: {
-		id: number;
-		name: string;
-	};
+	name: string;
 }
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const token = localStorage.getItem('user_token');
@@ -81,8 +71,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		},
 	);
 	const { themeStatus, darkModeStatus } = useDarkMode();
-	const [roles, setRoles] = useState<IRole[]>([]);
-	const [perName, setPerName] = useState('');
+	const [empresa, setEmpresa] = useState<IEmpresa[]>([]);
 	const [permisos, setPermisos] = useState<IPermisos[]>([]);
 
 	// BEGIN :: Upcoming Events
@@ -109,57 +98,61 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			notify: true,
 		},
 	});
-	const llamadoRoles = async () => {
-		const resp = await axios.get(`${API_URL}roles`);
-		setRoles(resp.data.data);
-		// console.log(resp);
-	};
-	const llamadoPermision = async () => {
-		const resp = await axios.get(`${API_URL}roles_permissions`);
-		setPermisos(resp.data.data);
-		console.log(resp.data.data);
-	};
 
 	useEffect(() => {
-		llamadoRoles();
-		llamadoPermision();
-	}, [perName]);
+		axios
+			.get(`${API_URL}company`)
+			.then((response) => {
+				setEmpresa(response.data.data);
+				console.log(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		// axios
+		// 	.get(`${API_URL}roles_permissions`)
+		// 	.then((response) => {
+		// 		setPermisos(response.data.data);
+		// 		console.log(response.data.data);
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error);
+		// 	});
+	}, []);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-	const onChangeName = (e: string) => {
-		setPerName(e);
-	};
 
 	return (
 		<>
 			<Card style={{ width: '100%' }}>
 				<CardHeader borderSize={1}>
-					<CardLabel icon='SafetyDivider' iconColor='info'>
-						<CardTitle>Roles y Permisos</CardTitle>
+					<CardLabel icon='Apartment' iconColor='info'>
+						<CardTitle>Empresas</CardTitle>
 					</CardLabel>
 					<CardActions>
-						<Button
+						{/* <Button
 							color='success'
-							icon='personAdd'
+							icon='FilterAlt'
 							onClick={() => setIsOpenModal(true)}>
 							Agregar
-						</Button>
+						</Button> */}
 					</CardActions>
 				</CardHeader>
 				<CardBody className='table-responsive' isScrollable={isFluid}>
 					<table className='table table-striped'>
 						<thead>
 							<tr>
-								<th>Roles</th>
-								<th>Status</th>
-								<th>Permisos</th>
+								<th>Nombre Empresa</th>
+								<th>RUC</th>
+								<th>Direccion</th>
+								<th>Web</th>
 								<td />
 							</tr>
 						</thead>
 						<tbody>
-							{dataPagination(roles, currentPage, perPage).map((item) => (
+							{dataPagination(empresa, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
 									{/* <td>
 										<Button
@@ -218,10 +211,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												'border-light': !darkModeStatus,
 											})}
 											icon='RemoveRedEye'
-											onClick={() => {
-												onChangeName(item.name);
-												handleUpcomingEdit();
-											}}>
+											onClick={handleUpcomingEdit}>
 											Ver Permisos
 										</Button>
 									</td>
@@ -247,14 +237,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				isBodyScroll
 				placement='end'>
 				<OffCanvasHeader setOpen={setUpcomingEventsEditOffcanvas}>
-					<OffCanvasTitle id='upcomingEdit'>
-						{/* {perName.length > 0 && perName} */}
-					</OffCanvasTitle>
-					<Popovers
-						trigger='hover'
-						desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
-						<Icon icon='none' size='lg' className='ms-1 cursor-help' />
-					</Popovers>
+					<OffCanvasTitle id='upcomingEdit'>Permisos</OffCanvasTitle>
 				</OffCanvasHeader>
 				<OffCanvasBody>
 					<div className='row g-4'>
@@ -267,9 +250,16 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											type='switch'
 											label={
 												<>
-													<CardTitle>
-														{perName.length > 0 && perName}
-													</CardTitle>
+													<CardTitle>Grupo 1</CardTitle>
+													<Popovers
+														trigger='hover'
+														desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
+														<Icon
+															icon='none'
+															size='lg'
+															className='ms-1 cursor-help'
+														/>
+													</Popovers>
 												</>
 											}
 											onChange={formik.handleChange}
@@ -285,13 +275,13 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												type='switch'
 												label={
 													<>
-														{permiso.id_permission.description}
+														{permiso.name}
 														<Popovers
 															trigger='hover'
 															desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
 															<Icon
 																icon='none'
-																size='md'
+																size='lg'
 																className='ms-1 cursor-help'
 															/>
 														</Popovers>
@@ -307,7 +297,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						</div>
 					</div>
 				</OffCanvasBody>
-				{/* <div className='row m-0'>
+				<div className='row m-0'>
 					<div className='col-12 p-3'>
 						<Button
 							color='info'
@@ -316,7 +306,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							Agregar
 						</Button>
 					</div>
-				</div> */}
+				</div>
 			</OffCanvas>
 			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} titleId='tour-title'>
 				<ModalHeader setIsOpen={setIsOpenModal}>
@@ -330,7 +320,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<div className='row'>
 						<div className='col-md-9 d-flex align-items-center'>
 							<div>
-								<h2>Agregar Roles</h2>
+								<h2>Agregar Empresa</h2>
 								<Input
 									type='text'
 									id='roleName'

@@ -65,12 +65,7 @@ export const demoPagesMenu = {
 				path: 'Users',
 				icon: 'PersonAdd',
 			},
-			Agencia:{
-				id: 'agencias',
-				text: 'Agencias',
-				path: 'Agency',
-				icon: 'storefront',
-			}
+
 		}
 	},
 };
@@ -119,5 +114,32 @@ id:"roles"
 ,path:"roles"
 ,icon:"AccountTree"
 ,subMenu:null
+},
 }
-}
+export const demoPagesMenu1 = {
+    pages: {
+        id: 'pages',
+        text: 'Empresas',
+        icon: 'Extension',
+    },
+    listPages: {
+        id: 'listPages',
+        text: 'Organización',
+        path: 'Organización',
+        icon: 'Preview',
+        subMenu: {
+            empresas: {
+                id: 'Empresas',
+                text: 'Empresas',
+                path: 'Empresas',
+                icon: 'Apartment',
+            },
+			Agencias:{
+				id: 'agencias',
+				text: 'Agencias',
+				path: 'Agency',
+				icon: 'storefront',
+			}
+        }
+    },
+};

@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { componentPagesMenu,dashboardPagesMenu,demoPagesMenu ,pageLayoutTypesPagesMenu,menuRole,loginMenu} from '../menu';
+import { componentPagesMenu,dashboardPagesMenu,demoPagesMenu ,pageLayoutTypesPagesMenu,menuRole,loginMenu,demoPagesMenu1} from '../menu';
 import Login from '../pages/presentation/auth/Login';
 
 const LANDING = {
@@ -26,7 +26,9 @@ const PAGE_ROLE={
 const AGENCY_PAGES = {
 	AGENCY_LIST: lazy(() => import('../pages/presentation/erp-ms/mainAgency')),
 }
-
+const PAGE_EMPRESA = {
+    EMPRESA: lazy(() => import('../pages/presentation/erp-ms/mainEmpresas')),
+};
 const presentation = [
 	/**
 	 * Landing
@@ -56,6 +58,11 @@ const presentation = [
 	{
 	path: demoPagesMenu.listPages.subMenu.Agencia.path,
 	element: <AGENCY_PAGES.AGENCY_LIST />,
+	exact: true,
+},
+{
+	path: demoPagesMenu1.listPages.subMenu.empresas.path,
+	element: <PAGE_EMPRESA.EMPRESA />,
 	exact: true,
 },
 ];
