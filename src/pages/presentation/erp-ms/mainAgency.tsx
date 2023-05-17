@@ -88,6 +88,7 @@ localStorage.removeItem("token");
   	const ADD_TITLE = 'Nueva Agencia';
 	const EDIT_TITLE = 'Editar Agencia';
 	const [modalTitle, setModalTitle] = useState('');
+	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -114,13 +115,13 @@ localStorage.removeItem("token");
 			description: '',
 			id_company: '',
 			iva_holiday:undefined,
-			phone: '',
 			establishment_code: '',
 			emission_code: '',
 			matriz:undefined,
 			state:undefined,
 			tradename: '',
 			whatsapp: '',
+			landline: '',
 			id_canton:undefined,
 			id_province:undefined,
 			logo_path: '',
@@ -141,13 +142,44 @@ localStorage.removeItem("token");
 		getAgency();
 		}, []);		
 	
+	const addAgency = async (values: any) => {
+		try {
+			if (isEditMode) {
+				if (formik.values.id) {
+					console.log("id is not defined");
+					return;
+				}
+				await axios.put(`${API_URL}agency/${formik.values.id}`, formik.values);
+			} else {
+				await axios.post(`${API_URL}agency`,{
+					address: formik.values.address,
+					description: formik.values.description,
+					landline: formik.values.landline,
+					id_company: formik.values.id_company,
+					iva_holiday: formik.values.iva_holiday,
+					establishment_code: formik.values.establishment_code,
+					emission_code: formik.values.emission_code,
+					matriz: formik.values.matriz,
+					state: formik.values.state,
+					tradename: formik.values.tradename,
+					whatsapp: formik.values.whatsapp,
+					id_canton: formik.values.id_canton,
+					id_province: formik.values.id_province,
+					logo_path: formik.values.logo_path,
+
+				});
+			}
+			getAgency();
+			setIsOpenModal(false);
+		} catch (error) {
+			console.log(error);
+		}
+
+	}
+	
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
-	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-	const clearName = () => {
-		formik.setFieldValue('roleName', '');
-	};
 	
 
 
@@ -168,9 +200,11 @@ localStorage.removeItem("token");
 						color='success'
 					icon='add'
 				
-					onClick={() => {setIsOpenModal(true)
-						setModalTitle(ADD_TITLE);
+					onClick={() => {
 						setIsEditMode(false);
+						setModalTitle(ADD_TITLE);
+						setIsOpenModal(true);
+						formik.resetForm();
 					}
 				}
 				//commit
@@ -180,39 +214,37 @@ localStorage.removeItem("token");
 						
 					</CardActions>
 				</CardHeader>
-				<CardBody style={{ width: '109%', overflowX: 'auto' }}>
+				<CardBody style={{ width: '100%', overflowX: 'auto' }}>
 				<table className='table table-modern '>
   <thead>
     <tr>
-      <th className='col-sm-2'>
-        Dirección
+      <th className='col-sm-2'  >
+        PROVINCIA
       </th>
       <th className='col-sm-2' >
-        Descripción
+        CANTON
       </th>
       <th className='col-sm-2' >
-        Empresa
+        EMPRESA
       </th>
       <th className='col-sm-2'>
-        Codigo de emisión
+   		 NOMBRE
       </th>
       <th className='col-sm-2' >
-        Codigo de establecimiento
+        C. ESTABLECIMIENTO
       </th>
       <th className='col-sm-2'>
-	  	IVA feriado
+	  	C. EMISION
       </th>
       <th className='col-sm-2'>
-        Telefono fijo
+        ESTADO
       </th>
-      <th className='col-sm-2'>
+       <th className='col-sm-2'>
 		Logo
-		</th>
+		</th> 
+		
 		<th className='col-sm-2'>
 		matriz
-		</th>
-		<th className='col-sm-2'>
-		Estado
 		</th>
 		<th className='col-sm-2'>
 			Nombre comercial
@@ -224,7 +256,7 @@ localStorage.removeItem("token");
 		Falta
 		</th>
 		<th className='col-sm-2'>
-		Acciones
+		ACCIONES
 		</th>
     </tr>
   </thead>
@@ -265,10 +297,13 @@ localStorage.removeItem("token");
 									{item.whatsapp}
 									</td>
 									<td className='col-sm-2'>
-									hola
+									{item.id_canton}
 									</td>
 									<td className='col-sm-2'>
-									hola
+									{item.id_province}
+									</td>
+									<td className='col-sm-2'>
+									{item.id_company}
 									</td>
 									
 									<td className='col-sm-2'>
@@ -362,43 +397,55 @@ localStorage.removeItem("token");
      							 <div className="col-md-10">
         						<Card>
          					 <CardBody>
-						<FormGroup id='name' label='Nombre Comercial' className='col-md-10'>
-							<Input onChange={formik.handleChange}
-
-							 />
-						</FormGroup>
-						<FormGroup id='name' label='Codigo Establecimiento' className='col-md-10'>
+						<FormGroup 
+						id='tradename' label='Nombre Comercial' className='col-md-10'>
 							<Input 
 							onChange={formik.handleChange}
-							//  value={formik.values.name}
+							value={formik.values.tradename} 
+
+							 />
+						</FormGroup>
+						<FormGroup id='establishment_code' label='Codigo Establecimiento' className='col-md-10'>
+							<Input 
+							onChange={formik.handleChange}
+							 value={formik.values.establishment_code} 
 							 />
 						</FormGroup>
 
-						<FormGroup id='name' label='Codigo Emision' className='col-md-10'>
+						<FormGroup id='emission_code' label='Codigo Emision' className='col-md-10'>
 							<Input onChange={formik.handleChange}
-							//  value={formik.values.name}
+							 value={formik.values.emission_code}
 							 />
 						</FormGroup>
-						<FormGroup id='name' label='Telefono' className='col-md-10'>
+						<FormGroup id='landline' label='Telefono' className='col-md-10'>
 							<Input onChange={formik.handleChange}
-							//  value={formik.values.name}
+							 value={formik.values.landline}
 							 />
 						</FormGroup>
-						<FormGroup id='name' label='Whatsapp' className='col-md-10'>
+						<FormGroup id='whatsapp' label='Whatsapp' className='col-md-10'>
 							<Input onChange={formik.handleChange}
-							//  value={formik.values.name}
+							 value={formik.values.whatsapp}
 							 />
 						</FormGroup>
-						<FormGroup id='name' label='Direccion' className='col-md-10'>
+						<FormGroup id='address' label='Direccion' className='col-md-10'>
 							<Input onChange={formik.handleChange}
-							//  value={formik.values.name}
+							 value={formik.values.address}
 							 />
 						</FormGroup>
-						<FormGroup id='name' label='Quienes Somos?' className='col-md-10'>
+						<FormGroup id='description' label='Descripción' className='col-md-10'>
 							<Input onChange={formik.handleChange}
-							//  value={formik.values.name}
+							 value={formik.values.description}
 							 />
 						</FormGroup>
+						<FormGroup id='logo_path' label='Imagen' className='col-md-10'>
+							<Input onChange={formik.handleChange}
+							 value={formik.values.logo_path}
+							 />
+						</FormGroup>
+						
+						
+						
+						
 						</CardBody>
         </Card>
 								
@@ -414,9 +461,9 @@ localStorage.removeItem("token");
 			color='success'
 			isLight
 			onClick={() => {
-				
+				addAgency(formik.values);
 				setIsOpenModal(false);
-				clearName()
+				
 			}}>
 			Guardar
 			</Button>

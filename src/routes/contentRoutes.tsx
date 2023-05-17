@@ -31,6 +31,7 @@ const PAGE_ROLE = {
 };
 const PAGE_EMPRESA = {
 	EMPRESA: lazy(() => import('../pages/presentation/erp-ms/mainEmpresas')),
+	AGENCIA: lazy(() => import('../pages/presentation/erp-ms/mainAgency')),
 };
 
 const presentation = [
@@ -61,6 +62,11 @@ const presentation = [
 	{
 		path: demoPagesMenu1.listPages.subMenu.empresas.path,
 		element: <PAGE_EMPRESA.EMPRESA />,
+		exact: true,
+	},
+	{
+		path: demoPagesMenu1.listPages.subMenu.Agencias.path,
+		element: <PAGE_EMPRESA.AGENCIA />,
 		exact: true,
 	},
 ];
