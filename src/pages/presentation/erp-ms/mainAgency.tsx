@@ -1,6 +1,5 @@
 import React, { FC, useState,useEffect } from 'react';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
 import Card, {
 	CardActions,
@@ -8,28 +7,17 @@ import Card, {
 	CardHeader,
 	CardLabel,
 	CardTitle,
+	
 } from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
-import { priceFormat } from '../../../helpers/helpers';
 import Dropdown, {
 	DropdownItem,
 	DropdownMenu,
 	DropdownToggle,
 } from '../../../components/bootstrap/Dropdown';
-import Icon from '../../../components/icon/Icon';
-import OffCanvas, {
-	OffCanvasBody,
-	OffCanvasHeader,
-	OffCanvasTitle,
-} from '../../../components/bootstrap/OffCanvas';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
-import Textarea from '../../../components/bootstrap/forms/Textarea';
-import Checks from '../../../components/bootstrap/forms/Checks';
-import Popovers from '../../../components/bootstrap/Popovers';
 import data from '../../../common/data/dummyEventsData';
-import USERS from '../../../common/data/userDummyData';
-import EVENT_STATUS from '../../../common/data/enumEventStatus';
 import Avatar from '../../../components/Avatar';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../../components/PaginationButtons';
 import useSortableData from '../../../hooks/useSortableData';
@@ -38,12 +26,16 @@ import Modal, {ModalBody,ModalFooter,ModalHeader,ModalTitle,} from '../../../com
 import axios from 'axios';
 import { API_URL } from '../../../constants';
 import Select from '../../../components/bootstrap/forms/Select';
+import Wizard, { WizardItem } from '../../../components/Wizard';
+import User1Webp from '../../../assets/img/wanna/wanna2.webp';
+import User1Img from '../../../assets/img/wanna/wanna2.png';
+import { TModalFullScreen, TModalSize } from '../../../type/modal-type';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
 interface IAgency{
-	id: string;
+	id: undefined;
 	address: string;
 	description: string;
 	id_company: string;
@@ -55,11 +47,19 @@ interface IAgency{
 	state: string;
 	tradename: string;
 	whatsapp: string;
-	id_canton: string;
-	id_province: string;
+	id_canton: undefined;
+	id_province: undefined;
 	logo_path: string;
-}
 
+}
+interface IProvince{
+	id:undefined;
+	name:undefined;
+}
+interface ICanton{
+	id:undefined;
+	name:undefined;
+}
 interface ICustomerEditModalProps {
 	id: string;
 	isOpen: boolean;
@@ -84,11 +84,15 @@ localStorage.removeItem("token");
 	
 	const { themeStatus, darkModeStatus } = useDarkMode();
   const [agency, setAgency] = useState<IAgency[]>([]);
+  const [province, setProvince] = useState<IProvince[]>([]);
+  const [canton, setCanton] = useState<ICanton[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   	const ADD_TITLE = 'Nueva Agencia';
 	const EDIT_TITLE = 'Editar Agencia';
 	const [modalTitle, setModalTitle] = useState('');
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+	const [selectedId, setSelectedId] = useState(null);
+ 
 
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -125,6 +129,7 @@ localStorage.removeItem("token");
 			id_canton:undefined,
 			id_province:undefined,
 			logo_path: '',
+			action: '',
 		},
 	});
 	const getAgency = async () => {
@@ -136,10 +141,27 @@ localStorage.removeItem("token");
 			console.log(error);
 		  }
 		};
-
-
+		const getProvince = () => {
+			axios.get(`${API_URL}province`)
+			.then(response => {
+			setProvince(response.data);
+			console.log(response.data);
+			})
+			.catch(error => {
+			console.log(error);
+			});
+			};
+			const getCanton = (id_prov:number) => {
+			axios.get(`${API_URL}canton/${id_prov}`)
+			.then(response => {
+			setCanton(response.data);
+			console.log(response.data);
+			})
+			}
 	useEffect(() => {
 		getAgency();
+		getProvince();
+
 		}, []);		
 	
 	const addAgency = async (values: any) => {
@@ -180,6 +202,7 @@ localStorage.removeItem("token");
 					id_canton: formik.values.id_canton,
 					id_province: formik.values.id_province,
 					logo_path: formik.values.logo_path,
+					action: formik.values.action,
 
 				});
 			}
@@ -194,6 +217,7 @@ localStorage.removeItem("token");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
+	const [sizeStatus, setSizeStatus] = useState<TModalSize>(null);
 	
 
 
@@ -228,8 +252,8 @@ localStorage.removeItem("token");
 						
 					</CardActions>
 				</CardHeader>
-				<CardBody style={{ width: '100%', overflowX: 'auto' }}>
-				<table className='table table-modern '>
+				<CardBody className='table-responsive' isScrollable={isFluid}>
+<table className='table table-modern'>
   <thead>
     <tr>
       <th className='col-sm-2'  >
@@ -242,7 +266,7 @@ localStorage.removeItem("token");
         EMPRESA
       </th>
       <th className='col-sm-2'>
-   		 NOMBRE
+   		 NOMBRE 
       </th>
       <th className='col-sm-2' >
         C. ESTABLECIMIENTO
@@ -253,21 +277,27 @@ localStorage.removeItem("token");
       <th className='col-sm-2'>
         ESTADO
       </th>
-       <th className='col-sm-2'>
-		Logo
+       {/* <th className='col-sm-2'>
+	    Telefono
 		</th> 
 		<th className='col-sm-2'>
 		matriz
 		</th>
 		<th className='col-sm-2'>
-			Nombre comercial
+		direnccion
 		</th>
 		<th className='col-sm-2'>
 		Whatsapp
 		</th>
 		<th className='col-sm-2'>
-		Falta
+		Usuarios
 		</th>
+		<th className='col-sm-2'>
+		logo
+		</th>
+		<th className='col-sm-2'>
+		iva
+		</th> */}
 		<th className='col-sm-2'>
 		ACCIONES
 		</th>
@@ -277,31 +307,32 @@ localStorage.removeItem("token");
   {dataPagination(agency, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
 									<td className='col-sm-2'>
-										{item.address}
+										{item.id_province}
 									</td>
 									<td className='col-sm-2'>
-										{item.description}
+										{item.id_canton}
 									</td>
 									<td className='col-sm-2'>
-										{item.emission_code}
+										{item.id_company}
+									</td>
+									<td className='col-sm-'>
+										{item.tradename}
 									</td>
 									<td className='col-sm-2'>
 										{item.establishment_code}
 									</td>
 									<td className='col-sm-2'>
-										{item.iva_holiday}
+										{item.emission_code}
 									</td>
 									<td className='col-sm-2'>
-										{item.landline}
+									{item.state}
 									</td>
-									<td className='col-sm-2'>
+								
+									{/* <td className='col-sm-2'>
 									{item.logo_path}
 									</td>
 									<td className='col-sm-2'>
 									{item.matriz}
-									</td>
-									<td className='col-sm-2'>
-									{item.state}
 									</td>
 									<td className='col-sm-2'>
 									{item.tradename}
@@ -314,10 +345,8 @@ localStorage.removeItem("token");
 									</td>
 									<td className='col-sm-2'>
 									{item.id_province}
-									</td>
-									<td className='col-sm-2'>
-									{item.id_company}
-									</td>
+									</td> */} 
+									
 									
 									<td className='col-sm-2'>
 									<Button icon='Edit' color='primary' isLight data-tour='filter ' className='ms-2' aria-label='Edit'  onClick={() => {(item)
@@ -369,66 +398,120 @@ localStorage.removeItem("token");
 				/>
 			</Card>
 		
-						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
-			<ModalHeader setIsOpen={setIsOpenModal}>
+						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} >
+			<ModalHeader setIsOpen={setIsOpenModal}
+			 >
 			<ModalTitle id='tour-title' className='d-flex align-items-end'>
 			<span className='ps-2'>
 			<h3 className=''>{modalTitle}</h3>			
 			</span>
 			</ModalTitle>
 			</ModalHeader>
-			<ModalBody>
-			<div className='row'>
-			<div className='col-md-9 d-flex align-items-center'>
+			<ModalBody >
+			<div className='row justify-content-end'>
+  <div className='col-md-5'>
 			<div>
 			<Card>
+			<Card>
+										<CardBody>
+											<div className='row g-4 align-items-center'>
+												<div className='col-xl-auto'>
+													<Avatar srcSet={User1Webp} src={User1Img} />
+												</div>
+												<div className='col-xl'>
+													<div className='row g-4'>
+														<div className='col-auto'>
+															<Input
+																type='file'
+																autoComplete='photo'
+															/>
+														</div>
+														<div className='col-auto'>
+															<Button
+																color='dark'
+																isLight
+																icon='Delete'>
+																Delete Photo
+															</Button>
+														</div>
+														<div className='col-12'>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+										</CardBody>
+									</Card>
 			<CardHeader>
 				<CardLabel icon='ReceiptLong'>
 				<CardTitle>Asignar</CardTitle>
 				</CardLabel>
 				</CardHeader>
-				<CardBody>
-				<Select
-									id='province'
-									size='lg'
-									ariaLabel='Category'
-									placeholder='Provincia'
-									
-									className={classNames('rounded-1', {
-										'bg-white': !darkModeStatus,
-									})}
-						
-								/>
-								<Select
-									id='canton'
-									size='lg'
-									ariaLabel='Category'
-									placeholder='Cantón'
-									
-									className={classNames('rounded-1', {
-										'bg-white': !darkModeStatus,
-									})}
-									
-								/>
-								<Select
-									id='users'
-									size='lg'
-									ariaLabel='Category'
-									placeholder='Usuarios'
+				<CardBody className='pt-0'>
+				<div className='col-md-12'>
+								<Dropdown>
+<DropdownToggle>
+
+<Button>
+{formik.values.id_province ?
+province.find(province => province.id  === formik.values.id)?.name || "Provincia"
+: "Provincia"
+}
+</Button>
+</DropdownToggle>
+<DropdownMenu>
+{province && province.map((provinces) => (
+<DropdownItem
+key={provinces.id}
+onClick={() => {
+formik.setFieldValue("id_province", provinces.id);
+}}
+>
+{provinces.name}
+</DropdownItem>
+))}
+</DropdownMenu>
+</Dropdown>
+</div>
+				<div className='col-md-12'>
+								<Dropdown>
+<DropdownToggle>
+
+<Button>
+{formik.values.id_province ?
+province.find(province => province.id  === formik.values.id)?.name || "Canton"
+: "Canton"
+}
+</Button>
+</DropdownToggle>
+<DropdownMenu>
+{province && province.map((provinces) => (
+<DropdownItem
+key={provinces.id}
+onClick={() => {
+formik.setFieldValue("id_province", provinces.id);
+}}
+>
+{provinces.name}
+</DropdownItem>
+))}
+</DropdownMenu>
+</Dropdown>
+</div>
 								
-									className={classNames('rounded-1', {
-										'bg-white': !darkModeStatus,
-									})}
-									
-								/>
 								 </CardBody>
 								 </Card>
 								 </div>
+								
     							</div>
-								 <div className="row">
-     							 <div className="col-md-10">
+							
+								
+                                <div className='col-md-7'>
         						<Card>
-         					 <CardBody>
+         					 <CardBody  className='pt-0'>
+							  <div className='row g-4'>
+								
+												<div className='col-md-16'>
 						<FormGroup 
 						id='tradename' label='Nombre Comercial' className='col-md-10'>
 							<Input 
@@ -469,22 +552,22 @@ localStorage.removeItem("token");
 							 value={formik.values.description}
 							 />
 						</FormGroup>
-						<FormGroup id='logo_path' label='Imagen' className='col-md-10'>
-							<Input onChange={formik.handleChange}
-							 value={formik.values.logo_path}
-							 />
-						</FormGroup>
 						
 						
 						
+						</div>
+			</div>
 						
 						</CardBody>
+						
         </Card>
+		
 								
 							
 			</div>
+			
 			</div>
-			</div>
+			
 			</ModalBody>
 			<ModalFooter>
 			
@@ -499,8 +582,11 @@ localStorage.removeItem("token");
 			}}>
 			Guardar
 			</Button>
+	
 			</ModalFooter>
+			
 			</Modal>
+			
 		</>
 
 	);

@@ -111,6 +111,13 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			roleName: '',
 			notify: true,
 		},
+		validate: (values) => {
+			const errors: any = {};
+			if (!values.roleName) {
+				errors.roleName = 'Requerido';
+			} 
+			return errors;
+		},
 	});
 	const llamadoRoles = async () => {
 		const resp = await axios.get(`${API_URL}roles`);
@@ -133,6 +140,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 	const clearName = () => {
 		formik.setFieldValue('roleName', '');
+		formik.errors.roleName = '';
 	};
 	const addRoles = async () => {
 		try {
@@ -340,16 +348,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						</div>
 					</div>
 				</OffCanvasBody>
-				{/* <div className='row m-0'>
-					<div className='col-12 p-3'>
-						<Button
-							color='info'
-							className='w-100'
-							onClick={() => setUpcomingEventsEditOffcanvas(false)}>
-							Agregar
-						</Button>
-					</div>
-				</div> */}
 			</OffCanvas>
 			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
 				<ModalHeader setIsOpen={setIsOpenModal}>
@@ -367,9 +365,14 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									type='text'
 									id='roleName'
 									name='roleName'
-									style={{ width: '230%' }}
+									style={{ width: '210%' }}
 									onChange={formik.handleChange}
-									value={formik.values.roleName}
+							value={formik.values.roleName}
+							onBlur={formik.handleBlur}
+						  isValid={formik.isValid}
+						  isTouched={formik.touched.roleName}
+						  invalidFeedback={formik.errors.roleName}
+						  validFeedback='Perfecto!'
 								/>
 							</div>
 						</div>
@@ -390,6 +393,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						icon='Save'
 						color='success'
 						isLight
+						isDisable={Object.keys(formik.errors).length > 0}
 						onClick={() => {
 							addRoles();
 							setIsOpenModal(false);
