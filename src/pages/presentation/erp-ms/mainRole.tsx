@@ -304,10 +304,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				<OffCanvasBody>
 					<div className='row g-4'>
 						<div className='col-12'>
-							<Card isCompact borderSize={2} shadow='none' className='mb-0'>
+							<Card isCompact borderSize={2} shadow='none' className='mb-0 '>
 								<CardHeader>
 									<CardLabel>
-										<CardTitle>{perName.length > 0 && perName}</CardTitle>
+										<CardTitle className='p-1'>
+											{perName.length > 0 && perName}
+										</CardTitle>
 										{/* <Checks
 											id='notify'
 											type='switch'
@@ -374,9 +376,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
 				<ModalHeader setIsOpen={setIsOpenModal}>
 					<ModalTitle id='tour-title' className='d-flex align-items-end'>
-						<span className='ps-2'>
-							<h3 className=''>{modalTitle}</h3>
-						</span>
+						<h1 className='ps-2 text-center'>
+							<h2 className='text-center'>{modalTitle}</h2>
+						</h1>
 					</ModalTitle>
 				</ModalHeader>
 				<ModalBody>

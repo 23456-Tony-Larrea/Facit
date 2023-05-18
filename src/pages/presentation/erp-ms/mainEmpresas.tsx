@@ -401,9 +401,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				</ModalHeader>
 				<ModalBody>
 					<div className='row'>
-						<div className='col-md-9 d-flex align-items-center'>
+						<div className='col-md-12 d-flex align-items-center justify-content-center'>
 							<div>
-								{/* <Card>
+								<Card>
 									<CardHeader>
 										<CardLabel icon='Apartment'>
 											<CardTitle>Empresa</CardTitle>
@@ -438,14 +438,14 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											})}
 										/>
 									</CardBody>
-								</Card> */}
+								</Card>
 							</div>
 						</div>
 						<div className='row'>
 							<div className='col-md-12 d-flex align-items-center justify-content-center'>
 								<Card className='col-md-10'>
 									<CardBody>
-										<FormGroup
+										{/* <FormGroup
 											id='province'
 											label='Provincia'
 											className='col-md-10'>
@@ -468,7 +468,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												onChange={formik.handleChange}
 												value={formik.values.id_province}
 											/>
-										</FormGroup>
+										</FormGroup> */}
 
 										<FormGroup id='ruc' label='RUC' className='col-md-10'>
 											<Input
