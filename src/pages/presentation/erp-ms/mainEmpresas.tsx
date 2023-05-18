@@ -120,15 +120,27 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				console.log(error);
 			});
 	};
+	const handleDeleteUser = (id: number) => {
+		axios
+			.delete(`${API_URL}company/${id}`)
+			.then((response) => {
+				const updatedUsers = empresa.filter((user) => user.id !== id);
+				setEmpresa(updatedUsers);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 	useEffect(() => {
 		getEmpresas();
 	}, []);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
-	const addEmpresa = async (values: any) => {
+
+	const addEmpresa = async () => {
 		try {
-			if (formik.values.id) {
+			if (isEditMode) {
 				console.log('this is my id', formik.values.id);
 
 				await axios.put(`${API_URL}agency/${formik.values.id}`, {
@@ -164,6 +176,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		} catch (error) {
 			console.log(error);
 		}
+	};
+	const clearForm = () => {
+		formik.resetForm();
 	};
 	return (
 		<>
@@ -240,6 +255,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									/>
 									Telefono
 								</th>
+								<th>Edit</th>
 								<td />
 							</tr>
 						</thead>
@@ -252,6 +268,36 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									<td>{item.address}</td>
 									<td>{item.web_site}</td>
 									<td>{item.phone}</td>
+									<td>
+										<Button
+											icon='Edit'
+											color='primary'
+											isLight
+											data-tour='filter '
+											className='ms-2 m-1'
+											aria-label='Edit'
+											onClick={() => {
+												setIsEditMode(true);
+												setModalTitle(EDIT_TITLE);
+												setIsOpenModal(true);
+												formik.resetForm();
+												getEmpresas();
+												clearForm();
+											}}></Button>
+										<Button
+											isOutline={!darkModeStatus}
+											color='danger'
+											isLight={darkModeStatus}
+											className={classNames('text-nowrap', {
+												'border-light': !darkModeStatus,
+											})}
+											icon='Cancel'
+											onClick={() => {
+												handleDeleteUser(item.id);
+												getEmpresas();
+												clearForm();
+											}}></Button>
+									</td>
 								</tr>
 							))}
 						</tbody>
@@ -349,7 +395,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				<ModalHeader setIsOpen={setIsOpenModal}>
 					<ModalTitle id='tour-title' className='d-flex align-items-end'>
 						<span className='ps-2'>
-							<h3 className=''>{modalTitle}</h3>
+							<h3 className='text-center'>{modalTitle}</h3>
 						</span>
 					</ModalTitle>
 				</ModalHeader>
@@ -357,7 +403,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<div className='row'>
 						<div className='col-md-9 d-flex align-items-center'>
 							<div>
-								<Card>
+								{/* <Card>
 									<CardHeader>
 										<CardLabel icon='Apartment'>
 											<CardTitle>Empresa</CardTitle>
@@ -392,22 +438,37 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											})}
 										/>
 									</CardBody>
-								</Card>
+								</Card> */}
 							</div>
 						</div>
 						<div className='row'>
-							<div className='col-md-10'>
-								<Card>
+							<div className='col-md-12 d-flex align-items-center justify-content-center'>
+								<Card className='col-md-10'>
 									<CardBody>
-										{/* <FormGroup
-											id='tradename'
-											label='Nombre Comercial'
+										<FormGroup
+											id='province'
+											label='Provincia'
 											className='col-md-10'>
 											<Input
 												onChange={formik.handleChange}
-												value={formik.values.id_user}
+												value={formik.values.id_province}
 											/>
-										</FormGroup> */}
+										</FormGroup>
+										<FormGroup id='canton' label='Cantón' className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.id_province}
+											/>
+										</FormGroup>
+										<FormGroup
+											id='users'
+											label='Usuarios'
+											className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.id_province}
+											/>
+										</FormGroup>
 
 										<FormGroup id='ruc' label='RUC' className='col-md-10'>
 											<Input
@@ -489,7 +550,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						color='success'
 						isLight
 						onClick={() => {
-							addEmpresa(formik.values);
+							addEmpresa();
 							setIsOpenModal(false);
 						}}>
 						Guardar

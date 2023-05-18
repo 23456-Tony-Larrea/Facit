@@ -56,6 +56,10 @@ interface IRole {
 
 interface IPermisos {
 	id: number;
+	id_rol: {
+		id: number;
+		name: string;
+	};
 	id_permission: {
 		name: string;
 		description: string;
@@ -64,6 +68,7 @@ interface IPermisos {
 		id: number;
 		name: string;
 	};
+	status: string;
 }
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const token = localStorage.getItem('user_token');
@@ -85,6 +90,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [modalTitle, setModalTitle] = useState('');
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [perName, setPerName] = useState('');
+	const [status, setStatus] = useState(false);
 	const [permisos, setPermisos] = useState<IPermisos[]>([]);
 
 	// BEGIN :: Upcoming Events
@@ -109,24 +115,30 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		initialValues: {
 			roleId: undefined,
 			roleName: '',
-			notify: true,
+			notify: undefined,
 		},
 	});
 	const llamadoRoles = async () => {
 		const resp = await axios.get(`${API_URL}roles`);
 		setRoles(resp.data.data);
-		// console.log(resp);
+		console.log(resp.data.data);
 	};
 	const llamadoPermision = async () => {
 		const resp = await axios.get(`${API_URL}roles_permissions`);
 		setPermisos(resp.data.data);
 		console.log(resp.data.data);
 	};
-
+	const changeStatus = async (id: number, e: number) => {
+		setStatus(e > 0 ? true : false);
+		const resp = await axios.put(`${API_URL}roles_permissions/status/${id}`, {
+			status: e,
+		});
+		console.log(resp);
+	};
 	useEffect(() => {
 		llamadoRoles();
 		llamadoPermision();
-	}, [perName]);
+	}, [perName, status]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
@@ -295,44 +307,52 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							<Card isCompact borderSize={2} shadow='none' className='mb-0'>
 								<CardHeader>
 									<CardLabel>
-										<Checks
+										<CardTitle>{perName.length > 0 && perName}</CardTitle>
+										{/* <Checks
 											id='notify'
 											type='switch'
 											label={
 												<>
-													<CardTitle>
-														{perName.length > 0 && perName}
-													</CardTitle>
 												</>
 											}
 											onChange={formik.handleChange}
 											checked={formik.values.notify}
-										/>
+										/> */}
 									</CardLabel>
 								</CardHeader>
 								<CardBody>
 									{permisos.map((permiso) => (
 										<FormGroup key={permiso.id}>
-											<Checks
-												id='notify'
-												type='switch'
-												label={
-													<>
-														{permiso.id_permission.description}
-														<Popovers
-															trigger='hover'
-															desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
-															<Icon
-																icon='none'
-																size='md'
-																className='ms-1 cursor-help'
-															/>
-														</Popovers>
-													</>
-												}
-												onChange={formik.handleChange}
-												checked={formik.values.notify}
-											/>
+											{perName === permiso.id_rol.name ? (
+												<>
+													<Checks
+														id='notify'
+														type='switch'
+														label={permiso.id_permission.description}
+														onChange={() => {
+															setStatus(
+																parseInt(permiso.status) > 0
+																	? true
+																	: false,
+															),
+																llamadoPermision();
+														}}
+														onClick={() => {
+															changeStatus(
+																permiso.id,
+																parseInt(permiso.status) === 0
+																	? 1
+																	: 0,
+															),
+																llamadoPermision();
+														}}
+														checked={parseInt(permiso.status) > 0}
+														style={{ cursor: 'pointer' }}
+													/>
+												</>
+											) : (
+												<> </>
+											)}
 										</FormGroup>
 									))}
 								</CardBody>
