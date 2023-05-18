@@ -38,6 +38,8 @@ import Modal, {ModalBody,ModalFooter,ModalHeader,ModalTitle,} from '../../../com
 import axios from 'axios';
 import { API_URL } from '../../../constants';
 import Select from '../../../components/bootstrap/forms/Select';
+import Wizard, { WizardItem } from '../../../components/Wizard';
+
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
@@ -125,6 +127,7 @@ localStorage.removeItem("token");
 			id_canton:undefined,
 			id_province:undefined,
 			logo_path: '',
+			action: '',
 		},
 	});
 	const getAgency = async () => {
@@ -180,6 +183,7 @@ localStorage.removeItem("token");
 					id_canton: formik.values.id_canton,
 					id_province: formik.values.id_province,
 					logo_path: formik.values.logo_path,
+					action: formik.values.action,
 
 				});
 			}
@@ -229,7 +233,7 @@ localStorage.removeItem("token");
 					</CardActions>
 				</CardHeader>
 				<CardBody style={{ width: '100%', overflowX: 'auto' }}>
-				<table className='table table-modern '>
+				<table className='table table-modern'>
   <thead>
     <tr>
       <th className='col-sm-2'  >
@@ -242,7 +246,7 @@ localStorage.removeItem("token");
         EMPRESA
       </th>
       <th className='col-sm-2'>
-   		 NOMBRE
+   		 NOMBRE 
       </th>
       <th className='col-sm-2' >
         C. ESTABLECIMIENTO
@@ -253,21 +257,27 @@ localStorage.removeItem("token");
       <th className='col-sm-2'>
         ESTADO
       </th>
-       <th className='col-sm-2'>
-		Logo
+       {/* <th className='col-sm-2'>
+	    Telefono
 		</th> 
 		<th className='col-sm-2'>
 		matriz
 		</th>
 		<th className='col-sm-2'>
-			Nombre comercial
+		direnccion
 		</th>
 		<th className='col-sm-2'>
 		Whatsapp
 		</th>
 		<th className='col-sm-2'>
-		Falta
+		Usuarios
 		</th>
+		<th className='col-sm-2'>
+		logo
+		</th>
+		<th className='col-sm-2'>
+		iva
+		</th> */}
 		<th className='col-sm-2'>
 		ACCIONES
 		</th>
@@ -277,31 +287,34 @@ localStorage.removeItem("token");
   {dataPagination(agency, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
 									<td className='col-sm-2'>
-										{item.address}
+										{item.id_province}
 									</td>
 									<td className='col-sm-2'>
-										{item.description}
+										{item.id_canton}
 									</td>
 									<td className='col-sm-2'>
-										{item.emission_code}
+										{item.id_company}
+									</td>
+									<td className='col-sm-'>
+										{item.tradename}
 									</td>
 									<td className='col-sm-2'>
 										{item.establishment_code}
 									</td>
 									<td className='col-sm-2'>
-										{item.iva_holiday}
+										{item.emission_code}
 									</td>
 									<td className='col-sm-2'>
-										{item.landline}
+									{item.state}
 									</td>
 									<td className='col-sm-2'>
+									{item.action}
+									</td>
+									{/* <td className='col-sm-2'>
 									{item.logo_path}
 									</td>
 									<td className='col-sm-2'>
 									{item.matriz}
-									</td>
-									<td className='col-sm-2'>
-									{item.state}
 									</td>
 									<td className='col-sm-2'>
 									{item.tradename}
@@ -314,10 +327,8 @@ localStorage.removeItem("token");
 									</td>
 									<td className='col-sm-2'>
 									{item.id_province}
-									</td>
-									<td className='col-sm-2'>
-									{item.id_company}
-									</td>
+									</td> */} 
+									
 									
 									<td className='col-sm-2'>
 									<Button icon='Edit' color='primary' isLight data-tour='filter ' className='ms-2' aria-label='Edit'  onClick={() => {(item)
@@ -378,8 +389,8 @@ localStorage.removeItem("token");
 			</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
-			<div className='row'>
-			<div className='col-md-9 d-flex align-items-center'>
+			<div className='row justify-content-end'>
+  <div className='col-md-5'>
 			<div>
 			<Card>
 			<CardHeader>
@@ -387,7 +398,7 @@ localStorage.removeItem("token");
 				<CardTitle>Asignar</CardTitle>
 				</CardLabel>
 				</CardHeader>
-				<CardBody>
+				<CardBody className='pt-0'>
 				<Select
 									id='province'
 									size='lg'
@@ -424,11 +435,16 @@ localStorage.removeItem("token");
 								 </CardBody>
 								 </Card>
 								 </div>
+								
     							</div>
-								 <div className="row">
-     							 <div className="col-md-10">
+							
+								
+                                <div className='col-md-7'>
         						<Card>
-         					 <CardBody>
+         					 <CardBody  className='pt-0'>
+							  <div className='row g-4'>
+								
+												<div className='col-md-16'>
 						<FormGroup 
 						id='tradename' label='Nombre Comercial' className='col-md-10'>
 							<Input 
@@ -476,15 +492,19 @@ localStorage.removeItem("token");
 						</FormGroup>
 						
 						
-						
+						</div>
+			</div>
 						
 						</CardBody>
+						
         </Card>
+		
 								
 							
 			</div>
+			
 			</div>
-			</div>
+			
 			</ModalBody>
 			<ModalFooter>
 			
@@ -499,8 +519,11 @@ localStorage.removeItem("token");
 			}}>
 			Guardar
 			</Button>
+	
 			</ModalFooter>
+			
 			</Modal>
+			
 		</>
 
 	);
