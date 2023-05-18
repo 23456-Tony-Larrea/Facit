@@ -202,7 +202,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					className='table-responsive'
 					style={{ width: '100%', overflowX: 'auto' }}
 					isScrollable={isFluid}>
-					<table className='table table-modern'>
+					<table className='table table-modern text-center'>
 						<thead>
 							<tr>
 								<th className='col-sm-3'>
