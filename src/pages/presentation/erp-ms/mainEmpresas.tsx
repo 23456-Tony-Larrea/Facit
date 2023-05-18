@@ -45,6 +45,7 @@ import Modal, {
 } from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
+import Select from '../../../components/bootstrap/forms/Select';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
@@ -53,10 +54,7 @@ interface IEmpresa {
 	id: number;
 	name: string;
 }
-interface IPermisos {
-	id: number;
-	name: string;
-}
+
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const token = localStorage.getItem('user_token');
 	axios.interceptors.request.use(
@@ -72,8 +70,11 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	);
 	const { themeStatus, darkModeStatus } = useDarkMode();
 	const [empresa, setEmpresa] = useState<IEmpresa[]>([]);
-	const [permisos, setPermisos] = useState<IPermisos[]>([]);
-
+	const [isEditMode, setIsEditMode] = useState(false);
+	const ADD_TITLE = 'Nueva Empresa';
+	const EDIT_TITLE = 'Editar Empresa';
+	const [modalTitle, setModalTitle] = useState('');
+	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
 	const handleUpcomingDetails = () => {
@@ -94,12 +95,21 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			return undefined;
 		},
 		initialValues: {
-			roleName: '',
-			notify: true,
+			id: undefined,
+			id_user: undefined,
+			ruc: '',
+			business_name: '',
+			commercial_name: '',
+			email_company: '',
+			address: '',
+			phone: '',
+			web_site: '',
+			logo_path: '',
+			id_province: undefined,
+			id_canton: undefined,
 		},
 	});
-
-	useEffect(() => {
+	const getEmpresas = () => {
 		axios
 			.get(`${API_URL}company`)
 			.then((response) => {
@@ -109,39 +119,77 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			.catch((error) => {
 				console.log(error);
 			});
-		// axios
-		// 	.get(`${API_URL}roles_permissions`)
-		// 	.then((response) => {
-		// 		setPermisos(response.data.data);
-		// 		console.log(response.data.data);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log(error);
-		// 	});
+	};
+	useEffect(() => {
+		getEmpresas();
 	}, []);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
-	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+	const addEmpresa = async (values: any) => {
+		try {
+			if (formik.values.id) {
+				console.log('this is my id', formik.values.id);
 
+				await axios.put(`${API_URL}agency/${formik.values.id}`, {
+					id_user: formik.values.id_user,
+					ruc: formik.values.ruc,
+					business_name: formik.values.business_name,
+					commercial_name: formik.values.commercial_name,
+					email_company: formik.values.email_company,
+					address: formik.values.address,
+					phone: formik.values.phone,
+					web_site: formik.values.web_site,
+					logo_path: formik.values.logo_path,
+					id_province: formik.values.id_province,
+					id_canton: formik.values.id_canton,
+				});
+			} else {
+				await axios.post(`${API_URL}agency`, {
+					id_user: formik.values.id_user,
+					ruc: formik.values.ruc,
+					business_name: formik.values.business_name,
+					commercial_name: formik.values.commercial_name,
+					email_company: formik.values.email_company,
+					address: formik.values.address,
+					phone: formik.values.phone,
+					web_site: formik.values.web_site,
+					logo_path: formik.values.logo_path,
+					id_province: formik.values.id_province,
+					id_canton: formik.values.id_canton,
+				});
+			}
+			getEmpresas();
+			setIsOpenModal(false);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<>
 			<Card style={{ width: '100%' }}>
 				<CardHeader borderSize={1}>
 					<CardLabel icon='Apartment' iconColor='info'>
-						<CardTitle>Empresas</CardTitle>
+						<CardTitle tag='h3' className='font-weight-bold'>
+							Empresas
+						</CardTitle>
 					</CardLabel>
 					<CardActions>
-						{/* <Button
+						<Button
 							color='success'
-							icon='FilterAlt'
-							onClick={() => setIsOpenModal(true)}>
-							Agregar
-						</Button> */}
+							icon='Add'
+							onClick={() => {
+								setIsEditMode(false);
+								setModalTitle(ADD_TITLE);
+								setIsOpenModal(true);
+								formik.resetForm();
+							}}>
+							Nueva Empresa
+						</Button>
 					</CardActions>
 				</CardHeader>
 				<CardBody className='table-responsive' isScrollable={isFluid}>
-					<table className='table table-striped'>
+					<table className='table table-modern'>
 						<thead>
 							<tr>
 								<th>
@@ -176,22 +224,34 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									/>
 									Direccion
 								</th>
+								<th>
+									<Icon
+										icon='ArrowRight'
+										size='lg'
+										className='ms-1 cursor-help'
+									/>
+									Sitio Web
+								</th>
+								<th>
+									<Icon
+										icon='ArrowRight'
+										size='lg'
+										className='ms-1 cursor-help'
+									/>
+									Telefono
+								</th>
 								<td />
 							</tr>
 						</thead>
 						<tbody>
 							{dataPagination(empresa, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
-									<td>
-										{/* <div className='d-flex'>
-											<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'> */}
-										{item.business_name}
-										{/* </div>
-										</div> */}
-									</td>
+									<td>{item.business_name}</td>
 									<td>{item.ruc}</td>
 									<td>{item.email_company}</td>
 									<td>{item.address}</td>
+									<td>{item.web_site}</td>
+									<td>{item.phone}</td>
 								</tr>
 							))}
 						</tbody>
@@ -207,7 +267,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				/>
 			</Card>
 
-			<OffCanvas
+			{/* <OffCanvas
 				setOpen={setUpcomingEventsEditOffcanvas}
 				isOpen={upcomingEventsEditOffcanvas}
 				titleId='upcomingEdit'
@@ -216,7 +276,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				<OffCanvasHeader setOpen={setUpcomingEventsEditOffcanvas}>
 					<OffCanvasTitle id='upcomingEdit'>Permisos</OffCanvasTitle>
 				</OffCanvasHeader>
-				<OffCanvasBody>
+			 <OffCanvasBody>
 					<div className='row g-4'>
 						<div className='col-12'>
 							<Card isCompact borderSize={2} shadow='none' className='mb-0'>
@@ -240,12 +300,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												</>
 											}
 											onChange={formik.handleChange}
-											checked={formik.values.notify}
+											// checked={formik.values.}
 										/>
 									</CardLabel>
 								</CardHeader>
 								<CardBody>
-									{permisos.map((permiso) => (
+									 {permisos.map((permiso) => (
 										<FormGroup key={permiso.id}>
 											<Checks
 												id='notify'
@@ -268,12 +328,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												checked={formik.values.notify}
 											/>
 										</FormGroup>
-									))}
+									))} 
 								</CardBody>
 							</Card>
 						</div>
 					</div>
-				</OffCanvasBody>
+				</OffCanvasBody> 
 				<div className='row m-0'>
 					<div className='col-12 p-3'>
 						<Button
@@ -284,12 +344,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						</Button>
 					</div>
 				</div>
-			</OffCanvas>
-			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} titleId='tour-title'>
+			</OffCanvas> */}
+			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
 				<ModalHeader setIsOpen={setIsOpenModal}>
 					<ModalTitle id='tour-title' className='d-flex align-items-end'>
 						<span className='ps-2'>
-							<Icon icon='Verified' color='info' />
+							<h3 className=''>{modalTitle}</h3>
 						</span>
 					</ModalTitle>
 				</ModalHeader>
@@ -297,14 +357,121 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<div className='row'>
 						<div className='col-md-9 d-flex align-items-center'>
 							<div>
-								<h2>Agregar Empresa</h2>
-								<Input
-									type='text'
-									id='roleName'
-									name='roleName'
-									onChange={formik.handleChange}
-									value={formik.values.roleName}
-								/>
+								<Card>
+									<CardHeader>
+										<CardLabel icon='Apartment'>
+											<CardTitle>Empresa</CardTitle>
+										</CardLabel>
+									</CardHeader>
+									<CardBody>
+										<Select
+											id='province'
+											size='lg'
+											ariaLabel='Category'
+											placeholder='Provincia'
+											className={classNames('rounded-1', {
+												'bg-white': !darkModeStatus,
+											})}
+										/>
+										<Select
+											id='canton'
+											size='lg'
+											ariaLabel='Category'
+											placeholder='Cantón'
+											className={classNames('rounded-1', {
+												'bg-white': !darkModeStatus,
+											})}
+										/>
+										<Select
+											id='users'
+											size='lg'
+											ariaLabel='Category'
+											placeholder='Usuarios'
+											className={classNames('rounded-1', {
+												'bg-white': !darkModeStatus,
+											})}
+										/>
+									</CardBody>
+								</Card>
+							</div>
+						</div>
+						<div className='row'>
+							<div className='col-md-10'>
+								<Card>
+									<CardBody>
+										{/* <FormGroup
+											id='tradename'
+											label='Nombre Comercial'
+											className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.id_user}
+											/>
+										</FormGroup> */}
+
+										<FormGroup id='ruc' label='RUC' className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.ruc}
+											/>
+										</FormGroup>
+
+										<FormGroup
+											id='business_name'
+											label='Nombre Empresa'
+											className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.business_name}
+											/>
+										</FormGroup>
+										<FormGroup
+											id='commercial_name'
+											label='Nombre Comercial'
+											className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.commercial_name}
+											/>
+										</FormGroup>
+										<FormGroup
+											id='email_company'
+											label='Email'
+											className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.email_company}
+											/>
+										</FormGroup>
+										<FormGroup
+											id='address'
+											label='Direccion'
+											className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.address}
+											/>
+										</FormGroup>
+										<FormGroup
+											id='phone'
+											label='Telefono'
+											className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.phone}
+											/>
+										</FormGroup>
+										<FormGroup
+											id='logo_path'
+											label='Imagen'
+											className='col-md-10'>
+											<Input
+												onChange={formik.handleChange}
+												value={formik.values.logo_path}
+											/>
+										</FormGroup>
+									</CardBody>
+								</Card>
 							</div>
 						</div>
 					</div>
@@ -322,6 +489,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						color='success'
 						isLight
 						onClick={() => {
+							addEmpresa(formik.values);
 							setIsOpenModal(false);
 						}}>
 						Guardar
