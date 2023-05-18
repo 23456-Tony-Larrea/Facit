@@ -143,7 +143,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			if (isEditMode) {
 				console.log('this is my id', formik.values.id);
 
-				await axios.put(`${API_URL}agency/${formik.values.id}`, {
+				await axios.put(`${API_URL}company/${formik.values.id}`, {
 					id_user: formik.values.id_user,
 					ruc: formik.values.ruc,
 					business_name: formik.values.business_name,
@@ -157,7 +157,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					id_canton: formik.values.id_canton,
 				});
 			} else {
-				await axios.post(`${API_URL}agency`, {
+				await axios.post(`${API_URL}company`, {
 					id_user: formik.values.id_user,
 					ruc: formik.values.ruc,
 					business_name: formik.values.business_name,
