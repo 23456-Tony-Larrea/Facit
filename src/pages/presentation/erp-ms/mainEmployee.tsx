@@ -89,6 +89,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		axios.get(`${API_URL}employee`)
 			.then(response => {
 				setUsers(response.data.data);
+
 			})
 			.catch(error => {
 				console.log(error);
@@ -98,7 +99,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		axios.get(`${API_URL}company`)
 			.then(response => {
 				setCompany(response.data.data);
-				
+				console.log(response.data.data);
 			})
 			.catch(error => {
 				console.log(error);
@@ -561,7 +562,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
        <Button>
     {formik.values.id_company ? 
       company.find(companys => companys.id === formik.values.id_company)?.business_name || "Selecciona una Compañia"
-      : "Selecciona un Rol"
+      : "Selecciona una Compañia"
     }
   </Button>
 

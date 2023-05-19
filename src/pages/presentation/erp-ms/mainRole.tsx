@@ -56,6 +56,10 @@ interface IRole {
 
 interface IPermisos {
 	id: number;
+	id_rol: {
+		id: number;
+		name: string;
+	};
 	id_permission: {
 		name: string;
 		description: string;
@@ -64,6 +68,7 @@ interface IPermisos {
 		id: number;
 		name: string;
 	};
+	status: string;
 }
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const token = localStorage.getItem('user_token');
@@ -85,6 +90,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [modalTitle, setModalTitle] = useState('');
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [perName, setPerName] = useState('');
+	const [status, setStatus] = useState(false);
 	const [permisos, setPermisos] = useState<IPermisos[]>([]);
 
 	// BEGIN :: Upcoming Events
@@ -109,7 +115,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		initialValues: {
 			roleId: undefined,
 			roleName: '',
-			notify: true,
+			notify: undefined,
 		},
 		validate: (values) => {
 			const errors: any = {};
@@ -122,18 +128,24 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const llamadoRoles = async () => {
 		const resp = await axios.get(`${API_URL}roles`);
 		setRoles(resp.data.data);
-		// console.log(resp);
+		console.log(resp.data.data);
 	};
 	const llamadoPermision = async () => {
 		const resp = await axios.get(`${API_URL}roles_permissions`);
 		setPermisos(resp.data.data);
 		console.log(resp.data.data);
 	};
-
+	const changeStatus = async (id: number, e: number) => {
+		setStatus(e > 0 ? true : false);
+		const resp = await axios.put(`${API_URL}roles_permissions/status/${id}`, {
+			status: e,
+		});
+		console.log(resp);
+	};
 	useEffect(() => {
 		llamadoRoles();
 		llamadoPermision();
-	}, [perName]);
+	}, [perName, status]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
@@ -198,7 +210,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					className='table-responsive'
 					style={{ width: '100%', overflowX: 'auto' }}
 					isScrollable={isFluid}>
-					<table className='table table-modern'>
+					<table className='table table-modern text-center'>
 						<thead>
 							<tr>
 								<th className='col-sm-3'>
@@ -300,47 +312,57 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				<OffCanvasBody>
 					<div className='row g-4'>
 						<div className='col-12'>
-							<Card isCompact borderSize={2} shadow='none' className='mb-0'>
+							<Card isCompact borderSize={2} shadow='none' className='mb-0 '>
 								<CardHeader>
 									<CardLabel>
-										<Checks
+										<CardTitle className='p-1'>
+											{perName.length > 0 && perName}
+										</CardTitle>
+										{/* <Checks
 											id='notify'
 											type='switch'
 											label={
 												<>
-													<CardTitle>
-														{perName.length > 0 && perName}
-													</CardTitle>
 												</>
 											}
 											onChange={formik.handleChange}
 											checked={formik.values.notify}
-										/>
+										/> */}
 									</CardLabel>
 								</CardHeader>
 								<CardBody>
 									{permisos.map((permiso) => (
 										<FormGroup key={permiso.id}>
-											<Checks
-												id='notify'
-												type='switch'
-												label={
-													<>
-														{permiso.id_permission.description}
-														<Popovers
-															trigger='hover'
-															desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
-															<Icon
-																icon='none'
-																size='md'
-																className='ms-1 cursor-help'
-															/>
-														</Popovers>
-													</>
-												}
-												onChange={formik.handleChange}
-												checked={formik.values.notify}
-											/>
+											{perName === permiso.id_rol.name ? (
+												<>
+													<Checks
+														id='notify'
+														type='switch'
+														label={permiso.id_permission.description}
+														onChange={() => {
+															setStatus(
+																parseInt(permiso.status) > 0
+																	? true
+																	: false,
+															),
+																llamadoPermision();
+														}}
+														onClick={() => {
+															changeStatus(
+																permiso.id,
+																parseInt(permiso.status) === 0
+																	? 1
+																	: 0,
+															),
+																llamadoPermision();
+														}}
+														checked={parseInt(permiso.status) > 0}
+														style={{ cursor: 'pointer' }}
+													/>
+												</>
+											) : (
+												<> </>
+											)}
 										</FormGroup>
 									))}
 								</CardBody>
@@ -352,9 +374,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
 				<ModalHeader setIsOpen={setIsOpenModal}>
 					<ModalTitle id='tour-title' className='d-flex align-items-end'>
-						<span className='ps-2'>
-							<h3 className=''>{modalTitle}</h3>
-						</span>
+						<h1 className='ps-2 text-center'>
+							<h2 className='text-center'>{modalTitle}</h2>
+						</h1>
 					</ModalTitle>
 				</ModalHeader>
 				<ModalBody>

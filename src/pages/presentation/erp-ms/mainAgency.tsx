@@ -1,4 +1,4 @@
-import React, { FC, useState,useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { FormikHelpers, useFormik } from 'formik';
 import Card, {
@@ -19,10 +19,18 @@ import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import data from '../../../common/data/dummyEventsData';
 import Avatar from '../../../components/Avatar';
-import PaginationButtons, { dataPagination, PER_COUNT } from '../../../components/PaginationButtons';
+import PaginationButtons, {
+	dataPagination,
+	PER_COUNT,
+} from '../../../components/PaginationButtons';
 import useSortableData from '../../../hooks/useSortableData';
 import useDarkMode from '../../../hooks/useDarkMode';
-import Modal, {ModalBody,ModalFooter,ModalHeader,ModalTitle,} from '../../../components/bootstrap/Modal';
+import Modal, {
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	ModalTitle,
+} from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
 import Select from '../../../components/bootstrap/forms/Select';
@@ -35,7 +43,7 @@ interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
 interface IAgency{
-	id: undefined;
+	id: string;
 	address: string;
 	description: string;
 	id_company: string;
@@ -67,25 +75,22 @@ interface ICustomerEditModalProps {
 }
 
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
-	const token = localStorage.getItem("user_token");
-axios.interceptors.request.use(
-(config) => {
-config.headers.authorization = `Bearer ${token}`;
-return config;
-},
-(error) => {
-if (error.response.status === 401) {
-localStorage.removeItem("token");
-}
-}
-);
+	const token = localStorage.getItem('user_token');
+	axios.interceptors.request.use(
+		(config) => {
+			config.headers.authorization = `Bearer ${token}`;
+			return config;
+		},
+		(error) => {
+			if (error.response.status === 401) {
+				localStorage.removeItem('token');
+			}
+		},
+	);
 
 
-	
 	const { themeStatus, darkModeStatus } = useDarkMode();
   const [agency, setAgency] = useState<IAgency[]>([]);
-  const [province, setProvince] = useState<IProvince[]>([]);
-  const [canton, setCanton] = useState<ICanton[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   	const ADD_TITLE = 'Nueva Agencia';
 	const EDIT_TITLE = 'Editar Agencia';
@@ -114,20 +119,20 @@ localStorage.removeItem("token");
 			return undefined;
 		},
 		initialValues: {
-			id:undefined,
+			id: undefined,
 			address: '',
 			description: '',
 			id_company: '',
-			iva_holiday:undefined,
+			iva_holiday: undefined,
 			establishment_code: '',
 			emission_code: '',
-			matriz:undefined,
-			state:undefined,
+			matriz: undefined,
+			state: undefined,
 			tradename: '',
 			whatsapp: '',
 			landline: '',
-			id_canton:undefined,
-			id_province:undefined,
+			id_canton: undefined,
+			id_province: undefined,
 			logo_path: '',
 			action: '',
 		},
@@ -137,39 +142,22 @@ localStorage.removeItem("token");
 			const response = await axios.get(`${API_URL}agency`);
 			setAgency(response.data.data);
 			console.log(response.data.data);
-		  } catch (error) {
+		} catch (error) {
 			console.log(error);
 		  }
 		};
-		const getProvince = () => {
-			axios.get(`${API_URL}province`)
-			.then(response => {
-			setProvince(response.data);
-			console.log(response.data);
-			})
-			.catch(error => {
-			console.log(error);
-			});
-			};
-			const getCanton = (id_prov:number) => {
-			axios.get(`${API_URL}canton/${id_prov}`)
-			.then(response => {
-			setCanton(response.data);
-			console.log(response.data);
-			})
-			}
+
+
 	useEffect(() => {
 		getAgency();
-		getProvince();
-
 		}, []);		
 	
 	const addAgency = async (values: any) => {
 		try {
 			if (formik.values.id) {
-				console.log("this is my id",formik.values.id);
+				console.log('this is my id', formik.values.id);
 
-				await axios.put(`${API_URL}agency/${formik.values.id}`,{
+				await axios.put(`${API_URL}agency/${formik.values.id}`, {
 					address: formik.values.address,
 					description: formik.values.description,
 					landline: formik.values.landline,
@@ -185,9 +173,8 @@ localStorage.removeItem("token");
 					id_province: formik.values.id_province,
 					logo_path: formik.values.logo_path,
 				});
-					
 			} else {
-				await axios.post(`${API_URL}agency`,{
+				await axios.post(`${API_URL}agency`, {
 					address: formik.values.address,
 					description: formik.values.description,
 					landline: formik.values.landline,
@@ -202,7 +189,6 @@ localStorage.removeItem("token");
 					id_canton: formik.values.id_canton,
 					id_province: formik.values.id_province,
 					logo_path: formik.values.logo_path,
-					action: formik.values.action,
 
 				});
 			}
@@ -211,13 +197,11 @@ localStorage.removeItem("token");
 		} catch (error) {
 			console.log(error);
 		}
+	};
 
-	}
-	
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
-	const [sizeStatus, setSizeStatus] = useState<TModalSize>(null);
 	
 
 
@@ -226,34 +210,28 @@ localStorage.removeItem("token");
 			<Card style={{ width: '100%', overflowX: 'auto' }}>
 				<CardHeader borderSize={4}>
 					<CardLabel icon='storefront' iconColor='info'>
-						 <CardTitle tag='h3' className='font-weight-bold'>
-          Agencias
-        </CardTitle>
-				
-						
+						<CardTitle tag='h3' className='font-weight-bold'>
+							Agencias
+						</CardTitle>
 					</CardLabel>
 					<CardActions>
-						
 						<Button
-						color='success'
-					icon='add'
-				
-					onClick={() => {
-						setIsEditMode(false);
-						setModalTitle(ADD_TITLE);
-						setIsOpenModal(true);
-						formik.resetForm();
-					}
-				}
-				//commit
-					>
-					Nuevo
-					</Button>
-						
+							color='success'
+							icon='add'
+							onClick={() => {
+								setIsEditMode(false);
+								setModalTitle(ADD_TITLE);
+								setIsOpenModal(true);
+								formik.resetForm();
+							}}
+							//commit
+						>
+							Nuevo
+						</Button>
 					</CardActions>
 				</CardHeader>
-				<CardBody className='table-responsive' isScrollable={isFluid}>
-<table className='table table-modern'>
+				<CardBody style={{ width: '100%', overflowX: 'auto' }}>
+				<table className='table table-modern '>
   <thead>
     <tr>
       <th className='col-sm-2'  >
@@ -266,7 +244,7 @@ localStorage.removeItem("token");
         EMPRESA
       </th>
       <th className='col-sm-2'>
-   		 NOMBRE 
+   		 NOMBRE
       </th>
       <th className='col-sm-2' >
         C. ESTABLECIMIENTO
@@ -277,27 +255,21 @@ localStorage.removeItem("token");
       <th className='col-sm-2'>
         ESTADO
       </th>
-       {/* <th className='col-sm-2'>
-	    Telefono
+       <th className='col-sm-2'>
+		Logo
 		</th> 
 		<th className='col-sm-2'>
 		matriz
 		</th>
 		<th className='col-sm-2'>
-		direnccion
+			Nombre comercial
 		</th>
 		<th className='col-sm-2'>
 		Whatsapp
 		</th>
 		<th className='col-sm-2'>
-		Usuarios
+		Falta
 		</th>
-		<th className='col-sm-2'>
-		logo
-		</th>
-		<th className='col-sm-2'>
-		iva
-		</th> */}
 		<th className='col-sm-2'>
 		ACCIONES
 		</th>
@@ -307,32 +279,31 @@ localStorage.removeItem("token");
   {dataPagination(agency, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
 									<td className='col-sm-2'>
-										{item.id_province}
+										{item.address}
 									</td>
 									<td className='col-sm-2'>
-										{item.id_canton}
-									</td>
-									<td className='col-sm-2'>
-										{item.id_company}
-									</td>
-									<td className='col-sm-'>
-										{item.tradename}
-									</td>
-									<td className='col-sm-2'>
-										{item.establishment_code}
+										{item.description}
 									</td>
 									<td className='col-sm-2'>
 										{item.emission_code}
 									</td>
 									<td className='col-sm-2'>
-									{item.state}
+										{item.establishment_code}
 									</td>
-								
-									{/* <td className='col-sm-2'>
+									<td className='col-sm-2'>
+										{item.iva_holiday}
+									</td>
+									<td className='col-sm-2'>
+										{item.landline}
+									</td>
+									<td className='col-sm-2'>
 									{item.logo_path}
 									</td>
 									<td className='col-sm-2'>
 									{item.matriz}
+									</td>
+									<td className='col-sm-2'>
+									{item.state}
 									</td>
 									<td className='col-sm-2'>
 									{item.tradename}
@@ -345,47 +316,66 @@ localStorage.removeItem("token");
 									</td>
 									<td className='col-sm-2'>
 									{item.id_province}
-									</td> */} 
-									
+									</td>
+									<td className='col-sm-2'>
+									{item.id_company}
+									</td>
 									
 									<td className='col-sm-2'>
-									<Button icon='Edit' color='primary' isLight data-tour='filter ' className='ms-2' aria-label='Edit'  onClick={() => {(item)
-						setIsOpenModal(true);
-						setModalTitle(EDIT_TITLE);
-						setIsEditMode(true);
-						formik.setValues(item);
-						formik.setFieldValue('id', item.id);
-						formik.setFieldValue('address', item.address);
-						formik.setFieldValue('description', item.description);
-						formik.setFieldValue('emission_code', item.emission_code);
-						formik.setFieldValue('establishment_code', item.establishment_code);
-						formik.setFieldValue('iva_holiday', item.iva_holiday);
-						formik.setFieldValue('landline', item.landline);
-						formik.setFieldValue('logo_path', item.logo_path);
-						formik.setFieldValue('matriz', item.matriz);
-						formik.setFieldValue('state', item.state);
-						formik.setFieldValue('tradename', item.tradename);
-						formik.setFieldValue('whatsapp', item.whatsapp);
-						formik.setFieldValue('id_canton', item.id_canton);
-						formik.setFieldValue('id_province', item.id_province);
-						formik.setFieldValue('id_company', item.id_company);
-					}}>
-						</Button>
-          
-      {/*    <Button isLight data-tour='filter ' icon='Delete' color='danger' className='ms-5' aria-label='Delete' onClick={() => { 
+										<Button
+											icon='Edit'
+											color='primary'
+											isLight
+											data-tour='filter '
+											className='ms-2'
+											aria-label='Edit'
+											onClick={() => {
+												item;
+												setIsOpenModal(true);
+												setModalTitle(EDIT_TITLE);
+												setIsEditMode(true);
+												formik.setValues(item);
+												formik.setFieldValue('id', item.id);
+												formik.setFieldValue('address', item.address);
+												formik.setFieldValue(
+													'description',
+													item.description,
+												);
+												formik.setFieldValue(
+													'emission_code',
+													item.emission_code,
+												);
+												formik.setFieldValue(
+													'establishment_code',
+													item.establishment_code,
+												);
+												formik.setFieldValue(
+													'iva_holiday',
+													item.iva_holiday,
+												);
+												formik.setFieldValue('landline', item.landline);
+												formik.setFieldValue('logo_path', item.logo_path);
+												formik.setFieldValue('matriz', item.matriz);
+												formik.setFieldValue('state', item.state);
+												formik.setFieldValue('tradename', item.tradename);
+												formik.setFieldValue('whatsapp', item.whatsapp);
+												formik.setFieldValue('id_canton', item.id_canton);
+												formik.setFieldValue(
+													'id_province',
+													item.id_province,
+												);
+												formik.setFieldValue('id_company', item.id_company);
+											}}></Button>
+
+										{/*    <Button isLight data-tour='filter ' icon='Delete' color='danger' className='ms-5' aria-label='Delete' onClick={() => { 
 						deleteRole(item.id);
 
 			 }}> 
            </Button> */}
-          
 									</td>
-					
 								</tr>
 							))}
-						
-
-									
-  </tbody>
+						</tbody>
 					</table>
 				</CardBody>
 				<PaginationButtons
@@ -398,120 +388,66 @@ localStorage.removeItem("token");
 				/>
 			</Card>
 		
-						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} >
-			<ModalHeader setIsOpen={setIsOpenModal}
-			 >
+						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
+			<ModalHeader setIsOpen={setIsOpenModal}>
 			<ModalTitle id='tour-title' className='d-flex align-items-end'>
 			<span className='ps-2'>
 			<h3 className=''>{modalTitle}</h3>			
 			</span>
 			</ModalTitle>
 			</ModalHeader>
-			<ModalBody >
-			<div className='row justify-content-end'>
-  <div className='col-md-5'>
+			<ModalBody>
+			<div className='row'>
+			<div className='col-md-9 d-flex align-items-center'>
 			<div>
 			<Card>
-			<Card>
-										<CardBody>
-											<div className='row g-4 align-items-center'>
-												<div className='col-xl-auto'>
-													<Avatar srcSet={User1Webp} src={User1Img} />
-												</div>
-												<div className='col-xl'>
-													<div className='row g-4'>
-														<div className='col-auto'>
-															<Input
-																type='file'
-																autoComplete='photo'
-															/>
-														</div>
-														<div className='col-auto'>
-															<Button
-																color='dark'
-																isLight
-																icon='Delete'>
-																Delete Photo
-															</Button>
-														</div>
-														<div className='col-12'>
-															
-														</div>
-													</div>
-												</div>
-											</div>
-										</CardBody>
-									</Card>
 			<CardHeader>
 				<CardLabel icon='ReceiptLong'>
 				<CardTitle>Asignar</CardTitle>
 				</CardLabel>
 				</CardHeader>
-				<CardBody className='pt-0'>
-				<div className='col-md-12'>
-								<Dropdown>
-<DropdownToggle>
-
-<Button>
-{formik.values.id_province ?
-province.find(province => province.id  === formik.values.id)?.name || "Provincia"
-: "Provincia"
-}
-</Button>
-</DropdownToggle>
-<DropdownMenu>
-{province && province.map((provinces) => (
-<DropdownItem
-key={provinces.id}
-onClick={() => {
-formik.setFieldValue("id_province", provinces.id);
-}}
->
-{provinces.name}
-</DropdownItem>
-))}
-</DropdownMenu>
-</Dropdown>
-</div>
-				<div className='col-md-12'>
-								<Dropdown>
-<DropdownToggle>
-
-<Button>
-{formik.values.id_province ?
-province.find(province => province.id  === formik.values.id)?.name || "Canton"
-: "Canton"
-}
-</Button>
-</DropdownToggle>
-<DropdownMenu>
-{province && province.map((provinces) => (
-<DropdownItem
-key={provinces.id}
-onClick={() => {
-formik.setFieldValue("id_province", provinces.id);
-}}
->
-{provinces.name}
-</DropdownItem>
-))}
-</DropdownMenu>
-</Dropdown>
-</div>
+				<CardBody>
+				<Select
+									id='province'
+									size='lg'
+									ariaLabel='Category'
+									placeholder='Provincia'
+									
+									className={classNames('rounded-1', {
+										'bg-white': !darkModeStatus,
+									})}
+						
+								/>
+								<Select
+									id='canton'
+									size='lg'
+									ariaLabel='Category'
+									placeholder='Cantón'
+									
+									className={classNames('rounded-1', {
+										'bg-white': !darkModeStatus,
+									})}
+									
+								/>
+								<Select
+									id='users'
+									size='lg'
+									ariaLabel='Category'
+									placeholder='Usuarios'
 								
+									className={classNames('rounded-1', {
+										'bg-white': !darkModeStatus,
+									})}
+									
+								/>
 								 </CardBody>
 								 </Card>
 								 </div>
-								
     							</div>
-							
-								
-                                <div className='col-md-7'>
+								 <div className="row">
+     							 <div className="col-md-10">
         						<Card>
-         					 <CardBody  className='pt-0'>
-							  <div className='row g-4'>
-								
-												<div className='col-md-16'>
+         					 <CardBody>
 						<FormGroup 
 						id='tradename' label='Nombre Comercial' className='col-md-10'>
 							<Input 
@@ -552,22 +488,22 @@ formik.setFieldValue("id_province", provinces.id);
 							 value={formik.values.description}
 							 />
 						</FormGroup>
+						<FormGroup id='logo_path' label='Imagen' className='col-md-10'>
+							<Input onChange={formik.handleChange}
+							 value={formik.values.logo_path}
+							 />
+						</FormGroup>
 						
 						
 						
-						</div>
-			</div>
 						
 						</CardBody>
-						
         </Card>
-		
 								
 							
 			</div>
-			
 			</div>
-			
+			</div>
 			</ModalBody>
 			<ModalFooter>
 			
@@ -582,13 +518,10 @@ formik.setFieldValue("id_province", provinces.id);
 			}}>
 			Guardar
 			</Button>
-	
 			</ModalFooter>
-			
 			</Modal>
 			
 		</>
-
 	);
 };
 export default CommonUpcomingEvents;
