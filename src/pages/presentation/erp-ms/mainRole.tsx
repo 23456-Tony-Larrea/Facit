@@ -136,12 +136,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		console.log(resp.data.data);
 	};
 	const changeStatus = async (id: number, e: number) => {
-		setStatus(e > 0 ? true : false);
+		setStatus(e > 0);
 		const resp = await axios.put(`${API_URL}roles_permissions/status/${id}`, {
-			status: e,
+		  status: e,
 		});
 		console.log(resp);
-	};
+	  };
 	useEffect(() => {
 		llamadoRoles();
 		llamadoPermision();
@@ -331,41 +331,28 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									</CardLabel>
 								</CardHeader>
 								<CardBody>
-									{permisos.map((permiso) => (
-										<FormGroup key={permiso.id}>
-											{perName === permiso.id_rol.name ? (
-												<>
-													<Checks
-														id='notify'
-														type='switch'
-														label={permiso.id_permission.description}
-														onChange={() => {
-															setStatus(
-																parseInt(permiso.status) > 0
-																	? true
-																	: false,
-															),
-																llamadoPermision();
-														}}
-														onClick={() => {
-															changeStatus(
-																permiso.id,
-																parseInt(permiso.status) === 0
-																	? 1
-																	: 0,
-															),
-																llamadoPermision();
-														}}
-														checked={parseInt(permiso.status) > 0}
-														style={{ cursor: 'pointer' }}
-													/>
-												</>
-											) : (
-												<> </>
-											)}
-										</FormGroup>
-									))}
-								</CardBody>
+      {permisos.map((permiso) => (
+        <FormGroup key={permiso.id}>
+          {perName === permiso.id_rol.name ? (
+            <>
+              <Checks
+                id='notify'
+                type='switch'
+                label={permiso.id_permission.description}
+                onChange={() => {
+                  changeStatus(permiso.id, permiso.status ? 0 : 1);
+                  llamadoPermision();
+                }}
+                checked={permiso.status}
+                style={{ cursor: 'pointer' }}
+              />
+            </>
+          ) : (
+            <> </>
+          )}
+        </FormGroup>
+      ))}
+    </CardBody>
 							</Card>
 						</div>
 					</div>
