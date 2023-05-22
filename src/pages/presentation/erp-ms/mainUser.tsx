@@ -23,7 +23,6 @@ import Modal, {
 } from '../../../components/bootstrap/Modal';
 import Button from '../../../components/bootstrap/Button';
 import Icon from '../../../components/icon/Icon';
-import Avatar from '../../../components/Avatar';
 import Input from '../../../components/bootstrap/forms/Input';
 import PaginationButtons, { dataPagination, PER_COUNT } from '../../../components/PaginationButtons';
 import useSortableData from '../../../hooks/useSortableData';
@@ -32,8 +31,7 @@ import axios, { AxiosResponse } from 'axios';
 import { API_URL } from '../../../constants';
 import { useToasts } from 'react-toast-notifications';
 import Toasts from '../../../components/bootstrap/Toasts';
-import { type } from 'os';
-import PlaceholderImage from '../../../components/extras/PlaceholderImage';
+
 
 
 

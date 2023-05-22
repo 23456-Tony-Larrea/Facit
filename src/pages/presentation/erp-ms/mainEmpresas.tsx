@@ -1,6 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
 import Card, {
 	CardActions,
@@ -10,27 +9,10 @@ import Card, {
 	CardTitle,
 } from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
-import { priceFormat } from '../../../helpers/helpers';
-import Dropdown, {
-	DropdownItem,
-	DropdownMenu,
-	DropdownToggle,
-} from '../../../components/bootstrap/Dropdown';
 import Icon from '../../../components/icon/Icon';
-import OffCanvas, {
-	OffCanvasBody,
-	OffCanvasHeader,
-	OffCanvasTitle,
-} from '../../../components/bootstrap/OffCanvas';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
-import Textarea from '../../../components/bootstrap/forms/Textarea';
-import Checks from '../../../components/bootstrap/forms/Checks';
-import Popovers from '../../../components/bootstrap/Popovers';
 import data from '../../../common/data/dummyEventsData';
-import USERS from '../../../common/data/userDummyData';
-import EVENT_STATUS from '../../../common/data/enumEventStatus';
-import Avatar from '../../../components/Avatar';
 import PaginationButtons, {
 	dataPagination,
 	PER_COUNT,
