@@ -432,7 +432,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<div className='row'>
 						<div className='col-md-12 d-flex align-items-center justify-content-center'>
 							<div>
-								{/* <Card>
+								<Card>
 									<CardHeader>
 										<CardLabel icon='Apartment'>
 											<CardTitle>Empresa</CardTitle>
@@ -467,7 +467,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											})}
 										/>
 									</CardBody>
-								</Card> */}
+								</Card>
 							</div>
 						</div>
 						<div className='row'>
