@@ -1,4 +1,4 @@
-import React, { FC, useState,useEffect } from 'react';
+import React, { FC, useState,useEffect, ChangeEvent } from 'react';
 import classNames from 'classnames';
 import { FormikHelpers, useFormik } from 'formik';
 import Card, {
@@ -88,6 +88,18 @@ localStorage.removeItem("token");
 }
 );
 
+	
+
+const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedPhoto(URL.createObjectURL(file));
+    }
+  };
+  const handleDeletePhoto = () => {
+    setSelectedPhoto(null);
+  };
+
 
 	
 	const { themeStatus, darkModeStatus } = useDarkMode();
@@ -102,7 +114,7 @@ localStorage.removeItem("token");
 	const [selectedId, setSelectedId] = useState(null);
 	const [company, setCompany] = useState <ICompany[]>([]);
 	const [iva_Holiday, setIva_Holiday] = useState<boolean>(false);
-
+	const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
 	const handleUpcomingDetails = () => {
@@ -436,7 +448,11 @@ Inactivo
 				/>
 			</Card>
 		
-						<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal} >
+						<Modal
+						isCentered
+						isScrollable
+						size='xl'
+						isOpen={isOpenModal} setIsOpen={setIsOpenModal} >
 			<ModalHeader setIsOpen={setIsOpenModal}
 			 >
 			<ModalTitle id='tour-title' className='d-flex align-items-end'>
@@ -447,106 +463,131 @@ Inactivo
 			</ModalHeader>
 			<ModalBody >
 			<div className='row justify-content-end'>
-  <div className='col-md-5'>
+  			<div className='col-md-5'>
 			<div>
 			<Card>
 			<Card>
-										<CardBody>
-											<div className='row g-4 align-items-center'>
-												<div className='col-xl-auto'>
-													<Avatar srcSet={User1Webp} src={User1Img} />
-												</div>
-												<div className='col-xl'>
-													<div className='row g-4'>
-														<div className='col-auto'>
-															<Input
-																type='file'
-																autoComplete='photo'
-															/>
-														</div>
-														<div className='col-auto'>
-															<Button
-																color='dark'
-																isLight
-																icon='Delete'>
-																Delete Photo
-															</Button>
-														</div>
-														<div className='col-12'>
-															
-														</div>
-													</div>
-												</div>
-											</div>
-										</CardBody>
-									</Card>
 			<CardHeader>
-				<CardLabel icon='ReceiptLong'>
+			<CardLabel icon='AddAPhoto'>
 				<CardTitle>Asignar</CardTitle>
 				</CardLabel>
 				</CardHeader>
+
+
+
+			<CardBody className='pt-5'>
+			<div className='row g-5'>
+			<div className='col-12 d-flex justify-content-center'>
+            {selectedPhoto ? (
+              <Avatar src={selectedPhoto} />
+            ) : (
+              <div>No hay foto seleccionada</div>
+            )}
+          </div>
+          <div className='col-xl'>
+            <div className='row g-3'>
+              <div className='col-auto '>
+                <Input type='file' autoComplete='photo' onChange={handlePhotoChange} />
+              </div>
+              <div className='col-auto '>
+			  <Button color='dark' isLight icon='Delete' onClick={handleDeletePhoto}>
+
+                  Eliminar Foto
+                </Button>
+              </div>
+              <div className='col-12'></div>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+	 </Card>
+			<CardHeader>
+				<CardLabel icon='ReceiptLong'>
+				<CardTitle>Elegir</CardTitle>
+				</CardLabel>
+				</CardHeader>
 				<CardBody className='pt-0'>
-		   		
+							<Dropdown>
+						<DropdownToggle>
+						<Button>
+						{formik.values.id_province ?
+						province.find(province => province.id  === formik.values.id)?.name || "Selecciona una Provincia"
+						: "Selecciona una Provincia"
+						
+						}
+						</Button>
+						</DropdownToggle>
+						<DropdownMenu>
+						{province && province.map((provinces) => (
+						<DropdownItem
+						key={provinces.id}
+						onClick={() => {
+						formik.setFieldValue("id_province", provinces.id);
+						getCanton(provinces.id);
+						}}
+						>
+						{provinces.name}
+						</DropdownItem>
+						))}
+						</DropdownMenu>
+							</Dropdown>
+
+							<Dropdown>
+							<DropdownToggle>
+							<Button>
+							{formik.values.id_canton ?
+							canton.find(canton => canton.id  === formik.values.id)?.name || "Selecciona Canton "
+							: "Selecciona Canton"
+							}
+							</Button>
+							</DropdownToggle>
+
+							<DropdownMenu>
+							{canton && canton.map((cantons) => (
+							<DropdownItem
+							key={cantons.id}
+							onClick={() => {
+							formik.setFieldValue("id_canton", cantons.id);
+
+
+							}}
+							className={formik.values.id_canton === cantons.id ? "selected" : ""}
+							>
+							{cantons.name}
+							</DropdownItem>
+							))}
+							</DropdownMenu>
+							</Dropdown>
 								
-									
-								<Dropdown>
-<DropdownToggle>
-<Button>
-{formik.values.id_province ?
-province.find(province => province.id  === formik.values.id)?.name || "Selecciona una Provincia "
-: "Selecciona una Provincia"
-}
-</Button>
-</DropdownToggle>
-<DropdownMenu>
-{province && province.map((provinces) => (
-<DropdownItem
-key={provinces.id}
-onClick={() => {
-formik.setFieldValue("id_province", provinces.id);
-getCanton(provinces.id);
-
-}}
-className={formik.values.id_province=== provinces.id ? "active" : ""}
->
-{provinces.name}
-</DropdownItem>
-))}
-</DropdownMenu>
-</Dropdown>
-
-<Dropdown>
-<DropdownToggle>
-<Button>
-{formik.values.id_canton ?
-canton.find(canton => canton.id  === formik.values.id)?.name || "Selecciona Canton "
-: "Selecciona Canton"
-}
-</Button>
-</DropdownToggle>
-
-<DropdownMenu>
-{canton && canton.map((cantons) => (
-<DropdownItem
-key={cantons.id}
-onClick={() => {
-formik.setFieldValue("id_canton", cantons.id);
+							<Dropdown>
+							<DropdownToggle>
+							<Button>
+							{formik.values.id_company ?
+							company.find(company => company.id  === formik.values.id)?.business_name || "Selecciona una empresa "
+							: "Selecciona una empresa"
+							}
+							</Button>
+							</DropdownToggle>
+							<DropdownMenu>
+							{company && company.map((companys) => (
+							<DropdownItem
+							key={companys.id}
+							onClick={() => {
+							formik.setFieldValue("id_company", companys.id);
+							}}
+							>
+							{companys.business_name}
+							</DropdownItem>
+							))}
+							</DropdownMenu>
+							</Dropdown>
 
 
-}}
-className={formik.values.id_canton === cantons.id ? "selected" : ""}
->
-{cantons.name}
-</DropdownItem>
-))}
-</DropdownMenu>
-</Dropdown>
 
-
-								 </CardBody>
-								 </Card>
-								 </div>
-								
+															</CardBody>
+															</Card>
+															</div>
+															
     							</div>
 							
 								
@@ -556,31 +597,12 @@ className={formik.values.id_canton === cantons.id ? "selected" : ""}
 							  <div className='row g-4'>
 								
 												<div className='col-md-16'>
-													
-												<Dropdown>
-<DropdownToggle>
-<Button>
-{formik.values.id_company ?
-company.find(company => company.id  === formik.values.id)?.business_name || "Selecciona una empresa "
-: "Selecciona una empresa"
-}
-</Button>
-</DropdownToggle>
-<DropdownMenu>
-{company && company.map((companys) => (
-<DropdownItem
-key={companys.id}
-onClick={() => {
-formik.setFieldValue("id_company", companys.id);
-}}
->
-{companys.business_name}
-</DropdownItem>
-))}
-</DropdownMenu>
-</Dropdown>
-
-
+											
+						<CardHeader>
+						<CardLabel icon='TextSnippet'>
+						<CardTitle>Completar</CardTitle>
+						</CardLabel>
+							</CardHeader>
 						<FormGroup 
 						id='tradename' label='Nombre Comercial' className='col-md-10'>
 							<Input 
