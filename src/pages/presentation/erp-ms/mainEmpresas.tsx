@@ -88,12 +88,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	// END :: Upcoming Events
 
 	const formik = useFormik({
-		onSubmit<Values>(
-			values: Values,
-			formikHelpers: FormikHelpers<Values>,
-		): void | Promise<any> {
-			return undefined;
-		},
+		onSubmit: () => {},
 		initialValues: {
 			id: undefined,
 			id_user: undefined,
@@ -108,7 +103,43 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			id_province: undefined,
 			id_canton: undefined,
 		},
+		validate: (values) => {
+			const errors: any = {};
+			if (!values.id_user) {
+				errors.id_user = 'Requerido';
+			}
+			if (!values.business_name) {
+				errors.business_name = 'Requerido';
+			}
+			if (!values.email_company) {
+				errors.email_company = 'Requerido';
+			} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email_company)) {
+				errors.email = 'Correo electrónico inválido';
+			}
+			if (!values.commercial_name) {
+				errors.commercial_name = 'Requerido';
+			}
+			if (!values.web_site) {
+				errors.web_site = 'Requerido';
+			}
+			if (values.ruc.length === 0 || !/^[0-9]{13}$/i.test(values.ruc)) {
+				errors.ruc = 'RUC inválido';
+			}
+			if (!values.phone) {
+				errors.phone = 'Requerido';
+			} else if (!/^[0-9]{10}$/i.test(values.phone)) {
+				errors.phone = 'el numero solo debe contener 10 digitos';
+			}
+			if (!values.address) {
+				errors.address = 'Requerido';
+			}
+			if (!values.logo_path) {
+				errors.logo_path = 'Requerido';
+			}
+			return errors;
+		},
 	});
+
 	const getEmpresas = () => {
 		axios
 			.get(`${API_URL}company`)
@@ -282,13 +313,21 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												formik.setValues(item);
 												formik.setFieldValue('logo_path', item.logo_path);
 												formik.setFieldValue('ruc', item.ruc);
-												formik.setFieldValue('business_name', item.business_name);
-												formik.setFieldValue('commercial_name', item.commercial_name);
-												formik.setFieldValue('email_company', item.email_company);
+												formik.setFieldValue(
+													'business_name',
+													item.business_name,
+												);
+												formik.setFieldValue(
+													'commercial_name',
+													item.commercial_name,
+												);
+												formik.setFieldValue(
+													'email_company',
+													item.email_company,
+												);
 												formik.setFieldValue('address', item.address);
 												formik.setFieldValue('phone', item.phone);
 												formik.setFieldValue('web_site', item.web_site);
-									
 											}}></Button>
 										<Button
 											isOutline={!darkModeStatus}
@@ -409,7 +448,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<div className='row'>
 						<div className='col-md-12 d-flex align-items-center justify-content-center'>
 							<div>
-								<Card>
+								{/* <Card>
 									<CardHeader>
 										<CardLabel icon='Apartment'>
 											<CardTitle>Empresa</CardTitle>
@@ -444,7 +483,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											})}
 										/>
 									</CardBody>
-								</Card>
+								</Card> */}
 							</div>
 						</div>
 						<div className='row'>
@@ -476,65 +515,110 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											/>
 										</FormGroup> */}
 
-										<FormGroup id='ruc' label='RUC' className='col-md-10'>
+										<FormGroup
+											id='ruc'
+											isFloating
+											label='RUC'
+											className='col-md-10'>
 											<Input
 												onChange={formik.handleChange}
 												value={formik.values.ruc}
+												invalidFeedback={formik.errors.ruc}
+												isTouched={formik.touched.ruc}
+												validFeedback='Perfecto!'
+												isValid={formik.isValid}
+												onBlur={formik.handleBlur}
 											/>
 										</FormGroup>
 
 										<FormGroup
 											id='business_name'
 											label='Nombre Empresa'
+											isFloating
 											className='col-md-10'>
 											<Input
 												onChange={formik.handleChange}
 												value={formik.values.business_name}
+												invalidFeedback={formik.errors.business_name}
+												isTouched={formik.touched.business_name}
+												validFeedback='Perfecto!'
+												isValid={formik.isValid}
+												onBlur={formik.handleBlur}
 											/>
 										</FormGroup>
 										<FormGroup
 											id='commercial_name'
 											label='Nombre Comercial'
+											isFloating
 											className='col-md-10'>
 											<Input
 												onChange={formik.handleChange}
 												value={formik.values.commercial_name}
+												invalidFeedback={formik.errors.commercial_name}
+												isTouched={formik.touched.commercial_name}
+												validFeedback='Perfecto!'
+												isValid={formik.isValid}
+												onBlur={formik.handleBlur}
 											/>
 										</FormGroup>
 										<FormGroup
 											id='email_company'
 											label='Email'
+											isFloating
 											className='col-md-10'>
 											<Input
 												onChange={formik.handleChange}
 												value={formik.values.email_company}
+												invalidFeedback={formik.errors.email_company}
+												isTouched={formik.touched.email_company}
+												validFeedback='Perfecto!'
+												isValid={formik.isValid}
+												onBlur={formik.handleBlur}
 											/>
 										</FormGroup>
 										<FormGroup
 											id='address'
 											label='Direccion'
+											isFloating
 											className='col-md-10'>
 											<Input
 												onChange={formik.handleChange}
 												value={formik.values.address}
+												invalidFeedback={formik.errors.address}
+												isTouched={formik.touched.address}
+												validFeedback='Perfecto!'
+												isValid={formik.isValid}
+												onBlur={formik.handleBlur}
 											/>
 										</FormGroup>
 										<FormGroup
 											id='phone'
 											label='Telefono'
+											isFloating
 											className='col-md-10'>
 											<Input
 												onChange={formik.handleChange}
 												value={formik.values.phone}
+												invalidFeedback={formik.errors.phone}
+												isTouched={formik.touched.phone}
+												validFeedback='Perfecto!'
+												isValid={formik.isValid}
+												onBlur={formik.handleBlur}
 											/>
 										</FormGroup>
 										<FormGroup
 											id='logo_path'
 											label='Imagen'
+											isFloating
 											className='col-md-10'>
 											<Input
 												onChange={formik.handleChange}
 												value={formik.values.logo_path}
+												invalidFeedback={formik.errors.logo_path}
+												isTouched={formik.touched.logo_path}
+												validFeedback='Perfecto!'
+												isValid={formik.isValid}
+												onBlur={formik.handleBlur}
 											/>
 										</FormGroup>
 									</CardBody>

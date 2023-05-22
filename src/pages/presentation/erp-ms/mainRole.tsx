@@ -116,12 +116,13 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			roleId: undefined,
 			roleName: '',
 			notify: undefined,
+			require: true,
 		},
 		validate: (values) => {
 			const errors: any = {};
 			if (!values.roleName) {
 				errors.roleName = 'Requerido';
-			} 
+			}
 			return errors;
 		},
 	});
@@ -138,10 +139,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const changeStatus = async (id: number, e: number) => {
 		setStatus(e > 0);
 		const resp = await axios.put(`${API_URL}roles_permissions/status/${id}`, {
-		  status: e,
+			status: e,
 		});
 		console.log(resp);
-	  };
+	};
 	useEffect(() => {
 		llamadoRoles();
 		llamadoPermision();
@@ -250,9 +251,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 														setIsEditMode(true);
 														formik.setFieldValue('roleId', item.id);
 														formik.setFieldValue('roleName', item.name);
-														
-						
-
 													}}></Button>
 												<Button
 													isLight
@@ -334,28 +332,31 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									</CardLabel>
 								</CardHeader>
 								<CardBody>
-      {permisos.map((permiso) => (
-        <FormGroup key={permiso.id}>
-          {perName === permiso.id_rol.name ? (
-            <>
-              <Checks
-                id='notify'
-                type='switch'
-                label={permiso.id_permission.description}
-                onChange={() => {
-                  changeStatus(permiso.id, permiso.status ? 0 : 1);
-                  llamadoPermision();
-                }}
-                checked={permiso.status}
-                style={{ cursor: 'pointer' }}
-              />
-            </>
-          ) : (
-            <> </>
-          )}
-        </FormGroup>
-      ))}
-    </CardBody>
+									{permisos.map((permiso) => (
+										<FormGroup key={permiso.id}>
+											{perName === permiso.id_rol.name ? (
+												<>
+													<Checks
+														id='notify'
+														type='switch'
+														label={permiso.id_permission.description}
+														onChange={() => {
+															changeStatus(
+																permiso.id,
+																permiso.status ? 0 : 1,
+															);
+															llamadoPermision();
+														}}
+														checked={permiso.status}
+														style={{ cursor: 'pointer' }}
+													/>
+												</>
+											) : (
+												<> </>
+											)}
+										</FormGroup>
+									))}
+								</CardBody>
 							</Card>
 						</div>
 					</div>
@@ -379,12 +380,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									name='roleName'
 									style={{ width: '210%' }}
 									onChange={formik.handleChange}
-							value={formik.values.roleName}
-							onBlur={formik.handleBlur}
-						  isValid={formik.isValid}
-						  isTouched={formik.touched.roleName}
-						  invalidFeedback={formik.errors.roleName}
-						  validFeedback='Perfecto!'
+									value={formik.values.roleName}
+									onBlur={formik.handleBlur}
+									isValid={formik.isValid}
+									isTouched={formik.touched.roleName}
+									invalidFeedback={formik.errors.roleName}
+									validFeedback='Perfecto!'
 								/>
 							</div>
 						</div>
