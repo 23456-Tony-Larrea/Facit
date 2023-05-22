@@ -239,6 +239,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 														setIsEditMode(true);
 														formik.setFieldValue('roleId', item.id);
 														formik.setFieldValue('roleName', item.name);
+														
+						
+
 													}}></Button>
 												<Button
 													isLight
