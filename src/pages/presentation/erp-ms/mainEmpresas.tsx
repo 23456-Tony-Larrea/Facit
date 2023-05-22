@@ -104,7 +104,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			if (!values.web_site) {
 				errors.web_site = 'Requerido';
 			}
-			if (values.ruc.length === 0 || !/^[0-9]{13}$/i.test(values.ruc)) {
+			if (!values.ruc) {
+				errors.ruc = 'Requerido';
+			} else if (!/^[0-9]{13}$/i.test(values.ruc)) {
 				errors.ruc = 'RUC inválido';
 			}
 			if (!values.phone) {
