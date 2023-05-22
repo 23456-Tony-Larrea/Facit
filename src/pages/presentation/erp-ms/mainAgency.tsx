@@ -10,15 +10,9 @@ import Card, {
 	
 } from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
-import Dropdown, {
-	DropdownItem,
-	DropdownMenu,
-	DropdownToggle,
-} from '../../../components/bootstrap/Dropdown';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import data from '../../../common/data/dummyEventsData';
-import Avatar from '../../../components/Avatar';
 import PaginationButtons, {
 	dataPagination,
 	PER_COUNT,
@@ -34,10 +28,7 @@ import Modal, {
 import axios from 'axios';
 import { API_URL } from '../../../constants';
 import Select from '../../../components/bootstrap/forms/Select';
-import Wizard, { WizardItem } from '../../../components/Wizard';
-import User1Webp from '../../../assets/img/wanna/wanna2.webp';
-import User1Img from '../../../assets/img/wanna/wanna2.png';
-import { TModalFullScreen, TModalSize } from '../../../type/modal-type';
+
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;

@@ -31,7 +31,6 @@ import axios, { AxiosResponse } from 'axios';
 import { API_URL } from '../../../constants';
 import { useToasts } from 'react-toast-notifications';
 import Toasts from '../../../components/bootstrap/Toasts';
-import Wizard ,{WizardItem }from '../../../components/Wizard';
 
 
 
