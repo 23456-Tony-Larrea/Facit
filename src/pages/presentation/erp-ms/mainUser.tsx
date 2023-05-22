@@ -133,8 +133,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		formik.setFieldValue('type_identification_card', type_identification_card);
 		formik.setFieldValue('type_identification_card', type_identification_card);
 		setSelectedOption(type_identification_card);
-	};
-	const formik = useFormik({
+	};	const formik = useFormik({
 		onSubmit: () => {},
 		initialValues: {
 			id: undefined,

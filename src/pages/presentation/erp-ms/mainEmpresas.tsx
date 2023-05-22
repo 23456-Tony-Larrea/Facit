@@ -140,11 +140,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 
 	const addEmpresa = async () => {
 		try {
-			if (isEditMode) {
+			if (formik.values.id) {
 				console.log('this is my id', formik.values.id);
-
 				await axios.put(`${API_URL}company/${formik.values.id}`, {
-					id_user: formik.values.id_user,
 					ruc: formik.values.ruc,
 					business_name: formik.values.business_name,
 					commercial_name: formik.values.commercial_name,
@@ -280,9 +278,17 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												setIsEditMode(true);
 												setModalTitle(EDIT_TITLE);
 												setIsOpenModal(true);
-												formik.resetForm();
 												getEmpresas();
-												clearForm();
+												formik.setValues(item);
+												formik.setFieldValue('logo_path', item.logo_path);
+												formik.setFieldValue('ruc', item.ruc);
+												formik.setFieldValue('business_name', item.business_name);
+												formik.setFieldValue('commercial_name', item.commercial_name);
+												formik.setFieldValue('email_company', item.email_company);
+												formik.setFieldValue('address', item.address);
+												formik.setFieldValue('phone', item.phone);
+												formik.setFieldValue('web_site', item.web_site);
+									
 											}}></Button>
 										<Button
 											isOutline={!darkModeStatus}

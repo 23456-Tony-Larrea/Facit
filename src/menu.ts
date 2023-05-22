@@ -69,7 +69,7 @@ export const demoPagesMenu = {
 				id: 'employees',
 				text: 'Empleados',
 				path: 'Employees',
-				icon: 'PersonAdd',
+				icon: 'SupervisedUserCircle',
 			},
 		}
 	},
