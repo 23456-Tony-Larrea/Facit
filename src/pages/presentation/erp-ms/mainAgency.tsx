@@ -10,11 +10,6 @@ import Card, {
 	
 } from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
-import Dropdown, {
-	DropdownItem,
-	DropdownMenu,
-	DropdownToggle,
-} from '../../../components/bootstrap/Dropdown';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import data from '../../../common/data/dummyEventsData';
@@ -25,15 +20,17 @@ import useDarkMode from '../../../hooks/useDarkMode';
 import Modal, {ModalBody,ModalFooter,ModalHeader,ModalTitle,} from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
-import Select from '../../../components/bootstrap/forms/Select';
-import Wizard, { WizardItem } from '../../../components/Wizard';
+
 import User1Webp from '../../../assets/img/wanna/wanna2.webp';
 import User1Img from '../../../assets/img/wanna/wanna2.png';
-import { TModalFullScreen, TModalSize } from '../../../type/modal-type';
+import {TModalSize } from '../../../type/modal-type';
 import showNotification from '../../../components/extras/showNotification';
-import { number } from 'prop-types';
 import Checks from '../../../components/bootstrap/forms/Checks';
-
+import Dropdown, {
+	DropdownItem,
+	DropdownMenu,
+	DropdownToggle,
+} from '../../../components/bootstrap/Dropdown';
 
 
 

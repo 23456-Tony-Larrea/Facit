@@ -1,6 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
 import { FormikHelpers, useFormik } from 'formik';
 import Card, {
 	CardActions,
@@ -10,12 +9,6 @@ import Card, {
 	CardTitle,
 } from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
-import { priceFormat } from '../../../helpers/helpers';
-import Dropdown, {
-	DropdownItem,
-	DropdownMenu,
-	DropdownToggle,
-} from '../../../components/bootstrap/Dropdown';
 import Icon from '../../../components/icon/Icon';
 import OffCanvas, {
 	OffCanvasBody,
@@ -24,13 +17,9 @@ import OffCanvas, {
 } from '../../../components/bootstrap/OffCanvas';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
-import Textarea from '../../../components/bootstrap/forms/Textarea';
 import Checks from '../../../components/bootstrap/forms/Checks';
 import Popovers from '../../../components/bootstrap/Popovers';
 import data from '../../../common/data/dummyEventsData';
-import USERS from '../../../common/data/userDummyData';
-import EVENT_STATUS from '../../../common/data/enumEventStatus';
-import Avatar from '../../../components/Avatar';
 import PaginationButtons, {
 	dataPagination,
 	PER_COUNT,
@@ -116,12 +105,13 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			roleId: undefined,
 			roleName: '',
 			notify: undefined,
+			require: true,
 		},
 		validate: (values) => {
 			const errors: any = {};
 			if (!values.roleName) {
 				errors.roleName = 'Requerido';
-			} 
+			}
 			return errors;
 		},
 	});
@@ -138,10 +128,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const changeStatus = async (id: number, e: number) => {
 		setStatus(e > 0);
 		const resp = await axios.put(`${API_URL}roles_permissions/status/${id}`, {
-		  status: e,
+			status: e,
 		});
 		console.log(resp);
-	  };
+	};
 	useEffect(() => {
 		llamadoRoles();
 		llamadoPermision();
@@ -250,9 +240,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 														setIsEditMode(true);
 														formik.setFieldValue('roleId', item.id);
 														formik.setFieldValue('roleName', item.name);
-														
-						
-
 													}}></Button>
 												<Button
 													isLight
@@ -334,28 +321,31 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									</CardLabel>
 								</CardHeader>
 								<CardBody>
-      {permisos.map((permiso) => (
-        <FormGroup key={permiso.id}>
-          {perName === permiso.id_rol.name ? (
-            <>
-              <Checks
-                id='notify'
-                type='switch'
-                label={permiso.id_permission.description}
-                onChange={() => {
-                  changeStatus(permiso.id, permiso.status ? 0 : 1);
-                  llamadoPermision();
-                }}
-                checked={permiso.status}
-                style={{ cursor: 'pointer' }}
-              />
-            </>
-          ) : (
-            <> </>
-          )}
-        </FormGroup>
-      ))}
-    </CardBody>
+									{permisos.map((permiso) => (
+										<FormGroup key={permiso.id}>
+											{perName === permiso.id_rol.name ? (
+												<>
+													<Checks
+														id='notify'
+														type='switch'
+														label={permiso.id_permission.description}
+														onChange={() => {
+															changeStatus(
+																permiso.id,
+																permiso.status ? 0 : 1,
+															);
+															llamadoPermision();
+														}}
+														checked={permiso.status}
+														style={{ cursor: 'pointer' }}
+													/>
+												</>
+											) : (
+												<> </>
+											)}
+										</FormGroup>
+									))}
+								</CardBody>
 							</Card>
 						</div>
 					</div>
@@ -379,12 +369,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									name='roleName'
 									style={{ width: '210%' }}
 									onChange={formik.handleChange}
-							value={formik.values.roleName}
-							onBlur={formik.handleBlur}
-						  isValid={formik.isValid}
-						  isTouched={formik.touched.roleName}
-						  invalidFeedback={formik.errors.roleName}
-						  validFeedback='Perfecto!'
+									value={formik.values.roleName}
+									onBlur={formik.handleBlur}
+									isValid={formik.isValid}
+									isTouched={formik.touched.roleName}
+									invalidFeedback={formik.errors.roleName}
+									validFeedback='Perfecto!'
 								/>
 							</div>
 						</div>
