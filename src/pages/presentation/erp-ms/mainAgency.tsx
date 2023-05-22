@@ -32,6 +32,8 @@ import User1Img from '../../../assets/img/wanna/wanna2.png';
 import { TModalFullScreen, TModalSize } from '../../../type/modal-type';
 import showNotification from '../../../components/extras/showNotification';
 import { number } from 'prop-types';
+import Checks from '../../../components/bootstrap/forms/Checks';
+
 
 
 
@@ -633,26 +635,20 @@ formik.setFieldValue("id_company", companys.id);
 							 />
 						</FormGroup>
 						
-						{/* <FormGroup key={iva_Holiday.id}>
-{iva === iva_Holiday.id_rol.name ? (
-<>
-<Checks
-id='notify'
-type='switch'
-label={permiso.id_permission.description}
-onChange={() => {
-changeStatus(permiso.id, permiso.status ? 0 : 1);
-llamadoPermision();
-}}
-checked={permiso.status}
-style={{ cursor: 'pointer' }}
-/>
-</>
-) : (
-<> </>
-)}
-</FormGroup>
-						 */}
+							<CardBody>
+								<Checks
+									type='switch'
+									id='flexSwitchCheckDefault'
+									label='IVA 8% Feriado'
+									name='defaultCheck'
+									checked={iva_Holiday}
+									onChange={() => {
+										setIva_Holiday(!iva_Holiday);
+										formik.setFieldValue('iva_holiday', !iva_Holiday);
+									}}
+								/>
+							</CardBody>
+
 						</div>
 			</div>
 						
