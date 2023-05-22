@@ -28,7 +28,7 @@ import Modal, {
 import axios from 'axios';
 import { API_URL } from '../../../constants';
 import Select from '../../../components/bootstrap/forms/Select';
-
+import showNotification from '../../../components/extras/showNotification';
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
@@ -108,9 +108,11 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			.then((response) => {
 				const updatedUsers = empresa.filter((user) => user.id !== id);
 				setEmpresa(updatedUsers);
+				showNotification('Exito', 'Empresa eliminada correctamente',"warning");
 			})
 			.catch((error) => {
 				console.log(error);
+				showNotification('Error', 'No se pudo eliminar la empresa',"danger");
 			});
 	};
 	useEffect(() => {
@@ -136,6 +138,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					id_province: formik.values.id_province,
 					id_canton: formik.values.id_canton,
 				});
+				showNotification('Exito', 'Empresa actualizada correctamente',"success");
 			} else {
 				await axios.post(`${API_URL}company`, {
 					id_user: formik.values.id_user,
@@ -153,8 +156,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			}
 			getEmpresas();
 			setIsOpenModal(false);
+			showNotification('Exito', 'Empresa creada correctamente',"success");
 		} catch (error) {
 			console.log(error);
+			showNotification('Error', 'No se pudo crear la empresa',"danger");
 		}
 	};
 	const clearForm = () => {

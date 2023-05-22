@@ -31,7 +31,7 @@ import axios, { AxiosResponse } from 'axios';
 import { API_URL } from '../../../constants';
 import { useToasts } from 'react-toast-notifications';
 import Toasts from '../../../components/bootstrap/Toasts';
-
+import showNotification from '../../../components/extras/showNotification';
 
 
 interface IUser {
@@ -237,18 +237,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				setUsers([...users, response.data]);
 				setIsOpenModal(false);
 				//implementar el toast
-				addToast(
-					<Toasts
-						title='Usuario actualizado'
-						icon='success'
-						iconColor='success'
-						time='Justo ahora'>
-						Usuario actualizado con exito
-					</Toasts>,
-					{
-						autoDismiss: true,
-					},
-				)
+				showNotification("Exito",'Usuario actualizado', 'success');
 			}else {
 		  		const response = await axios.post(`${API_URL}employee`, {
 			name: formik.values.name,
@@ -265,24 +254,12 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		  console.log(response);
 		  setUsers([...users, response.data]);
 		  setIsOpenModal(false);
-		//implementar el toast
-		addToast(
-			<Toasts
-				title='Usuario creado'
-				icon='success'
-				iconColor='success'
-				time='Justo ahora'
-				
-				>
-				Usuario creado con exito
-			</Toasts>,
-			{
-				autoDismiss: true,
-			},
-		)
+		//implementar el showNotification
+		showNotification("Exito",'Usuario creado', 'success');
 	}
 }catch (error) {
 		  console.error(error);
+		  showNotification("Error",'Error al crear el usuario', 'danger');
 		}
 	  };
 
@@ -616,8 +593,8 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
         </Button>
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem onClick={() => handleGenderType('M')}>Masculino</DropdownItem>
-        <DropdownItem onClick={() => handleGenderType('F')}>Femenino</DropdownItem>
+        <DropdownItem onClick={() => handleGenderType('Masculino')}>Masculino</DropdownItem>
+        <DropdownItem onClick={() => handleGenderType('Femenino')}>Femenino</DropdownItem>
       </DropdownMenu>
     </Dropdown>
 	</div>

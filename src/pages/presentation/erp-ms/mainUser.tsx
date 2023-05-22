@@ -30,8 +30,7 @@ import useDarkMode from '../../../hooks/useDarkMode';
 import axios, { AxiosResponse } from 'axios';
 import { API_URL } from '../../../constants';
 import { useToasts } from 'react-toast-notifications';
-import Toasts from '../../../components/bootstrap/Toasts';
-
+import showNotification from '../../../components/extras/showNotification';
 
 
 
@@ -115,9 +114,12 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			.then(response => {
 				const updatedUsers = users.filter(user => user.id !== id);
 				setUsers(updatedUsers);
+				showNotification('Exito', 'Usuario eliminado correctamente',"warning");
 			})
+			
 			.catch(error => {
 				console.log(error);
+				showNotification('Error', 'No se pudo eliminar el usuario',"danger");
 			});
 	};
 
@@ -216,19 +218,8 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				console.log(response);
 				setUsers([...users, response.data]);
 				setIsOpenModal(false);
-				//implementar el toast
-				addToast(
-					<Toasts
-						title='Usuario actualizado'
-						icon='success'
-						iconColor='success'
-						time='Justo ahora'>
-						Usuario actualizado con exito
-					</Toasts>,
-					{
-						autoDismiss: true,
-					},
-				)
+				//implementar ShowNotification
+					showNotification('success', 'Usuario actualizado correctamente');
 			}else {
 		  		const response = await axios.post(`${API_URL}user`, {
 				name: formik.values.name,
@@ -246,21 +237,8 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		  console.log(response);
 		  setUsers([...users, response.data]);
 		  setIsOpenModal(false);
-		//implementar el toast
-		addToast(
-			<Toasts
-				title='Usuario creado'
-				icon='success'
-				iconColor='success'
-				time='Justo ahora'
-				
-				>
-				Usuario creado con exito
-			</Toasts>,
-			{
-				autoDismiss: true,
-			},
-		)
+		//implementar el showNotification
+		showNotification('Exito', 'Usuario creado correctamente', 'success');
 	}
 }catch (error) {
 		  console.error(error);
@@ -277,34 +255,13 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					return user;
 				});
 				setUsers(updatedUsers);
-				addToast(
-					<Toasts
-						title='Usuario activado'
-						icon='success'
-						iconColor='success'
-						time='Justo ahora'>
-						Usuario activado con exito
-					</Toasts>,
-					{
-						autoDismiss: true,
-					},
-				)
+				//implementar el showNotification
+				showNotification('Exito', 'Usuario activado correctamente', 'success');
 			})
 			.catch(error => {
 				console.log(error);
-			//implementar el toast
-			addToast(
-				<Toasts
-					title='Error'
-					icon='Error'
-					iconColor='danger'
-					time='Justo ahora'>
-					No se pudo activar el usuario
-				</Toasts>,
-				{
-					autoDismiss: true,
-				},
-			)
+			//implementar el showNotification
+				showNotification('Error', 'Error al activar el usuario', 'error');
 			});
 	};
 	const clearForm = () => {
@@ -327,19 +284,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		  }
 		});
 		setIsOpenModal(false);
-		addToast(
-			<Toasts
-				title='Foto de perfil actualizada'
-				icon='success'
-				iconColor='success'
-				time='Justo ahora'>
-				Foto de perfil actualizada con exito
-			</Toasts>,
-			{
-				autoDismiss: true,
-			},
-		)
-		
+		showNotification('Exito', 'Foto de perfil actualizada correctamente', 'success');
 	}
 	return (
 		<>

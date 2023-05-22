@@ -34,6 +34,7 @@ import Modal, {
 } from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
+import showNotification from '../../../components/extras/showNotification';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
@@ -130,6 +131,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		  status: e,
 		});
 		console.log(resp);
+		showNotification('Estado actualizado',
+			'El estado se ha actualizado correctamente',
+			'info',
+		);
 	  };
 	useEffect(() => {
 		llamadoRoles();
@@ -153,8 +158,16 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				await axios.put(`${API_URL}roles/${formik.values.roleId}`, {
 					name: formik.values.roleName,
 				});
+				showNotification('Rol actualizado',
+					'El rol se ha actualizado correctamente',
+					'success',
+				);
 			} else {
 				await axios.post(`${API_URL}roles`, { name: formik.values.roleName });
+				showNotification('Rol agregado',
+					'El rol se ha agregado correctamente',
+					'success',
+				);
 			}
 			llamadoRoles();
 			setIsOpenModal(false);
@@ -170,9 +183,17 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			if (roleId) {
 				await axios.delete(`${API_URL}roles/${roleId}`);
 				llamadoRoles();
+				showNotification('Rol eliminado',
+					'El rol se ha eliminado correctamente',
+					'warning',
+				);
 			}
 		} catch (error) {
 			console.log(error);
+			showNotification('Error',
+				'El rol no se ha eliminado correctamente',
+				'error',
+			);
 		}
 	};
 	return (
@@ -310,16 +331,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 										<CardTitle className='p-1'>
 											{perName.length > 0 && perName}
 										</CardTitle>
-										{/* <Checks
-											id='notify'
-											type='switch'
-											label={
-												<>
-												</>
-											}
-											onChange={formik.handleChange}
-											checked={formik.values.notify}
-										/> */}
 									</CardLabel>
 								</CardHeader>
 								<CardBody>

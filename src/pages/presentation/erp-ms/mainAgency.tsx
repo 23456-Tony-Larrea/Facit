@@ -141,17 +141,6 @@ localStorage.removeItem("token");
 			action: '',
 			business_name: ''
 		},
-
-		// onSubmit: (values) => {
-		// 	setIsOpen(false);
-		// 	showNotification(
-		// 		<span className='d-flex align-items-center'>
-		// 			<Icon icon='Info' size='lg' className='me-1' />
-		// 			<span>Updated Successfully</span>
-		// 		</span>,
-		// 		'Customer has been updated successfully',
-		// 	);
-		// },
 	});
 	const getAgency = async () => {
 		try {
@@ -224,7 +213,8 @@ localStorage.removeItem("token");
 					id_province: formik.values.id_province,
 					logo_path: formik.values.logo_path,
 				});
-					
+				setIsOpenModal(false);
+				showNotification("Exito", "Agencia actualizada correctamente","success");
 			} else {
 				await axios.post(`${API_URL}agency`,{
 					address: formik.values.address,
@@ -235,7 +225,6 @@ localStorage.removeItem("token");
 					establishment_code: formik.values.establishment_code,
 					emission_code: formik.values.emission_code,
 					matriz: formik.values.matriz,
-				
 					tradename: formik.values.tradename,
 					whatsapp: formik.values.whatsapp,
 					id_canton: formik.values.id_canton,
@@ -244,7 +233,8 @@ localStorage.removeItem("token");
 					action: formik.values.action,
 					
 				});
-				
+				setIsOpenModal(false);
+				showNotification("Exito", "Agencia creada correctamente","success");
 			}
 			
 			getAgency();
@@ -503,7 +493,7 @@ Inactivo
 <DropdownToggle>
 <Button>
 {formik.values.id_province ?
-province.find(province => province.id  === formik.values.id)?.name || "Selecciona una provincia "
+province.find(province => province.id  === formik.values.id)?.name || "Selecciona una Provincia "
 : "Selecciona una Provincia"
 }
 </Button>
