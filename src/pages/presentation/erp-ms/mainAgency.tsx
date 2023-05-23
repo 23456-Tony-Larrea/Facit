@@ -91,10 +91,8 @@ localStorage.removeItem("token");
 	
 
 const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedPhoto(URL.createObjectURL(file));
-    }
+	const logo_path = formik.setFieldValue('logo_path',event.target.files?.[0]);
+	console.log(logo_path);
   };
   const handleDeletePhoto = () => {
     setSelectedPhoto(null);
@@ -209,7 +207,6 @@ if (!values.description) {
 		try {
 			const response = await axios.get(`${API_URL}agency`);
 			setAgency(response.data.data);
-			console.log(response.data.data);
 		  } catch (error) {
 			console.log(error);
 		  }
@@ -218,7 +215,6 @@ if (!values.description) {
 			axios.get(`${API_URL}province`)
 			.then(response => {
 			setProvince(response.data);
-			console.log(response.data);
 			
 			})
 			.catch(error => {
@@ -226,12 +222,10 @@ if (!values.description) {
 			});
 			};
 			const getCanton = (id_canton: undefined) => {
-				console.log(id_canton);
 				axios
 				  .get(`${API_URL}canton/${id_canton}`)
 				  .then(response => {
 					setCanton(response.data);
-					console.log(response.data);
 				  })
 				  .catch(error => {
 					console.log(error);
@@ -241,8 +235,6 @@ if (!values.description) {
 			axios.get(`${API_URL}company`)
 			.then(response => {
 			setCompany(response.data.data);
-			console.log("this is company",response.data.data);
-
 			})
 			.catch(error => {
 			console.log(error);
@@ -255,17 +247,28 @@ if (!values.description) {
 		getCompany();
 		}, []);		
 	
-	const clearId = () => {
-		const id = formik.values.id;
-		if (id) {
-			formik.setFieldValue('id', undefined);
-		}
-	};
-	const addAgency = async (values: any) => {
+
+		const clearId = () => {
+			setSelectId(null);
+			formik.setFieldValue('id', null);
+		};
+
+		const onUploadFile= async () => {
+			const id = selectId
+			const formData = new FormData();
+			formData.append('logo_path',formik.values.logo_path);
+			await axios.post(`${API_URL}agency/Logo/${id}`, formData,{
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+			showNotification('Exito', 'Logo cargado correctamente', 'success');
+			}
+
+		const addAgency = async (values: any) => {
 		
 		try {
 		  if (formik.values.id) {
-				console.log("this is my id",formik.values.id);
 
 				await axios.put(`${API_URL}agency/${formik.values.id}`,{
 					address: formik.values.address,
@@ -791,8 +794,7 @@ Inactivo
 			onClick={() => {
 				addAgency(formik.values);
 				setIsOpenModal(false);
-				
-				
+				onUploadFile();
 			}}
 			isDisable={Object.keys(formik.errors).length > 0}
 			>

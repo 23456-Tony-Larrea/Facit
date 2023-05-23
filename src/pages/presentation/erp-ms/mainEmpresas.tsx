@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect,ChangeEvent  } from 'react';
 import classNames from 'classnames';
 import { FormikHelpers, useFormik } from 'formik';
 import Card, {
@@ -34,6 +34,7 @@ import Dropdown, {
 	DropdownMenu,
 	DropdownToggle,
 } from '../../../components/bootstrap/Dropdown';
+import Avatar from '../../../components/Avatar';
 
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
@@ -64,6 +65,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			}
 		},
 	);
+	
+
+	const handleDeletePhoto = () => {
+		setSelectedPhoto(null);
+	  };
+	
 	const { themeStatus, darkModeStatus } = useDarkMode();
 	const [empresa, setEmpresa] = useState<IEmpresa[]>([]);
 	const [isEditMode, setIsEditMode] = useState(false);
@@ -73,6 +80,8 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 	const [province, setProvince] = useState<IProvince[]>([]);
   const [canton, setCanton] = useState<ICanton[]>([]);
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+  const [selectId, setSelectId] =useState(null);
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
 	const handleUpcomingDetails = () => {
@@ -160,8 +169,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		axios.get(`${API_URL}province`)
 		.then(response => {
 		setProvince(response.data);
-		console.log(response.data);
-		
 		})
 		.catch(error => {
 		console.log(error);
@@ -173,7 +180,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			  .get(`${API_URL}canton/${id_canton}`)
 			  .then(response => {
 				setCanton(response.data);
-				console.log(response.data);
 			  })
 			  .catch(error => {
 				console.log(error);
@@ -187,6 +193,11 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
 
+
+	const clearId = () => {
+		setSelectId(null);
+		formik.setFieldValue('id', null);
+	};
 	const addEmpresa = async () => {
 		try {
 			if (formik.values.id) {
@@ -230,6 +241,27 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const clearForm = () => {
 		formik.resetForm();
 	};
+	const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const logo_path = formik.setFieldValue('logo_path',event.target.files?.[0]);
+		console.log(logo_path);
+	  };
+	const onUploadFile= async () => {
+		const id = selectId
+		const formData = new FormData();
+		formData.append('logo_path', formik.values.logo_path);
+		await axios.post(`${API_URL}company/Logo/${id}`, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				},
+				})
+				.then(response => {
+					console.log(response);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		showNotification('Exito', 'Logo de compañia cargado correctamente', 'success');
+		}
 	return (
 		<>
 			<Card style={{ width: '100%' }}>
@@ -248,6 +280,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 								setModalTitle(ADD_TITLE);
 								setIsOpenModal(true);
 								formik.resetForm();
+								clearId();
 							}}>
 							Nueva Empresa
 						</Button>
@@ -305,7 +338,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									/>
 									Telefono
 								</th>
-								<th>Edit</th>
+								<th>Acciones</th>
 								<td />
 							</tr>
 						</thead>
@@ -332,7 +365,6 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												setIsOpenModal(true);
 												getEmpresas();
 												formik.setValues(item);
-												formik.setFieldValue('logo_path', item.logo_path);
 												formik.setFieldValue('ruc', item.ruc);
 												formik.setFieldValue(
 													'business_name',
@@ -349,6 +381,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												formik.setFieldValue('address', item.address);
 												formik.setFieldValue('phone', item.phone);
 												formik.setFieldValue('web_site', item.web_site);
+												setSelectId(item.id);
 											}}></Button>
 										<Button
 											isOutline={!darkModeStatus}
@@ -457,35 +490,46 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
   )}
 						</CardBody>
 					</Card>
-					{/* </div> */}
-					{/* <div className='row'> */}
-					{/* <div className='col-md-12 d-flex align-items-center justify-content-center'> */}
 					<Card className='d-flex justify-content-center align-item-center w-100'>
 						<CardBody>
-							{/* <FormGroup
-											id='province'
-											label='Provincia'
-											className='col-md-10'>
-											<Input
-												onChange={formik.handleChange}
-												value={formik.values.id_province}
-											/>
-										</FormGroup>
-										<FormGroup id='canton' label='Cantón' className='col-md-10'>
-											<Input
-												onChange={formik.handleChange}
-												value={formik.values.id_province}
-											/>
-										</FormGroup>
-										<FormGroup
-											id='users'
-											label='Usuarios'
-											className='col-md-10'>
-											<Input
-												onChange={formik.handleChange}
-												value={formik.values.id_province}
-											/>
-										</FormGroup> */}
+						{selectId && (
+			<Card>
+			<CardHeader>
+			
+			<CardLabel icon='AddAPhoto'>
+				<CardTitle>Asignar</CardTitle>
+				</CardLabel>
+				</CardHeader>
+
+
+
+			<CardBody className='pt-5'>
+			<div className='row g-5'>
+			<div className='col-12 d-flex justify-content-center'>
+            {selectedPhoto ? (
+              <Avatar src={selectedPhoto} />
+            ) : (
+              <div>No hay foto seleccionada</div>
+            )}
+          </div>
+          <div className='col-xl'>
+            <div className='row g-3'>
+              <div className='col-auto '>
+                <Input type='file' autoComplete='photo' onChange={handlePhotoChange} />
+              </div>
+              <div className='col-auto '>
+			  <Button color='dark' isLight icon='Delete' onClick={handleDeletePhoto}>
+
+                  Eliminar Foto
+                </Button>
+              </div>
+              <div className='col-12'></div>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+	 </Card>
+	 )}
 
 							<FormGroup id='ruc' isFloating label='RUC' className='col-md-12'>
 								<Input
@@ -599,6 +643,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						onClick={() => {
 							addEmpresa();
 							setIsOpenModal(false);
+							onUploadFile();
 						}}
 						isDisable={Object.keys(formik.errors).length > 0}
 						>
