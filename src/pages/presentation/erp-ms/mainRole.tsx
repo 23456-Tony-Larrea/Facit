@@ -24,6 +24,7 @@ import PaginationButtons, {
 	dataPagination,
 	PER_COUNT,
 } from '../../../components/PaginationButtons';
+import swal from 'sweetalert';
 import useSortableData from '../../../hooks/useSortableData';
 import useDarkMode from '../../../hooks/useDarkMode';
 import Modal, {
@@ -132,11 +133,8 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			status: e,
 		});
 		console.log(resp);
-		showNotification('Estado actualizado',
-			'El estado se ha actualizado correctamente',
-			'info',
-		);
-	  };
+		showNotification('Estado actualizado', 'El estado se ha actualizado correctamente', 'info');
+	};
 	useEffect(() => {
 		llamadoRoles();
 		llamadoPermision();
@@ -159,21 +157,23 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				await axios.put(`${API_URL}roles/${formik.values.roleId}`, {
 					name: formik.values.roleName,
 				});
-				showNotification('Rol actualizado',
+				showNotification(
+					'Rol actualizado',
 					'El rol se ha actualizado correctamente',
 					'success',
 				);
 			} else {
 				await axios.post(`${API_URL}roles`, { name: formik.values.roleName });
-				showNotification('Rol agregado',
-					'El rol se ha agregado correctamente',
-					'success',
-				);
+				showNotification('Rol agregado', 'El rol se ha agregado correctamente', 'success');
 			}
 			llamadoRoles();
 			setIsOpenModal(false);
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			const err = JSON.stringify(error.response.data.data)
+				.replace(/[\[\]{}"]/g, '')
+				.split(':')[1]
+				.trim();
+			swal(err);
 		}
 	};
 	const onChangeName = (e: string) => {
@@ -184,17 +184,15 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			if (roleId) {
 				await axios.delete(`${API_URL}roles/${roleId}`);
 				llamadoRoles();
-				showNotification('Rol eliminado',
+				showNotification(
+					'Rol eliminado',
 					'El rol se ha eliminado correctamente',
 					'warning',
 				);
 			}
 		} catch (error) {
 			console.log(error);
-			showNotification('Error',
-				'El rol no se ha eliminado correctamente',
-				'error',
-			);
+			showNotification('Error', 'El rol no se ha eliminado correctamente', 'error');
 		}
 	};
 	return (

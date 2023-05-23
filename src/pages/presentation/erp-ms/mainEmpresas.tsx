@@ -141,11 +141,11 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			.then((response) => {
 				const updatedUsers = empresa.filter((user) => user.id !== id);
 				setEmpresa(updatedUsers);
-				showNotification('Exito', 'Empresa eliminada correctamente',"warning");
+				showNotification('Exito', 'Empresa eliminada correctamente', 'warning');
 			})
 			.catch((error) => {
 				console.log(error);
-				showNotification('Error', 'No se pudo eliminar la empresa',"danger");
+				showNotification('Error', 'No se pudo eliminar la empresa', 'danger');
 			});
 	};
 	useEffect(() => {
@@ -159,7 +159,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		try {
 			if (formik.values.id) {
 				console.log('this is my id', formik.values.id);
-				await axios.put(`${API_URL}company/${formik.values.id}`, {
+				const resp = await axios.put(`${API_URL}company/${formik.values.id}`, {
 					ruc: formik.values.ruc,
 					business_name: formik.values.business_name,
 					commercial_name: formik.values.commercial_name,
@@ -171,9 +171,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					id_province: formik.values.id_province,
 					id_canton: formik.values.id_canton,
 				});
-				showNotification('Exito', 'Empresa actualizada correctamente',"success");
+				showNotification('Exito', 'Empresa actualizada correctamente', 'success');
 			} else {
-				await axios.post(`${API_URL}company`, {
+				const resp = await axios.post(`${API_URL}company`, {
 					id_user: formik.values.id_user,
 					ruc: formik.values.ruc,
 					business_name: formik.values.business_name,
@@ -189,10 +189,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			}
 			getEmpresas();
 			setIsOpenModal(false);
-			showNotification('Exito', 'Empresa creada correctamente',"success");
+			showNotification('Exito', 'Empresa creada correctamente', 'success');
 		} catch (error) {
 			console.log(error);
-			showNotification('Error', 'No se pudo crear la empresa',"danger");
+			showNotification('Error', 'No se pudo crear la empresa', 'danger');
 		}
 	};
 	const clearForm = () => {
