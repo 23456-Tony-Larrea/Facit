@@ -123,9 +123,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			if (!values.commercial_name) {
 				errors.commercial_name = 'Requerido';
 			}
-			// if (!values.web_site) {
-			// 	errors.web_site = 'Requerido';
-			// }
+			if (!values.web_site) {
+			 	errors.web_site = 'Requerido';
+			} 
 			if (!values.ruc) {
 				errors.ruc = 'Requerido';
 			} else if (!/^[0-9]{13}$/i.test(values.ruc)) {
@@ -136,7 +136,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			} else if (!/^[0-9]{10}$/i.test(values.phone)) {
 				errors.phone = 'el numero solo debe contener 10 digitos';
 			}
-	
+			if (!values.address) {
+				errors.address = 'Requerido';
+			}
 			return errors;
 		},
 	});
@@ -618,7 +620,12 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 								<Input
 									onChange={formik.handleChange}
 									value={formik.values.web_site}
-									
+									invalidFeedback={formik.errors.web_site}
+									isTouched={formik.touched.web_site}
+									validFeedback='Perfecto!'
+									isValid={formik.isValid}
+									onBlur={formik.handleBlur}
+
 								/>
 							</FormGroup>
 							
