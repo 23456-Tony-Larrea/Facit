@@ -1,4 +1,4 @@
-import React, { FC, useState,useEffect, ChangeEvent } from 'react';
+import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import classNames from 'classnames';
 import { FormikHelpers, useFormik } from 'formik';
 import Card, {
@@ -7,23 +7,30 @@ import Card, {
 	CardHeader,
 	CardLabel,
 	CardTitle,
-	
 } from '../../../components/bootstrap/Card';
 import Button from '../../../components/bootstrap/Button';
 import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../components/bootstrap/forms/Input';
 import data from '../../../common/data/dummyEventsData';
 import Avatar from '../../../components/Avatar';
-import PaginationButtons, { dataPagination, PER_COUNT } from '../../../components/PaginationButtons';
+import PaginationButtons, {
+	dataPagination,
+	PER_COUNT,
+} from '../../../components/PaginationButtons';
 import useSortableData from '../../../hooks/useSortableData';
 import useDarkMode from '../../../hooks/useDarkMode';
-import Modal, {ModalBody,ModalFooter,ModalHeader,ModalTitle,} from '../../../components/bootstrap/Modal';
+import Modal, {
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	ModalTitle,
+} from '../../../components/bootstrap/Modal';
 import axios from 'axios';
 import { API_URL } from '../../../constants';
-
+import swal from 'sweetalert';
 import User1Webp from '../../../assets/img/wanna/wanna2.webp';
 import User1Img from '../../../assets/img/wanna/wanna2.png';
-import {TModalSize } from '../../../type/modal-type';
+import { TModalSize } from '../../../type/modal-type';
 import showNotification from '../../../components/extras/showNotification';
 import Checks from '../../../components/bootstrap/forms/Checks';
 import Dropdown, {
@@ -32,12 +39,10 @@ import Dropdown, {
 	DropdownToggle,
 } from '../../../components/bootstrap/Dropdown';
 
-
-
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
-interface IAgency{
+interface IAgency {
 	id: undefined;
 	address: string;
 	description: string;
@@ -53,15 +58,14 @@ interface IAgency{
 	id_canton: undefined;
 	id_province: undefined;
 	logo_path: string;
-
 }
-interface IProvince{
-	id:undefined;
-	name:undefined;
+interface IProvince {
+	id: undefined;
+	name: undefined;
 }
-interface ICanton{
-	id:undefined;
-	name:undefined;
+interface ICanton {
+	id: undefined;
+	name: undefined;
 }
 interface ICustomerEditModalProps {
 	id: string;
@@ -69,50 +73,46 @@ interface ICustomerEditModalProps {
 	setIsOpen(...args: unknown[]): unknown;
 }
 
-interface ICompany{
-	id:undefined;
-	business_name:undefined;
+interface ICompany {
+	id: undefined;
+	business_name: undefined;
 }
 
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
-	const token = localStorage.getItem("user_token");
-axios.interceptors.request.use(
-(config) => {
-config.headers.authorization = `Bearer ${token}`;
-return config;
-},
-(error) => {
-if (error.response.status === 401) {
-localStorage.removeItem("token");
-}
-}
-);
+	const token = localStorage.getItem('user_token');
+	axios.interceptors.request.use(
+		(config) => {
+			config.headers.authorization = `Bearer ${token}`;
+			return config;
+		},
+		(error) => {
+			if (error.response.status === 401) {
+				localStorage.removeItem('token');
+			}
+		},
+	);
 
-	
+	const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0];
+		if (file) {
+			setSelectedPhoto(URL.createObjectURL(file));
+		}
+	};
+	const handleDeletePhoto = () => {
+		setSelectedPhoto(null);
+	};
 
-const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedPhoto(URL.createObjectURL(file));
-    }
-  };
-  const handleDeletePhoto = () => {
-    setSelectedPhoto(null);
-  };
-
-
-	
 	const { themeStatus, darkModeStatus } = useDarkMode();
-  const [agency, setAgency] = useState<IAgency[]>([]);
-  const [province, setProvince] = useState<IProvince[]>([]);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [canton, setCanton] = useState<ICanton[]>([]);
-  	const ADD_TITLE = 'Nueva Agencia';
+	const [agency, setAgency] = useState<IAgency[]>([]);
+	const [province, setProvince] = useState<IProvince[]>([]);
+	const [isEditMode, setIsEditMode] = useState(false);
+	const [canton, setCanton] = useState<ICanton[]>([]);
+	const ADD_TITLE = 'Nueva Agencia';
 	const EDIT_TITLE = 'Editar Agencia';
 	const [modalTitle, setModalTitle] = useState('');
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 	const [selectedId, setSelectedId] = useState(null);
-	const [company, setCompany] = useState <ICompany[]>([]);
+	const [company, setCompany] = useState<ICompany[]>([]);
 	const [iva_Holiday, setIva_Holiday] = useState<boolean>(false);
 	const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
 	// BEGIN :: Upcoming Events
@@ -135,23 +135,75 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
 			return undefined;
 		},
 		initialValues: {
-			id:undefined,
+			id: undefined,
 			address: '',
 			description: '',
 			id_company: '',
-			iva_holiday:undefined,
+			iva_holiday: undefined,
 			establishment_code: '',
 			emission_code: '',
-			matriz:undefined,
-			state:undefined,
+			matriz: undefined,
+			state: undefined,
 			tradename: '',
 			whatsapp: '',
 			landline: '',
-			id_canton:undefined,
-			id_province:undefined,
+			id_canton: undefined,
+			id_province: undefined,
 			logo_path: '',
 			action: '',
-			business_name: ''
+			business_name: '',
+		},
+		validate: (values) => {
+			const errors: any = {};
+			if (!values.description) {
+				errors.description = 'Requerido';
+			}
+			if (!values.business_name) {
+				errors.business_name = 'Requerido';
+			}
+			if (!values.action) {
+				errors.action = 'Requerido';
+			}
+			if (!values.id_canton) {
+				errors.id_canton = 'Requerido';
+			}
+			if (!values.id_province) {
+				errors.id_province = 'Requerido';
+			}
+			if (!values.tradename) {
+				errors.tradename = 'Requerido';
+			}
+			if (!values.whatsapp) {
+				errors.whatsapp = 'Requerido';
+			}
+			if (!values.landline) {
+				errors.landline = 'Requerido';
+			}
+			if (!values.state) {
+				errors.state = 'Requerido';
+			}
+			if (!values.id_company) {
+				errors.id_company = 'Requerido';
+			}
+			if (!values.iva_holiday) {
+				errors.iva_holiday = 'Requerido';
+			}
+			if (!values.establishment_code) {
+				errors.establishment_code = 'Requerido';
+			}
+			if (!values.emission_code) {
+				errors.emission_code = 'Requerido';
+			}
+			if (!values.matriz) {
+				errors.matriz = 'Requerido';
+			}
+			if (!values.address) {
+				errors.address = 'Requerido';
+			}
+			if (!values.logo_path) {
+				errors.logo_path = 'Requerido';
+			}
+			return errors;
 		},
 	});
 	const getAgency = async () => {
@@ -159,57 +211,57 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
 			const response = await axios.get(`${API_URL}agency`);
 			setAgency(response.data.data);
 			console.log(response.data.data);
-		  } catch (error) {
+		} catch (error) {
 			console.log(error);
-		  }
-		};
-		const getProvince = () => {
-			axios.get(`${API_URL}province`)
-			.then(response => {
-			setProvince(response.data);
-			console.log(response.data);
-			
+		}
+	};
+	const getProvince = () => {
+		axios
+			.get(`${API_URL}province`)
+			.then((response) => {
+				setProvince(response.data);
+				console.log(response.data);
 			})
-			.catch(error => {
-			console.log(error);
+			.catch((error) => {
+				console.log(error);
 			});
-			};
-			const getCanton = (id_canton: undefined) => {
-				console.log(id_canton);
-				axios
-				  .get(`${API_URL}canton/${id_canton}`)
-				  .then(response => {
-					setCanton(response.data);
-					console.log(response.data);
-				  })
-				  .catch(error => {
-					console.log(error);
-				  });
-			  };
-		 const getCompany = () => {
-			axios.get(`${API_URL}company`)
-			.then(response => {
-			setCompany(response.data.data);
-			console.log("this is company",response.data.data);
-
+	};
+	const getCanton = (id_canton: undefined) => {
+		console.log(id_canton);
+		axios
+			.get(`${API_URL}canton/${id_canton}`)
+			.then((response) => {
+				setCanton(response.data);
+				console.log(response.data);
 			})
-			.catch(error => {
-			console.log(error);
+			.catch((error) => {
+				console.log(error);
 			});
-			};
+	};
+	const getCompany = () => {
+		axios
+			.get(`${API_URL}company`)
+			.then((response) => {
+				setCompany(response.data.data);
+				console.log('this is company', response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	useEffect(() => {
 		getAgency();
 		getProvince();
 		getCompany();
-		}, []);		
-	
+	}, []);
+
 	const addAgency = async (values: any) => {
 		try {
 			if (formik.values.id) {
-				console.log("this is my id",formik.values.id);
+				console.log('this is my id', formik.values.id);
 
-				await axios.put(`${API_URL}agency/${formik.values.id}`,{
+				await axios.put(`${API_URL}agency/${formik.values.id}`, {
 					address: formik.values.address,
 					description: formik.values.description,
 					landline: formik.values.landline,
@@ -226,9 +278,9 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
 					logo_path: formik.values.logo_path,
 				});
 				setIsOpenModal(false);
-				showNotification("Exito", "Agencia actualizada correctamente","success");
+				showNotification('Exito', 'Agencia actualizada correctamente', 'success');
 			} else {
-				await axios.post(`${API_URL}agency`,{
+				await axios.post(`${API_URL}agency`, {
 					address: formik.values.address,
 					description: formik.values.description,
 					landline: formik.values.landline,
@@ -243,84 +295,64 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
 					id_province: formik.values.id_province,
 					logo_path: formik.values.logo_path,
 					action: formik.values.action,
-					
 				});
 				setIsOpenModal(false);
-				showNotification("Exito", "Agencia creada correctamente","success");
+				showNotification('Exito', 'Agencia creada correctamente', 'success');
 			}
-			
+
 			getAgency();
 			setIsOpenModal(false);
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			const err = JSON.stringify(error.response.data.data)
+				.replace(/[\[\]{}"]/g, '')
+				.split(':')[1]
+				.trim();
+			swal(err);
 		}
+	};
 
-	}
-	
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(data);
 	const [sizeStatus, setSizeStatus] = useState<TModalSize>(null);
-	
-
 
 	return (
 		<>
 			<Card style={{ width: '100%', overflowX: 'auto' }}>
 				<CardHeader borderSize={4}>
 					<CardLabel icon='storefront' iconColor='info'>
-						 <CardTitle tag='h3' className='font-weight-bold'>
-          Agencias
-        </CardTitle>
-				
-						
+						<CardTitle tag='h3' className='font-weight-bold'>
+							Agencias
+						</CardTitle>
 					</CardLabel>
 					<CardActions>
-						
 						<Button
-						color='success'
-					icon='add'
-				
-					onClick={() => {
-						setIsEditMode(false);
-						setModalTitle(ADD_TITLE);
-						setIsOpenModal(true);
-						formik.resetForm();
-					}
-				}
-				//commit
-					>
-					Nuevo
-					</Button>
-						
+							color='success'
+							icon='add'
+							onClick={() => {
+								setIsEditMode(false);
+								setModalTitle(ADD_TITLE);
+								setIsOpenModal(true);
+								formik.resetForm();
+							}}
+							//commit
+						>
+							Nuevo
+						</Button>
 					</CardActions>
 				</CardHeader>
 				<CardBody className='table-responsive' isScrollable={isFluid}>
-<table className='table table-modern'>
-  <thead>
-    <tr>
-      <th className='col-sm-2'  >
-        PROVINCIA
-      </th>
-      <th className='col-sm-2' >
-        CANTON
-      </th>
-      <th className='col-sm-2' >
-        EMPRESA
-      </th>
-      <th className='col-sm-2'>
-   		 NOMBRE 
-      </th>
-      <th className='col-sm-2' >
-        C. ESTABLECIMIENTO
-      </th>
-      <th className='col-sm-2'>
-	  	C. EMISION
-      </th>
-      <th className='col-sm-2'>
-        ESTADO
-      </th>
-       {/* <th className='col-sm-2'>
+					<table className='table table-modern'>
+						<thead>
+							<tr>
+								<th className='col-sm-2'>PROVINCIA</th>
+								<th className='col-sm-2'>CANTON</th>
+								<th className='col-sm-2'>EMPRESA</th>
+								<th className='col-sm-2'>NOMBRE</th>
+								<th className='col-sm-2'>C. ESTABLECIMIENTO</th>
+								<th className='col-sm-2'>C. EMISION</th>
+								<th className='col-sm-2'>ESTADO</th>
+								{/* <th className='col-sm-2'>
 	    Telefono
 		</th> 
 		<th className='col-sm-2'>
@@ -341,43 +373,47 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
 		<th className='col-sm-2'>
 		iva
 		</th> */}
-		<th className='col-sm-2'>
-		ACCIONES
-		</th>
-    </tr>
-  </thead>
-  <tbody>
-  {dataPagination(agency, currentPage, perPage).map((item) => (
+								<th className='col-sm-2'>ACCIONES</th>
+							</tr>
+						</thead>
+						<tbody>
+							{dataPagination(agency, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
 									<td className='col-sm-2'>
-									{item.id_province ? item.id_province.name : "Sin ninguna Provincia"}
+										{item.id_province
+											? item.id_province.name
+											: 'Sin ninguna Provincia'}
 									</td>
 									<td className='col-sm-2'>
-									{item.id_canton ? item.id_canton.name : "Sin ningún canton"}
+										{item.id_canton ? item.id_canton.name : 'Sin ningún canton'}
 									</td>
 									<td className='col-sm-2'>
-									{item.id_company ? item.id_company.business_name : "Sin ninguna compania"}
+										{item.id_company
+											? item.id_company.business_name
+											: 'Sin ninguna compania'}
 									</td>
-									<td className='col-sm-'>
-										{item.tradename}
-									</td>
-									<td className='col-sm-2'>
-										{item.establishment_code}
-									</td>
-									<td className='col-sm-2'>
-										{item.emission_code}
-									</td>
+									<td className='col-sm-'>{item.tradename}</td>
+									<td className='col-sm-2'>{item.establishment_code}</td>
+									<td className='col-sm-2'>{item.emission_code}</td>
 									<td>
-{item.state === true ? (
-<Button isLink color="success" icon="Circle" className="text-nowrap">
-Activo
-</Button>
-) : (
-<Button isLink color="danger" icon="Circle" className="text-nowrap">
-Inactivo
-</Button>
-)}
-</td>
+										{item.state === true ? (
+											<Button
+												isLink
+												color='success'
+												icon='Circle'
+												className='text-nowrap'>
+												Activo
+											</Button>
+										) : (
+											<Button
+												isLink
+												color='danger'
+												icon='Circle'
+												className='text-nowrap'>
+												Inactivo
+											</Button>
+										)}
+									</td>
 									{/* <td className='col-sm-2'>
 									{item.logo_path}
 									</td>
@@ -395,10 +431,10 @@ Inactivo
 									</td>
 									<td className='col-sm-2'>
 									{item.id_province}
-									</td> */} 
-									
-									
+									</td> */}
+
 									<td className='col-sm-2'>
+<<<<<<< HEAD
 									<Button icon='Edit' color='primary' isLight data-tour='filter ' className='ms-2' aria-label='Edit'  onClick={() => {(item)
 						setIsOpenModal(true);
 						setModalTitle(EDIT_TITLE);
@@ -422,14 +458,62 @@ Inactivo
 					}}>
 						</Button>
           
+=======
+										<Button
+											icon='Edit'
+											color='primary'
+											isLight
+											data-tour='filter '
+											className='ms-2'
+											aria-label='Edit'
+											onClick={() => {
+												item;
+												setIsOpenModal(true);
+												setModalTitle(EDIT_TITLE);
+												setIsEditMode(true);
+												formik.setValues(item);
+												formik.setFieldValue('id', item.id);
+												formik.setFieldValue('address', item.address);
+												formik.setFieldValue(
+													'description',
+													item.description,
+												);
+												formik.setFieldValue(
+													'emission_code',
+													item.emission_code,
+												);
+												formik.setFieldValue(
+													'establishment_code',
+													item.establishment_code,
+												);
+												formik.setFieldValue(
+													'iva_holiday',
+													item.iva_holiday,
+												);
+												formik.setFieldValue('landline', item.landline);
+												formik.setFieldValue('logo_path', item.logo_path);
+												formik.setFieldValue('matriz', item.matriz);
+												formik.setFieldValue('state', item.state);
+												formik.setFieldValue('tradename', item.tradename);
+												formik.setFieldValue('whatsapp', item.whatsapp);
+												formik.setFieldValue('id_canton', item.id_canton);
+												formik.setFieldValue(
+													'id_province',
+													item.id_province,
+												);
+												formik.setFieldValue('id_company', item.id_company);
+											}}></Button>
+
+										{/*    <Button isLight data-tour='filter ' icon='Delete' color='danger' className='ms-5' aria-label='Delete' onClick={() => { 
+						deleteRole(item.id);
+
+			 }}> 
+           </Button> */}
+>>>>>>> 79a019f05ead53f98ae659495904c627d2863f0e
 									</td>
-					
 								</tr>
 							))}
-						
-
-									
-  </tbody>
+						</tbody>
 					</table>
 				</CardBody>
 				<PaginationButtons
@@ -441,251 +525,325 @@ Inactivo
 					setPerPage={setPerPage}
 				/>
 			</Card>
-		
-						<Modal
-						isCentered
-						isScrollable
-						size='xl'
-						isOpen={isOpenModal} setIsOpen={setIsOpenModal} >
-			<ModalHeader setIsOpen={setIsOpenModal}
-			 >
-			<ModalTitle id='tour-title' className='d-flex align-items-end'>
-			<span className='ps-2'>
-			<h3 className=''>{modalTitle}</h3>			
-			</span>
-			</ModalTitle>
-			</ModalHeader>
-			<ModalBody >
-			<div className='row justify-content-end'>
-  			<div className='col-md-5'>
-			<div>
-			<Card>
-			<Card>
-			<CardHeader>
-			<CardLabel icon='AddAPhoto'>
-				<CardTitle>Asignar</CardTitle>
-				</CardLabel>
-				</CardHeader>
 
+			<Modal
+				isCentered
+				isScrollable
+				size='xl'
+				isOpen={isOpenModal}
+				setIsOpen={setIsOpenModal}>
+				<ModalHeader setIsOpen={setIsOpenModal}>
+					<ModalTitle id='tour-title' className='d-flex align-items-end'>
+						<span className='ps-2'>
+							<h3 className=''>{modalTitle}</h3>
+						</span>
+					</ModalTitle>
+				</ModalHeader>
+				<ModalBody>
+					<div className='row justify-content-end'>
+						<div className='col-md-5'>
+							<div>
+								<Card>
+									<Card>
+										<CardHeader>
+											<CardLabel icon='AddAPhoto'>
+												<CardTitle>Asignar</CardTitle>
+											</CardLabel>
+										</CardHeader>
 
+										<CardBody className='pt-5'>
+											<div className='row g-5'>
+												<div className='col-12 d-flex justify-content-center'>
+													{selectedPhoto ? (
+														<Avatar src={selectedPhoto} />
+													) : (
+														<div>No hay foto seleccionada</div>
+													)}
+												</div>
+												<div className='col-xl'>
+													<div className='row g-3'>
+														<div className='col-auto '>
+															<Input
+																type='file'
+																autoComplete='photo'
+																onChange={handlePhotoChange}
+															/>
+														</div>
+														<div className='col-auto '>
+															<Button
+																color='dark'
+																isLight
+																icon='Delete'
+																onClick={handleDeletePhoto}>
+																Eliminar Foto
+															</Button>
+														</div>
+														<div className='col-12'></div>
+													</div>
+												</div>
+											</div>
+										</CardBody>
+									</Card>
+									<CardHeader>
+										<CardLabel icon='ReceiptLong'>
+											<CardTitle>Elegir</CardTitle>
+										</CardLabel>
+									</CardHeader>
+									<CardBody className='pt-0'>
+										<Dropdown>
+											<DropdownToggle>
+												<Button>
+													{formik.values.id_province
+														? province.find(
+																(province) =>
+																	province.id ===
+																	formik.values.id,
+														  )?.name || 'Selecciona una Provincia'
+														: 'Selecciona una Provincia'}
+												</Button>
+											</DropdownToggle>
+											<DropdownMenu>
+												{province &&
+													province.map((provinces) => (
+														<DropdownItem
+															key={provinces.id}
+															onClick={() => {
+																formik.setFieldValue(
+																	'id_province',
+																	provinces.id,
+																);
+																getCanton(provinces.id);
+															}}>
+															{provinces.name}
+														</DropdownItem>
+													))}
+											</DropdownMenu>
+										</Dropdown>
 
-			<CardBody className='pt-5'>
-			<div className='row g-5'>
-			<div className='col-12 d-flex justify-content-center'>
-            {selectedPhoto ? (
-              <Avatar src={selectedPhoto} />
-            ) : (
-              <div>No hay foto seleccionada</div>
-            )}
-          </div>
-          <div className='col-xl'>
-            <div className='row g-3'>
-              <div className='col-auto '>
-                <Input type='file' autoComplete='photo' onChange={handlePhotoChange} />
-              </div>
-              <div className='col-auto '>
-			  <Button color='dark' isLight icon='Delete' onClick={handleDeletePhoto}>
+										<Dropdown>
+											<DropdownToggle>
+												<Button>
+													{formik.values.id_canton
+														? canton.find(
+																(canton) =>
+																	canton.id === formik.values.id,
+														  )?.name || 'Selecciona Canton '
+														: 'Selecciona Canton'}
+												</Button>
+											</DropdownToggle>
 
-                  Eliminar Foto
-                </Button>
-              </div>
-              <div className='col-12'></div>
-            </div>
-          </div>
-        </div>
-      </CardBody>
-	 </Card>
-			<CardHeader>
-				<CardLabel icon='ReceiptLong'>
-				<CardTitle>Elegir</CardTitle>
-				</CardLabel>
-				</CardHeader>
-				<CardBody className='pt-0'>
-							<Dropdown>
-						<DropdownToggle>
-						<Button>
-						{formik.values.id_province ?
-						province.find(province => province.id  === formik.values.id)?.name || "Selecciona una Provincia"
-						: "Selecciona una Provincia"
-						
-						}
-						</Button>
-						</DropdownToggle>
-						<DropdownMenu>
-						{province && province.map((provinces) => (
-						<DropdownItem
-						key={provinces.id}
-						onClick={() => {
-						formik.setFieldValue("id_province", provinces.id);
-						getCanton(provinces.id);
-						}}
-						>
-						{provinces.name}
-						</DropdownItem>
-						))}
-						</DropdownMenu>
-							</Dropdown>
+											<DropdownMenu>
+												{canton &&
+													canton.map((cantons) => (
+														<DropdownItem
+															key={cantons.id}
+															onClick={() => {
+																formik.setFieldValue(
+																	'id_canton',
+																	cantons.id,
+																);
+															}}
+															className={
+																formik.values.id_canton ===
+																cantons.id
+																	? 'selected'
+																	: ''
+															}>
+															{cantons.name}
+														</DropdownItem>
+													))}
+											</DropdownMenu>
+										</Dropdown>
 
-							<Dropdown>
-							<DropdownToggle>
-							<Button>
-							{formik.values.id_canton ?
-							canton.find(canton => canton.id  === formik.values.id)?.name || "Selecciona Canton "
-							: "Selecciona Canton"
-							}
-							</Button>
-							</DropdownToggle>
-
-							<DropdownMenu>
-							{canton && canton.map((cantons) => (
-							<DropdownItem
-							key={cantons.id}
-							onClick={() => {
-							formik.setFieldValue("id_canton", cantons.id);
-
-
-							}}
-							className={formik.values.id_canton === cantons.id ? "selected" : ""}
-							>
-							{cantons.name}
-							</DropdownItem>
-							))}
-							</DropdownMenu>
-							</Dropdown>
-								
-							<Dropdown>
-							<DropdownToggle>
-							<Button>
-							{formik.values.id_company ?
-							company.find(company => company.id  === formik.values.id)?.business_name || "Selecciona una empresa "
-							: "Selecciona una empresa"
-							}
-							</Button>
-							</DropdownToggle>
-							<DropdownMenu>
-							{company && company.map((companys) => (
-							<DropdownItem
-							key={companys.id}
-							onClick={() => {
-							formik.setFieldValue("id_company", companys.id);
-							}}
-							>
-							{companys.business_name}
-							</DropdownItem>
-							))}
-							</DropdownMenu>
-							</Dropdown>
-
-
-
-															</CardBody>
-															</Card>
-															</div>
-															
-    							</div>
-							
-								
-                                <div className='col-md-7'>
-        						<Card>
-         					 <CardBody  className='pt-0'>
-							  <div className='row g-4'>
-								
-												<div className='col-md-16'>
-											
-						<CardHeader>
-						<CardLabel icon='TextSnippet'>
-						<CardTitle>Completar</CardTitle>
-						</CardLabel>
-							</CardHeader>
-						<FormGroup 
-						id='tradename' label='Nombre Comercial' className='col-md-10'>
-							<Input 
-							onChange={formik.handleChange}
-							value={formik.values.tradename} 
-
-							 />
-						</FormGroup>
-						<FormGroup id='establishment_code' label='Codigo Establecimiento' className='col-md-10'>
-							<Input 
-							onChange={formik.handleChange}
-							 value={formik.values.establishment_code} 
-							 />
-						</FormGroup>
-
-						<FormGroup id='emission_code' label='Codigo Emision' className='col-md-10'>
-							<Input onChange={formik.handleChange}
-							 value={formik.values.emission_code}
-							 />
-						</FormGroup>
-						<FormGroup id='landline' label='Telefono' className='col-md-10'>
-							<Input onChange={formik.handleChange}
-							 value={formik.values.landline}
-							 />
-						</FormGroup>
-						<FormGroup id='whatsapp' label='Whatsapp' className='col-md-10'>
-							<Input onChange={formik.handleChange}
-							 value={formik.values.whatsapp}
-							 />
-						</FormGroup>
-						<FormGroup id='address' label='Direccion' className='col-md-10'>
-							<Input onChange={formik.handleChange}
-							 value={formik.values.address}
-							 />
-						</FormGroup>
-						<FormGroup id='description' label='Descripción' className='col-md-10'>
-							<Input onChange={formik.handleChange}
-							 value={formik.values.description}
-							 />
-						</FormGroup>
-						
-							<CardBody>
-								<Checks
-									type='switch'
-									id='flexSwitchCheckDefault'
-									label='IVA 8% Feriado'
-									name='defaultCheck'
-									checked={iva_Holiday}
-									onChange={() => {
-										setIva_Holiday(!iva_Holiday);
-										formik.setFieldValue('iva_holiday', !iva_Holiday);
-									}}
-								/>
-							</CardBody>
-
+										<Dropdown>
+											<DropdownToggle>
+												<Button>
+													{formik.values.id_company
+														? company.find(
+																(company) =>
+																	company.id === formik.values.id,
+														  )?.business_name ||
+														  'Selecciona una empresa '
+														: 'Selecciona una empresa'}
+												</Button>
+											</DropdownToggle>
+											<DropdownMenu>
+												{company &&
+													company.map((companys) => (
+														<DropdownItem
+															key={companys.id}
+															onClick={() => {
+																formik.setFieldValue(
+																	'id_company',
+																	companys.id,
+																);
+															}}>
+															{companys.business_name}
+														</DropdownItem>
+													))}
+											</DropdownMenu>
+										</Dropdown>
+									</CardBody>
+								</Card>
+							</div>
 						</div>
-			</div>
-						
-						</CardBody>
-						
-        </Card>
-		
-								
-							
-			</div>
-			
-			</div>
-			
-			</ModalBody>
-			<ModalFooter>
-			
-			<Button
-			icon='Save'
-			color='success'
-			isLight
-			onClick={() => {
-				addAgency(formik.values);
-				setIsOpenModal(false);
-				
-			}}>
-			Guardar
-			</Button>
-	
-			</ModalFooter>
-			
-			</Modal>
-			
-		</>
 
+						<div className='col-md-7'>
+							<Card>
+								<CardBody className='pt-0'>
+									<div className='row g-4'>
+										<div className='col-md-16'>
+											<CardHeader>
+												<CardLabel icon='TextSnippet'>
+													<CardTitle>Completar</CardTitle>
+												</CardLabel>
+											</CardHeader>
+											<FormGroup
+												id='tradename'
+												isFloating
+												label='Nombre Comercial'
+												className='col-md-10'>
+												<Input
+													onChange={formik.handleChange}
+													value={formik.values.tradename}
+													invalidFeedback={formik.errors.tradename}
+													isTouched={formik.touched.tradename}
+													validFeedback='Perfecto!'
+													isValid={formik.isValid}
+													onBlur={formik.handleBlur}
+												/>
+											</FormGroup>
+											<FormGroup
+												id='establishment_code'
+												isFloating
+												label='Codigo Establecimiento'
+												className='col-md-10'>
+												<Input
+													onChange={formik.handleChange}
+													value={formik.values.establishment_code}
+													invalidFeedback={
+														formik.errors.establishment_code
+													}
+													isTouched={formik.touched.establishment_code}
+													validFeedback='Perfecto!'
+													isValid={formik.isValid}
+													onBlur={formik.handleBlur}
+												/>
+											</FormGroup>
+
+											<FormGroup
+												id='emission_code'
+												isFloating
+												label='Codigo Emision'
+												className='col-md-10'>
+												<Input
+													onChange={formik.handleChange}
+													value={formik.values.emission_code}
+													invalidFeedback={formik.errors.emission_code}
+													isTouched={formik.touched.emission_code}
+													validFeedback='Perfecto!'
+													isValid={formik.isValid}
+													onBlur={formik.handleBlur}
+												/>
+											</FormGroup>
+											<FormGroup
+												id='landline'
+												isFloating
+												label='Telefono'
+												className='col-md-10'>
+												<Input
+													onChange={formik.handleChange}
+													value={formik.values.landline}
+													invalidFeedback={formik.errors.landline}
+													isTouched={formik.touched.landline}
+													validFeedback='Perfecto!'
+													isValid={formik.isValid}
+													onBlur={formik.handleBlur}
+												/>
+											</FormGroup>
+											<FormGroup
+												id='whatsapp'
+												isFloating
+												label='Whatsapp'
+												className='col-md-10'>
+												<Input
+													onChange={formik.handleChange}
+													value={formik.values.whatsapp}
+													invalidFeedback={formik.errors.whatsapp}
+													isTouched={formik.touched.whatsapp}
+													validFeedback='Perfecto!'
+													isValid={formik.isValid}
+													onBlur={formik.handleBlur}
+												/>
+											</FormGroup>
+											<FormGroup
+												id='address'
+												isFloating
+												label='Direccion'
+												className='col-md-10'>
+												<Input
+													onChange={formik.handleChange}
+													value={formik.values.address}
+													invalidFeedback={formik.errors.address}
+													isTouched={formik.touched.address}
+													validFeedback='Perfecto!'
+													isValid={formik.isValid}
+													onBlur={formik.handleBlur}
+												/>
+											</FormGroup>
+											<FormGroup
+												id='description'
+												isFloating
+												label='Descripción'
+												className='col-md-10'>
+												<Input
+													onChange={formik.handleChange}
+													value={formik.values.description}
+													invalidFeedback={formik.errors.description}
+													isTouched={formik.touched.description}
+													validFeedback='Perfecto!'
+													isValid={formik.isValid}
+													onBlur={formik.handleBlur}
+												/>
+											</FormGroup>
+
+											<CardBody>
+												<Checks
+													type='switch'
+													id='flexSwitchCheckDefault'
+													label='IVA 8% Feriado'
+													name='defaultCheck'
+													checked={iva_Holiday}
+													onChange={() => {
+														setIva_Holiday(!iva_Holiday);
+														formik.setFieldValue(
+															'iva_holiday',
+															!iva_Holiday,
+														);
+													}}
+												/>
+											</CardBody>
+										</div>
+									</div>
+								</CardBody>
+							</Card>
+						</div>
+					</div>
+				</ModalBody>
+				<ModalFooter>
+					<Button
+						icon='Save'
+						color='success'
+						isLight
+						onClick={() => {
+							addAgency(formik.values);
+							setIsOpenModal(false);
+						}}>
+						Guardar
+					</Button>
+				</ModalFooter>
+			</Modal>
+		</>
 	);
 };
 export default CommonUpcomingEvents;
