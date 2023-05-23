@@ -193,12 +193,15 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					'warning',
 				);
 			}
-		} catch (error) {
-			console.log(error);
-			showNotification('Error',
-				'El rol no se ha eliminado correctamente',
-				'warning',
-			);
+		} catch (error:any) {
+			if (error.response) {
+				const  message  = error.response.data.data;
+				showNotification('Error',
+					message,
+					'warning',
+				);
+			};
+
 		}
 	};
 	return (
@@ -250,8 +253,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											<div className='d-flex  align-items-center'>
 												<div className='text-nowrap'>{item.name}</div>
 												<div className='ms-auto'></div>
-
-												<Button
+												{item.name !== 'Administrador' && ( 
+      											<>
+													<Button
 													icon='Edit'
 													color='primary'
 													isLight
@@ -266,6 +270,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 														formik.setFieldValue('roleId', item.id);
 														formik.setFieldValue('roleName', item.name);
 													}}></Button>
+												
 												<Button
 													isLight
 													data-tour='filter '
@@ -276,6 +281,8 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 													onClick={() => {
 														deleteRole(item.id);
 													}}></Button>
+													</>
+												)}
 											</div>
 										</td>
 										<td>

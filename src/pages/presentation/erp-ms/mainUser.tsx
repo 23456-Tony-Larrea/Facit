@@ -242,17 +242,14 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	}
 }catch (error:any) {
 	if (error.response) {
-		console.log(error.response.data); // Aquí está la respuesta del backend
+		console.log(error.response.data.message); // Aquí está la respuesta del backend
 	
 		// Verificar si hay un mensaje de error personalizado
 		if (error.response.data.message === 'Error de validación.') {
 		  // Acceder al mensaje de error específico
-		  const errorMessage = error.response.data.data.identification_card[0];
-		  const emailError = error.response.data.data.email[0];
-		  const phoneError = error.response.data.data.phone[0];
+		  console.log(error.response.data.data.identification_card[0]);
+		  const errorMessage =error.response.data.data.identification_card[0];
 		  showNotification('Error', errorMessage, 'warning');
-		  showNotification('Error', emailError, 'warning');
-		  showNotification('Error', phoneError, 'warning');
 		}
 		
 	};
