@@ -174,6 +174,10 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			setIsOpenModal(false);
 		} catch (error) {
 			console.log(error);
+			showNotification('Error',
+				'El rol no se ha agregado correctamente',
+				'error',
+			);
 		}
 	};
 	const onChangeName = (e: string) => {
@@ -193,7 +197,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			console.log(error);
 			showNotification('Error',
 				'El rol no se ha eliminado correctamente',
-				'error',
+				'warning',
 			);
 		}
 	};

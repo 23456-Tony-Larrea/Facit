@@ -88,7 +88,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		axios.get(`${API_URL}employee`)
 			.then(response => {
 				setUsers(response.data.data);
-
+				console.log("employee",response.data.data);
 			})
 			.catch(error => {
 				console.log(error);
@@ -111,10 +111,11 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 
 
 	const handleDeleteUser = (id: number) => {
-		axios.delete(`${API_URL}user/${id}`)
+		axios.delete(`${API_URL}employee/${id}`)
 			.then(response => {
 				const updatedUsers = users.filter(user => user.id !== id);
 				setUsers(updatedUsers);
+
 			})
 			.catch(error => {
 				console.log(error);
@@ -152,7 +153,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const formik = useFormik({
 		onSubmit: () => {},
 		initialValues: {
-			id: undefined,
+			id_employee: undefined,
 			name: '',
 			first_name: '',
 			last_name: '',
@@ -220,40 +221,48 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	});
 	const addUsers = async () => {
 		try {
-			if (formik.values.id){
-				console.log("this is my id",formik.values.id);
-				const response = await axios.put(`${API_URL}user/${formik.values.id}`, {
+			if (formik.values.id_employee){
+				console.log("this is my id",formik.values.id_employee);
+				console.log("this is my department",formik.values.department);
+				 const response = await axios.put(`${API_URL}employee/${formik.values.id_employee}`, {
 					name: formik.values.name,
 					first_name: formik.values.first_name,
 					last_name: formik.values.last_name,
 					email: formik.values.email,
 					type_identification_card: formik.values.type_identification_card,
 					identification_card: formik.values.identification_card,
-					status: formik.values.status,
 					phone: formik.values.phone,
 					address: formik.values.address,
+					occupation: formik.values.occupation,
+					department: formik.values.department,
+					gender:	formik.values.gender,
+					id_company:formik.values.id_company,
+					marital_status:formik.values.marital_status,
 				});
-				console.log(response);
-				setUsers([...users, response.data]);
+				console.log("this my edit",response);
+				setUsers([...users, response.data]); 
 				setIsOpenModal(false);
 				//implementar el toast
-				showNotification("Exito",'Usuario actualizado', 'success');
+				showNotification("Exito",'Usuario actualizado', 'success'); 
 			}else {
-		  		const response = await axios.post(`${API_URL}employee`, {
+		  		const response =await axios.post(`${API_URL}employee`,{
+					
 			name: formik.values.name,
 			first_name: formik.values.first_name,
 			last_name: formik.values.last_name,
 			email: formik.values.email,
 			type_identification_card: formik.values.type_identification_card,
 			identification_card: formik.values.identification_card,
-			status: formik.values.status,
 			password:'12345678',
 			phone: formik.values.phone,
-			address: formik.values.address
+			occupation: formik.values.occupation,
+			department: formik.values.department,
+			gender:	formik.values.gender,
+			id_company:formik.values.id_company,
 		  });
 		  console.log(response);
-		  setUsers([...users, response.data]);
-		  setIsOpenModal(false);
+		 setUsers([...users, response.data]);
+		setIsOpenModal(false);  
 		//implementar el showNotification
 		showNotification("Exito",'Usuario creado', 'success');
 	}
@@ -340,7 +349,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 											onClick={() => {
 												setIsOpenModal(true);
 												formik.setValues(item);
-												formik.setFieldValue('userId', item.id);
+												formik.setFieldValue('id_employe', item.id);
 												formik.setFieldValue('name', item.name);
 												formik.setFieldValue('first_name', item.first_name);
 												formik.setFieldValue('last_name', item.last_name);
@@ -351,6 +360,8 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												formik.setFieldValue('status', item.status);
 												formik.setFieldValue('phone', item.phone);
 												formik.setFieldValue('address', item.address);
+												formik.setFieldValue('occupation', item.occupation);
+												formik.setFieldValue('department', item.department);
 									
 												setIsEditMode(false);
 												getUsers();
@@ -593,8 +604,8 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
         </Button>
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem onClick={() => handleGenderType('Masculino')}>Masculino</DropdownItem>
-        <DropdownItem onClick={() => handleGenderType('Femenino')}>Femenino</DropdownItem>
+        <DropdownItem onClick={() => handleGenderType('M')}>Masculino</DropdownItem>
+        <DropdownItem onClick={() => handleGenderType('F')}>Femenino</DropdownItem>
       </DropdownMenu>
     </Dropdown>
 	</div>

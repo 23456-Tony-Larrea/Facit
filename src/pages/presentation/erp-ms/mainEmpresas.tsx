@@ -145,7 +145,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			})
 			.catch((error) => {
 				console.log(error);
-				showNotification('Error', 'No se pudo eliminar la empresa',"danger");
+				showNotification('Error', 'No se pudo eliminar la empresa',"warning");
 			});
 	};
 	useEffect(() => {

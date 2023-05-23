@@ -422,12 +422,6 @@ Inactivo
 					}}>
 						</Button>
           
-      {/*    <Button isLight data-tour='filter ' icon='Delete' color='danger' className='ms-5' aria-label='Delete' onClick={() => { 
-						deleteRole(item.id);
-
-			 }}> 
-           </Button> */}
-          
 									</td>
 					
 								</tr>
