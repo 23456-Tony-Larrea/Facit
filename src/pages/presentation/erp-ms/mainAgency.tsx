@@ -115,6 +115,7 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
 	const [company, setCompany] = useState <ICompany[]>([]);
 	const [iva_Holiday, setIva_Holiday] = useState<boolean>(false);
 	const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+	const [selectId, setSelectId] =useState(null);
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
 	const handleUpcomingDetails = () => {
@@ -254,9 +255,16 @@ if (!values.description) {
 		getCompany();
 		}, []);		
 	
+	const clearId = () => {
+		const id = formik.values.id;
+		if (id) {
+			formik.setFieldValue('id', undefined);
+		}
+	};
 	const addAgency = async (values: any) => {
+		
 		try {
-			if (formik.values.id) {
+		  if (formik.values.id) {
 				console.log("this is my id",formik.values.id);
 
 				await axios.put(`${API_URL}agency/${formik.values.id}`,{
@@ -313,7 +321,6 @@ if (!values.description) {
 	const [sizeStatus, setSizeStatus] = useState<TModalSize>(null);
 	
 
-
 	return (
 		<>
 			<Card style={{ width: '100%', overflowX: 'auto' }}>
@@ -336,6 +343,7 @@ if (!values.description) {
 						setModalTitle(ADD_TITLE);
 						setIsOpenModal(true);
 						formik.resetForm();
+						clearId();
 					}
 				}
 				//commit
@@ -469,6 +477,8 @@ Inactivo
 						formik.setFieldValue('id_canton', item.id_canton);
 						formik.setFieldValue('id_province', item.id_province);
 						formik.setFieldValue('id_company', item.id_company);
+						setSelectId(item.id);
+
 					}}>
 						</Button>
           
@@ -516,6 +526,7 @@ Inactivo
   			<div className='col-md-5'>
 			<div>
 			<Card>
+			{selectId && (
 			<Card>
 			<CardHeader>
 			
@@ -552,6 +563,7 @@ Inactivo
         </div>
       </CardBody>
 	 </Card>
+	 )}
 			<CardHeader>
 				<CardLabel icon='ReceiptLong'>
 				<CardTitle>Elegir</CardTitle>
