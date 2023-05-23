@@ -219,7 +219,7 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				setUsers([...users, response.data]);
 				setIsOpenModal(false);
 				//implementar ShowNotification
-					showNotification('success', 'Usuario actualizado correctamente');
+					showNotification('Exito', 'Usuario actualizado correctamente','info');
 			}else {
 		  		const response = await axios.post(`${API_URL}user`, {
 				name: formik.values.name,
@@ -240,10 +240,24 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		//implementar el showNotification
 		showNotification('Exito', 'Usuario creado correctamente', 'success');
 	}
-}catch (error) {
-		  console.error(error);
+}catch (error:any) {
+	if (error.response) {
+		console.log(error.response.data); // Aquí está la respuesta del backend
+	
+		// Verificar si hay un mensaje de error personalizado
+		if (error.response.data.message === 'Error de validación.') {
+		  // Acceder al mensaje de error específico
+		  const errorMessage = error.response.data.data.identification_card[0];
+		  const emailError = error.response.data.data.email[0];
+		  const phoneError = error.response.data.data.phone[0];
+		  showNotification('Error', errorMessage, 'warning');
+		  showNotification('Error', emailError, 'warning');
+		  showNotification('Error', phoneError, 'warning');
 		}
-	  };
+		
+	};
+};
+};
 	const activateUser = (id: undefined) => {
 		axios.put(`${API_URL}user/Status/${id}`)
 			.then(response => {
@@ -278,6 +292,10 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		
 		const formData = new FormData();
 		formData.append('profile_photo_path', formik.values.profile_photo_path);
+		if(!formik.values.profile_photo_path){
+			showNotification('Error', 'Debe seleccionar una imagen', 'warning');
+			return;
+		}
 		await axios.post(`${API_URL}user/Photo/${id}`, formData,{
 		headers:{
 			'Content-Type': 'multipart/form-data'
@@ -609,11 +627,13 @@ const MainUser: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
     ))}
   </DropdownMenu>
 </Dropdown>
-{
-		formik.errors.role_id && formik.touched.role_id
-		? <div className="text-danger">{formik.errors.role_id}</div>
-		: null
-	}
+
+{formik.errors.role_id && (
+<h1 className="invalid-feedback d-block">
+{formik.errors.role_id}
+</h1>
+)}
+
 
 			</div>
 			<div className="col-12">
