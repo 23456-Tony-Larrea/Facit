@@ -153,6 +153,56 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
 			action: '',
 			business_name: ''
 		},
+		validate: values => {
+			const errors: any = {};
+			if (!values.tradename) {
+				errors.tradename = 'Requerido';
+			}	
+			if (!values.id_province) {
+				errors.id_province = 'Debe seleccionar una Provincia';
+			  }
+			  if (!values.id_canton) {
+				errors.id_canton = 'Debe seleccionar un Cantón';
+			  }
+			  if (!values.id_company) {
+				errors.id_company = 'Debe seleccionar una Empresa';
+			  }
+			  if (!values.establishment_code) {
+				errors.establishment_code = 'Requerido';
+		} else if (!/^[0-9]{3}$/i.test(values.establishment_code)) {
+			errors.establishment_code = 'El codigo debe tener al menos 3 caracteres';
+		}
+		if (!values.emission_code) {
+			errors.emission_code = 'Requerido';
+	}else if (!/^[0-9]{3}$/i.test(values.emission_code)){
+		errors.emission_code = 'El codigo debe tener al menos 3 caracteres';
+	}
+	if (!values.landline) {
+		errors.landline = 'Requerido';
+} else if (!/^[0-9]{10}$/i.test(values.landline)){
+	errors.landline = 'El telefono debe tener al menos 10 caracteres';
+}
+if (!values.whatsapp) {
+	errors.whatsapp = 'Requerido';
+} else if (!/^[0-9]{10}$/i.test(values.whatsapp)){
+	errors.whatsapp = 'El whatsapp debe tener al menos 10 caracteres';
+}
+if (!values.address) {
+	errors.address = 'Requerido';
+}
+if (!values.description) {
+	errors.description = 'Requerido';
+}
+
+
+
+			  
+			
+			
+
+			return errors;
+		},
+
 	});
 	const getAgency = async () => {
 		try {
@@ -468,6 +518,7 @@ Inactivo
 			<Card>
 			<Card>
 			<CardHeader>
+			
 			<CardLabel icon='AddAPhoto'>
 				<CardTitle>Asignar</CardTitle>
 				</CardLabel>
@@ -507,84 +558,94 @@ Inactivo
 				</CardLabel>
 				</CardHeader>
 				<CardBody className='pt-0'>
-							<Dropdown>
-						<DropdownToggle>
-						<Button>
-						{formik.values.id_province ?
-						province.find(province => province.id  === formik.values.id)?.name || "Selecciona una Provincia"
-						: "Selecciona una Provincia"
-						
-						}
-						</Button>
-						</DropdownToggle>
-						<DropdownMenu>
-						{province && province.map((provinces) => (
-						<DropdownItem
-						key={provinces.id}
-						onClick={() => {
-						formik.setFieldValue("id_province", provinces.id);
-						getCanton(provinces.id);
-						}}
-						>
-						{provinces.name}
-						</DropdownItem>
-						))}
-						</DropdownMenu>
-							</Dropdown>
+					
+  <Dropdown>
+    <DropdownToggle>
+      <Button>
+        {formik.values.id_province ?
+          province.find(province => province.id === formik.values.id_province)?.name || "Selecciona una Provincia"
+          : "Selecciona una Provincia"
+        }
+      </Button>
+    </DropdownToggle>
+    <DropdownMenu  style={{ maxHeight: '175px', overflowY: 'auto' }}>
+      {province && province.slice(0, 1000).map((provinces) => (
+        <DropdownItem
+          key={provinces.id}
+          onClick={() => {
+            formik.setFieldValue("id_province", provinces.id);
+            getCanton(provinces.id);
+          }}
+		  
+        >
+          {provinces.name}
+        </DropdownItem>
+      ))}
+    </DropdownMenu>
+  </Dropdown>
+  {formik.errors.id_province && (
+	<h1 className="invalid-feedback d-block">
+	{formik.errors.id_province}
+	</h1>
+  )}
 
-							<Dropdown>
-							<DropdownToggle>
-							<Button>
-							{formik.values.id_canton ?
-							canton.find(canton => canton.id  === formik.values.id)?.name || "Selecciona Canton "
-							: "Selecciona Canton"
-							}
-							</Button>
-							</DropdownToggle>
+  <Dropdown>
+    <DropdownToggle>
+      <Button>
+        {formik.values.id_canton ?
+          canton.find(canton => canton.id === formik.values.id_canton)?.name || "Selecciona Canton "
+          : "Selecciona Canton"
+        }
+      </Button>
+    </DropdownToggle>
 
-							<DropdownMenu>
-							{canton && canton.map((cantons) => (
-							<DropdownItem
-							key={cantons.id}
-							onClick={() => {
-							formik.setFieldValue("id_canton", cantons.id);
+    <DropdownMenu style={{ maxHeight: '150px', overflowY: 'auto' }}>
+      {canton && canton.slice(0, 1000).map((cantons) => (
+        <DropdownItem
+          key={cantons.id}
+          onClick={() => {
+            formik.setFieldValue("id_canton", cantons.id);
+          }}
+        >
+          {cantons.name}
+        </DropdownItem>
+      ))}
+    </DropdownMenu>
+  </Dropdown>
+  {formik.errors.id_canton&& (
+	<h1 className="invalid-feedback d-block">
+	{formik.errors.id_canton}
+	</h1>
+  )}
+  <Dropdown>
+    <DropdownToggle>
+      <Button>
+        {formik.values.id_company ?
+          company.find(company => company.id === formik.values.id_company)?.business_name || "Selecciona una empresa "
+          : "Selecciona una empresa"
+        }
+      </Button>
+    </DropdownToggle>
+    <DropdownMenu style={{ maxHeight: '175px', overflowY: 'auto' }}>
+      {company && company.slice(0, 1000).map((companys) => (
+        <DropdownItem
+          key={companys.id}
+          onClick={() => {
+            formik.setFieldValue("id_company", companys.id);
+          }}
+        >
+          {companys.business_name}
+        </DropdownItem>
+      ))}
+    </DropdownMenu>
+  </Dropdown>
+  {formik.errors.id_company && (
+	<h1 className="invalid-feedback d-block">
+	{formik.errors.id_company}
+	</h1>
+  )}
+</CardBody>
 
-
-							}}
-							className={formik.values.id_canton === cantons.id ? "selected" : ""}
-							>
-							{cantons.name}
-							</DropdownItem>
-							))}
-							</DropdownMenu>
-							</Dropdown>
-								
-							<Dropdown>
-							<DropdownToggle>
-							<Button>
-							{formik.values.id_company ?
-							company.find(company => company.id  === formik.values.id)?.business_name || "Selecciona una empresa "
-							: "Selecciona una empresa"
-							}
-							</Button>
-							</DropdownToggle>
-							<DropdownMenu>
-							{company && company.map((companys) => (
-							<DropdownItem
-							key={companys.id}
-							onClick={() => {
-							formik.setFieldValue("id_company", companys.id);
-							}}
-							>
-							{companys.business_name}
-							</DropdownItem>
-							))}
-							</DropdownMenu>
-							</Dropdown>
-
-
-
-															</CardBody>
 															</Card>
 															</div>
 															
@@ -608,39 +669,76 @@ Inactivo
 							<Input 
 							onChange={formik.handleChange}
 							value={formik.values.tradename} 
-
+		  					onBlur={formik.handleBlur}
+							isValid={formik.isValid}
+							isTouched={formik.touched.tradename}
+							invalidFeedback={formik.errors.tradename}
+							validFeedback='Perfecto!'
 							 />
 						</FormGroup>
 						<FormGroup id='establishment_code' label='Codigo Establecimiento' className='col-md-10'>
 							<Input 
 							onChange={formik.handleChange}
 							 value={formik.values.establishment_code} 
+							onBlur={formik.handleBlur}
+							isValid={formik.isValid}
+							isTouched={formik.touched.establishment_code}
+							invalidFeedback={formik.errors.establishment_code}
+							max={3}
+							validFeedback='Perfecto!'
+							
 							 />
 						</FormGroup>
 
 						<FormGroup id='emission_code' label='Codigo Emision' className='col-md-10'>
 							<Input onChange={formik.handleChange}
 							 value={formik.values.emission_code}
+							 onBlur={formik.handleBlur}
+							 isValid={formik.isValid}
+							 isTouched={formik.touched.emission_code}
+							 invalidFeedback={formik.errors.emission_code}
+							 validFeedback='Perfecto!'
 							 />
 						</FormGroup>
 						<FormGroup id='landline' label='Telefono' className='col-md-10'>
 							<Input onChange={formik.handleChange}
 							 value={formik.values.landline}
+							 onBlur={formik.handleBlur}
+							 isValid={formik.isValid}
+							 isTouched={formik.touched.landline}
+							 invalidFeedback={formik.errors.landline}
+							 validFeedback='Perfecto!'
 							 />
 						</FormGroup>
 						<FormGroup id='whatsapp' label='Whatsapp' className='col-md-10'>
 							<Input onChange={formik.handleChange}
 							 value={formik.values.whatsapp}
+							 onBlur={formik.handleBlur}
+							 isValid={formik.isValid}
+							 isTouched={formik.touched.whatsapp}
+							 invalidFeedback={formik.errors.whatsapp}
+							 validFeedback='Perfecto!'
+
 							 />
 						</FormGroup>
 						<FormGroup id='address' label='Direccion' className='col-md-10'>
 							<Input onChange={formik.handleChange}
 							 value={formik.values.address}
+							 onBlur={formik.handleBlur}
+							 isValid={formik.isValid}
+							 isTouched={formik.touched.address}
+							 invalidFeedback={formik.errors.address}
+							 validFeedback='Perfecto!'
 							 />
 						</FormGroup>
 						<FormGroup id='description' label='Descripción' className='col-md-10'>
 							<Input onChange={formik.handleChange}
 							 value={formik.values.description}
+							 onBlur={formik.handleBlur}
+							 isValid={formik.isValid}
+							 isTouched={formik.touched.description}
+							 invalidFeedback={formik.errors.description}
+							 validFeedback='Perfecto!'
 							 />
 						</FormGroup>
 						
@@ -682,7 +780,11 @@ Inactivo
 				addAgency(formik.values);
 				setIsOpenModal(false);
 				
-			}}>
+				
+			}}
+			isDisable={Object.keys(formik.errors).length > 0}
+			>
+				
 			Guardar
 			</Button>
 	

@@ -29,12 +29,26 @@ import axios from 'axios';
 import { API_URL } from '../../../constants';
 import Select from '../../../components/bootstrap/forms/Select';
 import showNotification from '../../../components/extras/showNotification';
+import Dropdown, {
+	DropdownItem,
+	DropdownMenu,
+	DropdownToggle,
+} from '../../../components/bootstrap/Dropdown';
+
 interface ICommonUpcomingEventsProps {
 	isFluid?: boolean;
 }
 interface IEmpresa {
 	id: number;
 	name: string;
+}
+interface IProvince{
+	id:undefined;
+	name:undefined;
+}
+interface ICanton{
+	id:undefined;
+	name:undefined;
 }
 
 const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
@@ -57,6 +71,8 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const EDIT_TITLE = 'Editar Empresa';
 	const [modalTitle, setModalTitle] = useState('');
 	const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+	const [province, setProvince] = useState<IProvince[]>([]);
+  const [canton, setCanton] = useState<ICanton[]>([]);
 	// BEGIN :: Upcoming Events
 	const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
 	const handleUpcomingDetails = () => {
@@ -87,23 +103,20 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		},
 		validate: (values) => {
 			const errors: any = {};
-			if (!values.id_user) {
-				errors.id_user = 'Requerido';
-			}
 			if (!values.business_name) {
 				errors.business_name = 'Requerido';
 			}
 			if (!values.email_company) {
 				errors.email_company = 'Requerido';
-			} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email_company)) {
-				errors.email = 'Correo electrónico inválido';
+			}else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email_company)){
+				errors.email_company = 'Correo electrónico inválido';
 			}
 			if (!values.commercial_name) {
 				errors.commercial_name = 'Requerido';
 			}
-			if (!values.web_site) {
-				errors.web_site = 'Requerido';
-			}
+			// if (!values.web_site) {
+			// 	errors.web_site = 'Requerido';
+			// }
 			if (!values.ruc) {
 				errors.ruc = 'Requerido';
 			} else if (!/^[0-9]{13}$/i.test(values.ruc)) {
@@ -114,12 +127,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			} else if (!/^[0-9]{10}$/i.test(values.phone)) {
 				errors.phone = 'el numero solo debe contener 10 digitos';
 			}
-			if (!values.address) {
-				errors.address = 'Requerido';
-			}
-			if (!values.logo_path) {
-				errors.logo_path = 'Requerido';
-			}
+	
 			return errors;
 		},
 	});
@@ -148,8 +156,32 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				showNotification('Error', 'No se pudo eliminar la empresa',"danger");
 			});
 	};
+	const getProvince = () => {
+		axios.get(`${API_URL}province`)
+		.then(response => {
+		setProvince(response.data);
+		console.log(response.data);
+		
+		})
+		.catch(error => {
+		console.log(error);
+		});
+		};
+		const getCanton = (id_canton: undefined) => {
+			console.log(id_canton);
+			axios
+			  .get(`${API_URL}canton/${id_canton}`)
+			  .then(response => {
+				setCanton(response.data);
+				console.log(response.data);
+			  })
+			  .catch(error => {
+				console.log(error);
+			  });
+		  };
 	useEffect(() => {
 		getEmpresas();
+		getProvince();
 	}, []);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['5']);
@@ -347,84 +379,7 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				/>
 			</Card>
 
-			{/* <OffCanvas
-				setOpen={setUpcomingEventsEditOffcanvas}
-				isOpen={upcomingEventsEditOffcanvas}
-				titleId='upcomingEdit'
-				isBodyScroll
-				placement='end'>
-				<OffCanvasHeader setOpen={setUpcomingEventsEditOffcanvas}>
-					<OffCanvasTitle id='upcomingEdit'>Permisos</OffCanvasTitle>
-				</OffCanvasHeader>
-			 <OffCanvasBody>
-					<div className='row g-4'>
-						<div className='col-12'>
-							<Card isCompact borderSize={2} shadow='none' className='mb-0'>
-								<CardHeader>
-									<CardLabel>
-										<Checks
-											id='notify'
-											type='switch'
-											label={
-												<>
-													<CardTitle>Grupo 1</CardTitle>
-													<Popovers
-														trigger='hover'
-														desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
-														<Icon
-															icon='none'
-															size='lg'
-															className='ms-1 cursor-help'
-														/>
-													</Popovers>
-												</>
-											}
-											onChange={formik.handleChange}
-											// checked={formik.values.}
-										/>
-									</CardLabel>
-								</CardHeader>
-								<CardBody>
-									 {permisos.map((permiso) => (
-										<FormGroup key={permiso.id}>
-											<Checks
-												id='notify'
-												type='switch'
-												label={
-													<>
-														{permiso.name}
-														<Popovers
-															trigger='hover'
-															desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
-															<Icon
-																icon='none'
-																size='lg'
-																className='ms-1 cursor-help'
-															/>
-														</Popovers>
-													</>
-												}
-												onChange={formik.handleChange}
-												checked={formik.values.notify}
-											/>
-										</FormGroup>
-									))} 
-								</CardBody>
-							</Card>
-						</div>
-					</div>
-				</OffCanvasBody> 
-				<div className='row m-0'>
-					<div className='col-12 p-3'>
-						<Button
-							color='info'
-							className='w-100'
-							onClick={() => setUpcomingEventsEditOffcanvas(false)}>
-							Agregar
-						</Button>
-					</div>
-				</div>
-			</OffCanvas> */}
+			
 			<Modal isOpen={isOpenModal} setIsOpen={setIsOpenModal}>
 				<ModalHeader setIsOpen={setIsOpenModal}>
 					<ModalTitle id='tour-title' className='d-flex align-items-end'>
@@ -434,42 +389,72 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					</ModalTitle>
 				</ModalHeader>
 				<ModalBody className='row'>
-					{/* <div className='row'> */}
-					{/* <div className='col-md-12 d-flex align-items-center justify-content-center'> */}
+				
 					<Card>
 						<CardHeader>
 							<CardLabel icon='Apartment'>
 								<CardTitle>Empresa</CardTitle>
 							</CardLabel>
 						</CardHeader>
-						<CardBody>
-							<Select
-								id='province'
-								size='lg'
-								ariaLabel='Category'
-								placeholder='Provincia'
-								className={classNames('rounded-1', {
-									'bg-white': !darkModeStatus,
-								})}
-							/>
-							<Select
-								id='canton'
-								size='lg'
-								ariaLabel='Category'
-								placeholder='Cantón'
-								className={classNames('rounded-1', {
-									'bg-white': !darkModeStatus,
-								})}
-							/>
-							<Select
-								id='users'
-								size='lg'
-								ariaLabel='Category'
-								placeholder='Usuarios'
-								className={classNames('rounded-1', {
-									'bg-white': !darkModeStatus,
-								})}
-							/>
+						<CardBody className='pt-0'>
+						<Dropdown>
+    		<DropdownToggle>
+      <Button>
+        {formik.values.id_province ?
+          province.find(province => province.id === formik.values.id_province)?.name || "Selecciona una Provincia"
+          : "Selecciona una Provincia"
+        }
+      </Button>
+    </DropdownToggle>
+    <DropdownMenu  style={{ maxHeight: '175px', overflowY: 'auto' }}>
+      {province && province.slice(0, 1000).map((provinces) => (
+        <DropdownItem
+          key={provinces.id}
+          onClick={() => {
+            formik.setFieldValue("id_province", provinces.id);
+            getCanton(provinces.id);
+          }}
+		  
+        >
+          {provinces.name}
+        </DropdownItem>
+      ))}
+    </DropdownMenu>
+  </Dropdown>
+  {formik.errors.id_province && (
+	<h1 className="invalid-feedback d-block">
+	{formik.errors.id_province}
+	</h1>
+  )}
+
+  <Dropdown>
+    <DropdownToggle>
+      <Button>
+        {formik.values.id_canton ?
+          canton.find(canton => canton.id === formik.values.id_canton)?.name || "Selecciona Canton "
+          : "Selecciona Canton"
+        }
+      </Button>
+    </DropdownToggle>
+
+    <DropdownMenu style={{ maxHeight: '150px', overflowY: 'auto' }}>
+      {canton && canton.slice(0, 1000).map((cantons) => (
+        <DropdownItem
+          key={cantons.id}
+          onClick={() => {
+            formik.setFieldValue("id_canton", cantons.id);
+          }}
+        >
+          {cantons.name}
+        </DropdownItem>
+      ))}
+    </DropdownMenu>
+  </Dropdown>
+  {formik.errors.id_canton&& (
+	<h1 className="invalid-feedback d-block">
+	{formik.errors.id_canton}
+	</h1>
+  )}
 						</CardBody>
 					</Card>
 					{/* </div> */}
@@ -552,11 +537,11 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 								<Input
 									onChange={formik.handleChange}
 									value={formik.values.email_company}
-									invalidFeedback={formik.errors.email_company}
-									isTouched={formik.touched.email_company}
-									validFeedback='Perfecto!'
-									isValid={formik.isValid}
 									onBlur={formik.handleBlur}
+									isValid={formik.isValid}
+									isTouched={formik.touched.email_company}
+									invalidFeedback={formik.errors.email_company}
+									validFeedback='Perfecto!'
 								/>
 							</FormGroup>
 							<FormGroup
@@ -585,21 +570,14 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									onBlur={formik.handleBlur}
 								/>
 							</FormGroup>
-							<FormGroup
-								id='logo_path'
-								label='Imagen'
-								isFloating
-								className='col-md-12'>
+							<FormGroup id='web_site' label='Sitio Web' isFloating className='col-md-12'>
 								<Input
 									onChange={formik.handleChange}
-									value={formik.values.logo_path}
-									invalidFeedback={formik.errors.logo_path}
-									isTouched={formik.touched.logo_path}
-									validFeedback='Perfecto!'
-									isValid={formik.isValid}
-									onBlur={formik.handleBlur}
+									value={formik.values.web_site}
+									
 								/>
 							</FormGroup>
+							
 						</CardBody>
 					</Card>
 					{/* </div> */}
@@ -621,7 +599,9 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						onClick={() => {
 							addEmpresa();
 							setIsOpenModal(false);
-						}}>
+						}}
+						isDisable={Object.keys(formik.errors).length > 0}
+						>
 						Guardar
 					</Button>
 				</ModalFooter>
