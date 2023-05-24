@@ -148,14 +148,11 @@ const CommonUpcomingEvents: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const clearName = () => {
 		formik.setFieldValue('roleName', '');
 		formik.errors.roleName = '';
+		formik.setFieldValue('roleId', undefined);
 	};
 	const addRoles = async () => {
 		try {
-			if (isEditMode) {
-				if (!formik.values.roleId) {
-					console.log('roleId is not defined'); // Mostrar mensaje de error si roleId no está definido
-					return;
-				}
+				if (formik.values.roleId) {
 				await axios.put(`${API_URL}roles/${formik.values.roleId}`, {
 					name: formik.values.roleName,
 				});
