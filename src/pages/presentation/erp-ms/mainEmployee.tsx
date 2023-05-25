@@ -59,6 +59,10 @@ type Company = {
 	id: number;
 	business_name: string;
   }
+type Agency={
+	id:number;
+	tradename:string;
+}
 const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
     const token = localStorage.getItem("user_token");
     axios.interceptors.request.use(
@@ -78,12 +82,8 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [activeFilter, setActiveFilter] = useState<boolean | null>(null);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 	const [isEditMode, setIsEditMode] = useState(false);
-	const { addToast } = useToasts();
-	const [IsOpenModalPhoto,setIsOpenModalPhoto] = useState<boolean>(false);
-	
 	const [company, setCompany] = useState<Company[]>([]);
-
-
+	const [agency, setAgency] = useState<Agency[]>([]);
 	const getUsers = () => {
 		axios.get(`${API_URL}employee`)
 			.then(response => {
@@ -98,17 +98,28 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		axios.get(`${API_URL}company`)
 			.then(response => {
 				setCompany(response.data.data);
-				console.log(response.data.data);
 			})
 			.catch(error => {
 				console.log(error);
 			});
 	};
+
+	const getAgency = () => {
+		axios.get(`${API_URL}agency`)
+			.then(response => {
+				setAgency(response.data.data);
+				console.log("agency",response.data.data);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	};
+	
 	useEffect(() => {
 		getUsers();
 		getCompany();	
+		getAgency();
     }, []);
-
 
 	const handleDeleteUser = (id: number) => {
 		axios.delete(`${API_URL}employee/${id}`)
@@ -128,6 +139,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const [selectedOption, setSelectedOption] = useState('')
 	const [selectedGender, setSelectedGender] = useState('')
 	const [selectedMaritalStatus, setSelectedMarital] = useState('')
+
 
 
 	const handleGenderType = (gender: string) => {
@@ -172,6 +184,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			gender:'',
 			marital_status:'',
 			birth_date:'',
+			agency_id:undefined,
 		},
 		validate: values => {
 			const errors: any = {};
@@ -222,8 +235,6 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 	const addUsers = async () => {
 		try {
 			if (formik.values.id_employee){
-				console.log("this is my id",formik.values.id_employee);
-				console.log("this is my department",formik.values.department);
 				 const response = await axios.put(`${API_URL}employee/${formik.values.id_employee}`, {
 					name: formik.values.name,
 					first_name: formik.values.first_name,
@@ -238,15 +249,15 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					gender:	formik.values.gender,
 					id_company:formik.values.id_company,
 					marital_status:formik.values.marital_status,
+					agency_id:formik.values.agency_id
 				});
-				console.log("this my edit",response);
+
 				setUsers([...users, response.data]); 
 				setIsOpenModal(false);
 				//implementar el toast
 				showNotification("Exito",'Usuario actualizado', 'success'); 
 			}else {
 		  		const response =await axios.post(`${API_URL}employee`,{
-					
 			name: formik.values.name,
 			first_name: formik.values.first_name,
 			last_name: formik.values.last_name,
@@ -259,8 +270,8 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 			department: formik.values.department,
 			gender:	formik.values.gender,
 			id_company:formik.values.id_company,
+			agency_id:formik.values.agency_id,
 		  });
-		  console.log(response);
 		 setUsers([...users, response.data]);
 		setIsOpenModal(false);  
 		//implementar el showNotification
@@ -298,14 +309,10 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 					<table className='table table-modern'>
 						<thead>
 							<tr>
-								<th>Nombre del usuario</th>
 								<th>Nombres</th>
 								<th>Apellidos</th>
 								<th>e-mail</th>
-								<th>Tipo de identificación</th>
-								<th>Identificación</th>
-                                <th>Telefono</th>
-                                <th>Direccion</th>
+								<th>Identificación</th>  
                                 <th>Acciones</th>
 								<td />
 							</tr>
@@ -313,11 +320,6 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						<tbody>
 							{dataPagination(items, currentPage, perPage).map((item) => (
 								<tr key={item.id}>
-									<td>
-										<div>
-											<div>{item.name}</div>
-										</div>
-									</td>
 									<td>
 										<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
 											{item.first_name}
@@ -329,14 +331,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 										</div>
 									</td>
 									<td>{item.email}</td>
-                                    <td>
-									<div className='flex-grow-1 ms-3 d-flex align-items-center text-nowrap'>
-										{item.type_identification_card}
-									</div>
-										</td>
 									<td>{item.identification_card}</td>
-                                    <td>{item.phone}</td>
-                                    <td>{item.address}</td>
 									<td>
 										<Button
 											isOutline={!darkModeStatus}
@@ -350,38 +345,15 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 												setIsOpenModal(true);
 												formik.setValues(item);
 												formik.setFieldValue('id_employe', item.id);
-												formik.setFieldValue('name', item.name);
-												formik.setFieldValue('first_name', item.first_name);
-												formik.setFieldValue('last_name', item.last_name);
-												formik.setFieldValue('email', item.email);
-												formik.setFieldValue('photo', item.photo);
-												formik.setFieldValue('type_identification_card', item.type_identification_card);
-												formik.setFieldValue('identification_card', item.identification_card);
-												formik.setFieldValue('status', item.status);
 												formik.setFieldValue('phone', item.phone);
 												formik.setFieldValue('address', item.address);
 												formik.setFieldValue('occupation', item.occupation);
 												formik.setFieldValue('department', item.department);
-									
-												setIsEditMode(false);
+												setIsEditMode(true);
 												getUsers();
 												
 											}}>
 						
-										</Button>
-										<Button
-											isOutline={!darkModeStatus}
-											color='danger'
-											isLight={darkModeStatus}
-											className={classNames('text-nowrap', {
-												'border-light': !darkModeStatus,
-											})}
-											icon='Cancel'
-											onClick={() => {handleDeleteUser(item.id)
-												getUsers();
-												clearForm();
-											}}>
-											
 										</Button>
 									</td>
 								</tr>
@@ -407,7 +379,9 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 				</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
-			<div className="col-12">
+				{!formik.values.id_employee  && (
+					<>
+					<div className="col-12">
                         <FormGroup
                           id="name"
                           isFloating
@@ -424,6 +398,9 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						  />
                         </FormGroup>
             </div>
+
+			</>
+			)}
 			<div className="col-12">
                         <FormGroup
                           id="first_name"
@@ -438,6 +415,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						  isTouched={formik.touched.first_name}
 						  invalidFeedback={formik.errors.first_name}
 						  validFeedback='Perfecto!'
+						  disabled={formik.values.id_employee}
 						  />
                         </FormGroup>
             </div>
@@ -455,9 +433,11 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 						  isTouched={formik.touched.last_name}
 						  invalidFeedback={formik.errors.last_name}
 						  validFeedback='Perfecto!'
+						  disabled={formik.values.id_employee}
 						  />
                         </FormGroup>
             </div>
+			
 			<div className="col-12">
 						<FormGroup
 							id='email'
@@ -471,9 +451,12 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 								isTouched={formik.touched.email}
 								invalidFeedback={formik.errors.email}
 								validFeedback='Perfecto!'
+								disabled={formik.values.id_employee}
 							/>
 						</FormGroup>
 			</div>
+			{!formik.values.id_employee  && (
+					<>
 			<div className="col-12">
 			<Dropdown>
       <DropdownToggle>
@@ -493,6 +476,8 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 		: null
 	}
 			</div> 
+			</>
+			)}
 			<div className="col-12">
 						<FormGroup
 							id='identification_card'
@@ -507,10 +492,12 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 									isTouched={formik.touched.identification_card}
 									invalidFeedback={formik.errors.identification_card}
 									validFeedback='Perfecto!'
-
+									disabled={formik.values.id_employee}
 							/>
 						</FormGroup>
 			</div>
+			{!formik.values.id_employee  && (
+					<>
 			<div className="col-12">
 						<FormGroup
 							id='phone'
@@ -524,11 +511,12 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 								isTouched={formik.touched.phone}
 								invalidFeedback={formik.errors.phone}
 								validFeedback='Perfecto!'
-							
+								disabled={formik.values.id_employee}
 							/>
 						</FormGroup>
 			</div>
-		
+			</>
+			)}
             <div className="col-12">
                         <FormGroup
                         id="Role"
@@ -541,7 +529,7 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
                         disabled
                         />
                         </FormGroup>
-            </div>
+            </div> 
 			<div className="col-12">
 			 <Dropdown>
   <DropdownToggle>
@@ -563,6 +551,32 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
         }}
       >
         {companys.business_name}
+      </DropdownItem>
+    ))}
+  </DropdownMenu>
+</Dropdown>
+			</div>
+			<div className="col-12">
+			 <Dropdown>
+  <DropdownToggle>
+
+       <Button>
+    {formik.values.agency_id ? 
+      agency.find(agencys => agencys.id === formik.values.agency_id)?.tradename || "Selecciona una Agencia"
+      : "Selecciona una Agencia"
+    }
+  </Button>
+
+  </DropdownToggle>
+  <DropdownMenu>
+    {agency && agency.map((agencys) => (
+      <DropdownItem 
+        key={agencys.id} 
+        onClick={() => {
+          formik.setFieldValue("agency_id", agencys.id);
+        }}
+      >
+        {agencys.tradename}
       </DropdownItem>
     ))}
   </DropdownMenu>
@@ -596,6 +610,8 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
 							/>
 						</FormGroup>
 			</div>
+			{!formik.values.id_employee  && (
+					<>
 			<div className="col-12">
 			<Dropdown>
       <DropdownToggle>
@@ -625,6 +641,8 @@ const mainEmployee: FC<ICommonUpcomingEventsProps> = ({ isFluid }) => {
       </DropdownMenu>
     </Dropdown>
 	</div>
+	</>
+	)}
 			</ModalBody>
 			<ModalFooter>
 				<Button icon='Close' color='danger' isLink onClick={() => {setIsOpenModal(false)
